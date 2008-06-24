@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.pde.ui.pluginContent">
+      <!-- contribute to plugin wizards -->
+      <wizard
+            class="org.eclipse.riena.ui.templates.hello.HelloRienaNewWizard"
+            icon="$nl$/icons/etool16/newexprj_wiz.gif"
+            id="org.eclipse.riena.internal.ui.templates.HelloRienaWizard"
+            java="true"
+            name="%pluginContent.helloRiena.name"
+            rcp="true"
+            ui-content="true">
+         <description>
+            %pluginContent.helloRiena.description
+         </description>
+      </wizard>
+      <!-- contribute to rcp wizards -->
+   </extension>
+
+</plugin>
