@@ -9,11 +9,11 @@
             icon="$nl$/icons/etool16/newexprj_wiz.gif"
             id="org.eclipse.riena.internal.ui.templates.HelloRienaWizard"
             java="true"
-            name="%pluginContent.helloRiena.name"
+            name="%helloRiena.name"
             rcp="true"
             ui-content="true">
          <description>
-            %pluginContent.helloRiena.description
+            %helloRiena.desc
          </description>
       </wizard>
       <wizard
@@ -21,11 +21,11 @@
             icon="$nl$/icons/etool16/newexprj_wiz.gif"
             id="org.eclipse.riena.internal.ui.templates.MailRienaWizard"
             java="true"
-            name="%pluginContent.mailRiena.name"
+            name="%mailRiena.name"
             rcp="true"
             ui-content="true">
          <description>
-            %pluginContent.mailRiena.description
+            %mailRiena.desc
          </description>
       </wizard>
       <!-- contribute to rcp wizards -->
