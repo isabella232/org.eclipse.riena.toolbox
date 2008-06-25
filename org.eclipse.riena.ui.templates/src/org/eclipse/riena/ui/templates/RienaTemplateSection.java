@@ -16,7 +16,9 @@ import java.net.URL;
 import java.util.*;
 
 import org.eclipse.core.runtime.*;
+import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
+import org.eclipse.pde.ui.templates.PluginReference;
 import org.osgi.framework.Bundle;
 
 public abstract class RienaTemplateSection extends OptionTemplateSection {
@@ -25,8 +27,8 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	public static final String KEY_PRODUCT_NAME = "productName"; //$NON-NLS-1$
 
 	public static final String VALUE_PRODUCT_ID = "product"; //$NON-NLS-1$
-	public static final String VALUE_PRODUCT_NAME = "RCP Product"; //$NON-NLS-1$
-	public static final String VALUE_PERSPECTIVE_NAME = "RCP Perspective"; //$NON-NLS-1$
+	public static final String VALUE_PRODUCT_NAME = "Riena Product"; //$NON-NLS-1$
+	public static final String VALUE_PERSPECTIVE_NAME = "Riena Perspective"; //$NON-NLS-1$
 	public static final String VALUE_APPLICATION_ID = "application"; //$NON-NLS-1$
 
 	protected ResourceBundle getPluginResourceBundle() {
@@ -98,6 +100,33 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 
 	protected boolean copyBrandingDirectory() {
 		return getBooleanOption(KEY_PRODUCT_BRANDING);
+	}
+	
+	public IPluginReference[] getUIDependencies(String schemaVersion) {
+		IPluginReference[] dep = new IPluginReference[15];
+		int i = 0;
+		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.navigation", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.navigation.ui", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.navigation.ui.swt", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.ui", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.ui.workbench", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.core", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.sample.app.common", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.core.databinding", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.core.databinding.beans", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.jface.databinding", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.ui.ridgets.swt", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.ui.ridgets", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.ui.core", null, 0); //$NON-NLS-1$
+		return dep;
 	}
 
 //	protected void createBrandingOptions() {

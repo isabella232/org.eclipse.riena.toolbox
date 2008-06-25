@@ -16,6 +16,18 @@
             %pluginContent.helloRiena.description
          </description>
       </wizard>
+      <wizard
+            class="org.eclipse.riena.ui.templates.mail.MailNewWizard"
+            icon="$nl$/icons/etool16/newexprj_wiz.gif"
+            id="org.eclipse.riena.internal.ui.templates.MailRienaWizard"
+            java="true"
+            name="%pluginContent.mailRiena.name"
+            rcp="true"
+            ui-content="true">
+         <description>
+            %pluginContent.mailRiena.description
+         </description>
+      </wizard>
       <!-- contribute to rcp wizards -->
    </extension>
 

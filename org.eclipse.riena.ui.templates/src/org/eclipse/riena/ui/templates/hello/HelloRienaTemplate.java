@@ -211,30 +211,7 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	 * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#getDependencies(java.lang.String)
 	 */
 	public IPluginReference[] getDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[15];
-		int i = 0;
-		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.riena.navigation", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.navigation.ui", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.navigation.ui.swt", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.ui", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.ui.workbench", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.riena.core", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.sample.app.common", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.core.databinding", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.core.databinding.beans", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.jface.databinding", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.ui.ridgets.swt", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.riena.ui.ridgets", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference("org.eclipse.riena.ui.core", null, 0); //$NON-NLS-1$
-		return dep;
+		return getUIDependencies(schemaVersion);
 	}
 
 	/*
