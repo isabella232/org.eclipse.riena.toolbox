@@ -122,7 +122,7 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 		element.setName("perspective"); //$NON-NLS-1$
 		element
 				.setAttribute(
-						"class", "org.eclipse.riena.navigation.ui.swt.views.SubApplicationView"); //$NON-NLS-1$ //$NON-NLS-2$
+						"class", "org.eclipse.riena.navigation.ui.swt.views.SubApplicationPerspectiveFactory"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("name", VALUE_PERSPECTIVE_NAME); //$NON-NLS-1$
 		element.setAttribute("id", "helloWorldSubApplication"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(element);

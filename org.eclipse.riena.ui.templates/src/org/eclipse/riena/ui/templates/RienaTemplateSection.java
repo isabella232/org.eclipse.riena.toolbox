@@ -11,6 +11,7 @@
 
 package org.eclipse.riena.ui.templates;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -128,6 +129,16 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		dep[i++] = new PluginReference("org.eclipse.riena.ui.core", null, 0); //$NON-NLS-1$
 		return dep;
 	}
+
+	@Override
+	protected boolean isOkToCreateFolder(File sourceFolder) {
+		if (sourceFolder.getName().equals("CVS")) {
+			return false;
+		} else {
+			return super.isOkToCreateFolder(sourceFolder);}
+	}
+	
+	
 
 //	protected void createBrandingOptions() {
 //		addOption(KEY_PRODUCT_BRANDING,
