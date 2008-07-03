@@ -104,7 +104,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	}
 	
 	public IPluginReference[] getUIDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[15];
+		IPluginReference[] dep = new IPluginReference[14];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.navigation", null, 0); //$NON-NLS-1$
@@ -115,8 +115,6 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		dep[i++] = new PluginReference("org.eclipse.ui", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.ui.workbench", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.core", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.sample.app.common", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference(
 				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.core.databinding", null, 0); //$NON-NLS-1$
