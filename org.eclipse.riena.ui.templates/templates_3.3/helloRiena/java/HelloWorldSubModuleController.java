@@ -1,10 +1,10 @@
 package $packageName$;
 
 import org.eclipse.riena.navigation.ISubModuleNode;
-import org.eclipse.riena.navigation.ui.controllers.SubModuleNodeViewController;
+import org.eclipse.riena.navigation.ui.controllers.SubModuleController;
 import org.eclipse.riena.ui.ridgets.ILabelRidget;
 
-public class HelloWorldSubModuleController extends SubModuleNodeViewController {
+public class HelloWorldSubModuleController extends SubModuleController {
 
 	private ILabelRidget labelRidget;
 	private TxtBean bean;
