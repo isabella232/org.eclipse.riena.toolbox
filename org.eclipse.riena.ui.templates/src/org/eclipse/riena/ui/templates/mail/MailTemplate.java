@@ -21,7 +21,6 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.internal.ui.IHelpContextIds;
 import org.eclipse.pde.ui.IFieldData;
-import org.eclipse.pde.ui.templates.PluginReference;
 import org.eclipse.riena.ui.templates.RienaTemplateSection;
 
 public class MailTemplate extends RienaTemplateSection {
@@ -88,6 +87,8 @@ public class MailTemplate extends RienaTemplateSection {
 		if (getTargetVersion() >= 3.1) {
 			createCommandExtension();
 			createBindingsExtension();
+			createUIMenusExtension();
+			createUIHandlersExtension();
 		}
 		createProductExtension();
 	}
@@ -170,7 +171,7 @@ public class MailTemplate extends RienaTemplateSection {
 		element.setName("command"); //$NON-NLS-1$
 		element.setAttribute("description", "Opens a mailbox"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("name", "Open Mailbox"); //$NON-NLS-1$ //$NON-NLS-2$
-		element.setAttribute("id", id + ".open"); //$NON-NLS-1$ //$NON-NLS-2$
+		element.setAttribute("id", "rcp.mail.open"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("categoryId", id + ".category"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(element);
 
@@ -178,7 +179,7 @@ public class MailTemplate extends RienaTemplateSection {
 		element.setName("command"); //$NON-NLS-1$
 		element.setAttribute("description", "Open a message dialog"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("name", "Open Message Dialog"); //$NON-NLS-1$ //$NON-NLS-2$
-		element.setAttribute("id", id + ".openMessage"); //$NON-NLS-1$ //$NON-NLS-2$
+		element.setAttribute("id", "rcp.mail.openMessage"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("categoryId", id + ".category"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(element);
 
@@ -195,7 +196,7 @@ public class MailTemplate extends RienaTemplateSection {
 		IPluginElement element = model.getPluginFactory().createElement(
 				extension);
 		element.setName("key"); //$NON-NLS-1$
-		element.setAttribute("commandId", id + ".open"); //$NON-NLS-1$ //$NON-NLS-2$
+		element.setAttribute("commandId", "rcp.mail.open"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("sequence", "CTRL+2"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute(
 				"schemeId", "org.eclipse.ui.defaultAcceleratorConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -203,7 +204,7 @@ public class MailTemplate extends RienaTemplateSection {
 
 		element = model.getPluginFactory().createElement(extension);
 		element.setName("key"); //$NON-NLS-1$
-		element.setAttribute("commandId", id + ".openMessage"); //$NON-NLS-1$ //$NON-NLS-2$
+		element.setAttribute("commandId", "rcp.mail.openMessage"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("sequence", "CTRL+3"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute(
 				"schemeId", "org.eclipse.ui.defaultAcceleratorConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -216,6 +217,94 @@ public class MailTemplate extends RienaTemplateSection {
 		element.setAttribute(
 				"schemeId", "org.eclipse.ui.defaultAcceleratorConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(element);
+
+		if (!extension.isInTheModel())
+			plugin.add(extension);
+	}
+
+	private void createUIMenusExtension() throws CoreException {
+		IPluginBase plugin = model.getPluginBase();
+		IPluginExtension extension = createExtension("org.eclipse.ui.menus",
+				true);
+
+		IPluginElement element = model.getPluginFactory().createElement(
+				extension);
+		element.setName("menuContribution");
+		element.setAttribute("locationURI",
+				"toolbar:org.eclipse.ui.main.toolbar?after=additions");
+		extension.add(element);
+
+		IPluginElement toolbar = model.getPluginFactory()
+				.createElement(element);
+		toolbar.setName("toolbar");
+		toolbar.setAttribute("id", "riena.rcp.toolbar");
+		element.add(toolbar);
+
+		IPluginElement command = model.getPluginFactory()
+				.createElement(toolbar);
+		command.setName("command");
+		command.setAttribute("commandId", "rcp.mail.open");
+		command.setAttribute("icon", "icons/sample2.gif");
+		command.setAttribute("style", "push");
+		toolbar.add(command);
+
+		command = model.getPluginFactory().createElement(toolbar);
+		command.setName("command");
+		command.setAttribute("commandId", "rcp.mail.openMessage");
+		command.setAttribute("icon", "icons/sample3.gif");
+		command.setAttribute("style", "push");
+		toolbar.add(command);
+
+		IPluginElement element2 = model.getPluginFactory().createElement(
+				extension);
+		element2.setName("menuContribution");
+		element2.setAttribute("locationURI", "menu:org.eclipse.ui.main.menu");
+		extension.add(element2);
+
+		IPluginElement menubar = model.getPluginFactory()
+				.createElement(element);
+		menubar.setName("menu");
+		menubar.setAttribute("label", "&File");
+		element2.add(menubar);
+
+		IPluginElement commandM = model.getPluginFactory().createElement(
+				toolbar);
+		commandM.setName("command");
+		commandM.setAttribute("commandId", "rcp.mail.open");
+		commandM.setAttribute("label", "Open Mailbox");
+		commandM.setAttribute("style", "push");
+		menubar.add(commandM);
+
+		commandM = model.getPluginFactory().createElement(toolbar);
+		commandM.setName("command");
+		commandM.setAttribute("commandId", "rcp.mail.openMessage");
+		commandM.setAttribute("label", "Open Message Dialog");
+		commandM.setAttribute("style", "push");
+		menubar.add(commandM);
+
+		if (!extension.isInTheModel())
+			plugin.add(extension);
+	}
+
+	private void createUIHandlersExtension() throws CoreException {
+		IPluginBase plugin = model.getPluginBase();
+		IPluginExtension extension = createExtension("org.eclipse.ui.handlers",
+				true);
+
+		IPluginElement handler = model.getPluginFactory().createElement(
+				extension);
+		handler.setName("handler");
+		handler.setAttribute("class", getStringOption(KEY_PACKAGE_NAME)
+				+ ".OpenViewHandler");
+		handler.setAttribute("commandId", "rcp.mail.open");
+		extension.add(handler);
+
+		handler = model.getPluginFactory().createElement(extension);
+		handler.setName("handler");
+		handler.setAttribute("class", getStringOption(KEY_PACKAGE_NAME)
+				+ ".MessagePopupHandler");
+		handler.setAttribute("commandId", "rcp.mail.openMessage");
+		extension.add(handler);
 
 		if (!extension.isInTheModel())
 			plugin.add(extension);
