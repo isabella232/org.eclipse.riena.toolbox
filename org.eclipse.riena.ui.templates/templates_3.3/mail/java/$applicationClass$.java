@@ -1,18 +1,18 @@
 package $packageName$;
 
-import org.eclipse.riena.navigation.IApplicationModel;
+import org.eclipse.riena.navigation.IApplicationNode;
 import org.eclipse.riena.navigation.IModuleGroupNode;
 import org.eclipse.riena.navigation.IModuleNode;
 import org.eclipse.riena.navigation.ISubApplicationNode;
 import org.eclipse.riena.navigation.ISubModuleNode;
-import org.eclipse.riena.navigation.model.ApplicationModel;
+import org.eclipse.riena.navigation.model.ApplicationNode;
 import org.eclipse.riena.navigation.model.ModuleGroupNode;
 import org.eclipse.riena.navigation.model.ModuleNode;
 import org.eclipse.riena.navigation.model.SubApplicationNode;
 import org.eclipse.riena.navigation.model.SubModuleNode;
 import org.eclipse.riena.navigation.ui.swt.application.SwtApplication;
-import org.eclipse.riena.navigation.ui.swt.presentation.SwtPresentationManager;
-import org.eclipse.riena.navigation.ui.swt.presentation.SwtPresentationManagerAccessor;
+import org.eclipse.riena.navigation.ui.swt.presentation.SwtViewProvider;
+import org.eclipse.riena.navigation.ui.swt.presentation.SwtViewProviderAccessor;
 import org.osgi.framework.Bundle;
 
 /**
@@ -21,10 +21,10 @@ import org.osgi.framework.Bundle;
 public class Application extends SwtApplication {
 	
 	@Override
-	protected IApplicationModel createModel() {
-		SwtPresentationManager presentation = SwtPresentationManagerAccessor.getManager();
+	protected IApplicationNode createModel() {
+		SwtViewProvider presentation = SwtViewProviderAccessor.getViewProvider();
 		
-		ApplicationModel app = new ApplicationModel("Riena Mail");
+		ApplicationNode app = new ApplicationNode("Riena Mail");
 		
 		ISubApplicationNode subApp = new SubApplicationNode("Your Mail");
 		app.addChild(subApp);
@@ -57,7 +57,7 @@ public class Application extends SwtApplication {
 			                               String viewId) {
 		ISubModuleNode subModule = new SubModuleNode(caption);
 		parent.addChild(subModule);
-		SwtPresentationManagerAccessor.getManager().present(subModule, viewId);
+		SwtViewProviderAccessor.getViewProvider().present(subModule, viewId);
 		return subModule;
 	}
 
