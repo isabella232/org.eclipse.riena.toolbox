@@ -14,9 +14,13 @@ package org.eclipse.riena.ui.templates;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
 import org.eclipse.pde.ui.templates.PluginReference;
@@ -61,8 +65,6 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		ArrayList result = new ArrayList();
 		if (version >= 3.4)
 			result.add("templates_3.4" + "/" + getSectionId() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		if (version >= 3.3)
-			result.add("templates_3.3" + "/" + getSectionId() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return (String[]) result.toArray(new String[result.size()]);
 	}
 
@@ -102,7 +104,35 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	protected boolean copyBrandingDirectory() {
 		return getBooleanOption(KEY_PRODUCT_BRANDING);
 	}
-	
+
+	public IPluginReference[] getCoreDependencies(String schemaVersion) {
+		IPluginReference[] dep = new IPluginReference[1];
+		int i = 0;
+		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
+		return dep;
+	}
+
+	public IPluginReference[] getCommonDependencies(String schemaVersion) {
+		IPluginReference[] dep = new IPluginReference[2];
+		int i = 0;
+		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
+		return dep;
+	}
+
+	public IPluginReference[] getHeadlessClientDependencies(String schemaVersion) {
+		IPluginReference[] dep = new IPluginReference[4];
+		int i = 0;
+		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.core", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference(
+				"org.eclipse.riena.communication.factory.hessian", null, 0); //$NON-NLS-1$
+		return dep;
+	}
+
 	public IPluginReference[] getUIDependencies(String schemaVersion) {
 		IPluginReference[] dep = new IPluginReference[2];
 		int i = 0;
@@ -111,19 +141,35 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		return dep;
 	}
 
+	public IPluginReference[] getServiceDependencies(String schemaVersion) {
+		IPluginReference[] dep = new IPluginReference[2];
+		int i = 0;
+		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.server", null, 0); //$NON-NLS-1$
+		return dep;
+	}
+
 	@Override
 	protected boolean isOkToCreateFolder(File sourceFolder) {
 		if (sourceFolder.getName().equals("CVS")) {
 			return false;
 		} else {
-			return super.isOkToCreateFolder(sourceFolder);}
+			return super.isOkToCreateFolder(sourceFolder);
+		}
 	}
-	
-	
 
-//	protected void createBrandingOptions() {
-//		addOption(KEY_PRODUCT_BRANDING,
-//				PDETemplateMessages.HelloRCPTemplate_productBranding, false, 0);
-//	}
+	@Override
+	public String getReplacementString(String fileName, String key) {
+		if ((fileName.endsWith(".launch") || fileName.endsWith(".java"))
+				&& key.startsWith("{") && key.contains("}")) {
+			return "$" + key;
+		}
+		return super.getReplacementString(fileName, key);
+	}
+
+	// protected void createBrandingOptions() {
+	// addOption(KEY_PRODUCT_BRANDING,
+	// PDETemplateMessages.HelloRCPTemplate_productBranding, false, 0);
+	// }
 
 }

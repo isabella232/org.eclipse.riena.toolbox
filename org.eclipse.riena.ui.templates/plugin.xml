@@ -28,6 +28,33 @@
             %mailRiena.desc
          </description>
       </wizard>
+      <wizard
+            class="org.eclipse.riena.ui.templates.rienaCustomerSample.RienaClientWizard"
+            icon="$nl$/icons/etool16/newexprj_wiz.gif"
+            id="org.eclipse.riena.internal.ui.templates.RienaClientWizard"
+            java="true"
+            name="Riena Sample Client"
+            rcp="true"
+            ui-content="true">
+      </wizard>
+      <wizard
+            class="org.eclipse.riena.ui.templates.rienaCustomerSample.RienaServiceWizard"
+            icon="$nl$/icons/etool16/newexprj_wiz.gif"
+            id="org.eclipse.riena.internal.ui.templates.RienaServiceWizard"
+            java="true"
+            name="Riena Sample Service"
+            rcp="true"
+            ui-content="true">
+      </wizard>
+      <wizard
+            class="org.eclipse.riena.ui.templates.rienaCustomerSample.RienaCommonWizard"
+            icon="$nl$/icons/etool16/newexprj_wiz.gif"
+            id="org.eclipse.riena.internal.ui.templates.RienaCommonWizard"
+            java="true"
+            name="Riena Sample Common"
+            rcp="true"
+            ui-content="true">
+      </wizard>
       <!-- contribute to rcp wizards -->
    </extension>
 
