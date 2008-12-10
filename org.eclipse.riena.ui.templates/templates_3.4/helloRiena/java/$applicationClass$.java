@@ -19,9 +19,9 @@ import org.osgi.framework.Bundle;
  * Riena Hello World Sample
  */
 public class $applicationClass$ extends SwtApplication {
-	
+
 	private IApplicationNode application;
-	
+
 	/**
 	 * Creates the model of the application "Hello world".
 	 * 
@@ -30,24 +30,8 @@ public class $applicationClass$ extends SwtApplication {
 	@Override
 	protected IApplicationNode createModel() {
 
-		SwtViewProvider presentation = SwtViewProviderAccessor.getViewProvider();
 
 		application = new ApplicationNode("Hello World Application");
-		ISubApplicationNode subApplication = new SubApplicationNode("Riena Samples");
-		presentation.present(subApplication, "helloWorldSubApplication");
-		application.addChild(subApplication);
-
-		IModuleGroupNode moduleGroup = new ModuleGroupNode();
-		subApplication.addChild(moduleGroup);
-
-		// simple hello world
-		IModuleNode helloWorldModule = new ModuleNode("Hello World");
-		moduleGroup.addChild(helloWorldModule);
-
-		ISubModuleNode helloWorldSubModule = new SubModuleNode("Hello World");
-		presentation.registerView(HelloWorldSubModuleView.ID, false);
-		presentation.present(helloWorldSubModule, HelloWorldSubModuleView.ID);
-		helloWorldModule.addChild(helloWorldSubModule);
 
 		return application;
 
@@ -56,12 +40,13 @@ public class $applicationClass$ extends SwtApplication {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.riena.navigation.ui.swt.application.SwtApplication#getBundle()
+	 * @see
+	 * org.eclipse.riena.navigation.ui.swt.application.SwtApplication#getBundle
+	 * ()
 	 */
 	@Override
 	protected Bundle getBundle() {
 		return Activator.getDefault().getBundle();
 	}
-	
 
 }

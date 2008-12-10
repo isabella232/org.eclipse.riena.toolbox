@@ -20,7 +20,6 @@ import org.eclipse.pde.core.plugin.IPluginExtension;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.ui.IFieldData;
-import org.eclipse.pde.ui.templates.PluginReference;
 import org.eclipse.riena.ui.templates.RienaTemplateSection;
 
 public class HelloRienaTemplate extends RienaTemplateSection {
@@ -34,7 +33,8 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	}
 
 	public void addPages(Wizard wizard) {
-		WizardPage page = createPage(0, "");// IHelpContextIds.TEMPLATE_RCP_MAIL);
+		WizardPage page = createPage(0, "");//IHelpContextIds.TEMPLATE_RCP_MAIL)
+		// ;
 		page.setTitle("Application window &title");
 		page
 				.setDescription("This template creates a minimal standalone RCP application that consists of an application window with a title.");
@@ -79,12 +79,15 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#updateModel(org.eclipse.core.runtime.IProgressMonitor)
+	 * @see
+	 * org.eclipse.pde.ui.templates.AbstractTemplateSection#updateModel(org.
+	 * eclipse.core.runtime.IProgressMonitor)
 	 */
 	protected void updateModel(IProgressMonitor monitor) throws CoreException {
 		createApplicationExtension();
 		createPerspectiveExtension();
 		createViewExtension();
+		createNavigationExtension();
 		if (getBooleanOption(KEY_PRODUCT_BRANDING))
 			createProductExtension();
 	}
@@ -151,6 +154,58 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 			plugin.add(extension);
 	}
 
+	private void createNavigationExtension() throws CoreException {
+		IPluginBase plugin = model.getPluginBase();
+		String id = plugin.getId();
+		IPluginExtension extension = createExtension(
+				"org.eclipse.riena.navigation.assemblies", true);
+
+		IPluginElement assembly = model.getPluginFactory().createElement(
+				extension);
+		assembly.setName("assembly");
+		assembly.setAttribute("autostartsequence", "1");
+		assembly.setAttribute("parentTypeId", "application");
+		assembly.setAttribute("id", "assembly.1");
+		extension.add(assembly);
+
+		IPluginElement subapplication = model.getPluginFactory().createElement(
+				assembly);
+		subapplication.setName("subapplication");
+		subapplication.setAttribute("label", "HelloWorldSubapplication");
+		subapplication.setAttribute("typeId", "subapplication.1");
+		subapplication.setAttribute("view", "helloWorldSubApplication");
+		assembly.add(subapplication);
+
+		IPluginElement modulegroup = model.getPluginFactory().createElement(
+				subapplication);
+		modulegroup.setName("modulegroup");
+		modulegroup.setAttribute("name", "modulegroup");
+		modulegroup.setAttribute("typeId", "moduleGroup.1");
+		subapplication.add(modulegroup);
+
+		IPluginElement module = model.getPluginFactory().createElement(
+				modulegroup);
+		module.setName("module");
+		module.setAttribute("label", "Hello World");
+		module.setAttribute("uncloseable", "false");
+		module.setAttribute("typeId", "module.1");
+		modulegroup.add(module);
+
+		IPluginElement submodule = model.getPluginFactory().createElement(
+				module);
+		submodule.setName("submodule");
+		submodule.setAttribute("controller", getStringOption(KEY_PACKAGE_NAME)
+				+ ".HelloWorldSubModuleController");
+		submodule.setAttribute("shared", "false");
+		submodule.setAttribute("typeId", "submodule.1");
+		submodule.setAttribute("label", "Hello World View");
+		submodule.setAttribute("view", id + ".HelloWorldSubModuleView");
+		module.add(submodule);
+
+		if (!extension.isInTheModel())
+			plugin.add(extension);
+	}
+
 	private void createProductExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
 		IPluginExtension extension = createExtension(
@@ -181,7 +236,8 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.pde.ui.templates.ITemplateSection#getUsedExtensionPoint()
+	 * @see
+	 * org.eclipse.pde.ui.templates.ITemplateSection#getUsedExtensionPoint()
 	 */
 	public String getUsedExtensionPoint() {
 		return null;
@@ -190,7 +246,8 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.pde.ui.templates.BaseOptionTemplateSection#isDependentOnParentWizard()
+	 * @seeorg.eclipse.pde.ui.templates.BaseOptionTemplateSection#
+	 * isDependentOnParentWizard()
 	 */
 	public boolean isDependentOnParentWizard() {
 		return true;
@@ -199,7 +256,9 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#getNumberOfWorkUnits()
+	 * @see
+	 * org.eclipse.pde.ui.templates.AbstractTemplateSection#getNumberOfWorkUnits
+	 * ()
 	 */
 	public int getNumberOfWorkUnits() {
 		return super.getNumberOfWorkUnits() + 1;
@@ -208,7 +267,9 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.pde.ui.templates.AbstractTemplateSection#getDependencies(java.lang.String)
+	 * @see
+	 * org.eclipse.pde.ui.templates.AbstractTemplateSection#getDependencies(
+	 * java.lang.String)
 	 */
 	public IPluginReference[] getDependencies(String schemaVersion) {
 		return getUIDependencies(schemaVersion);
@@ -217,7 +278,8 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.pde.internal.ui.templates.PDETemplateSection#getNewFiles()
+	 * @see
+	 * org.eclipse.pde.internal.ui.templates.PDETemplateSection#getNewFiles()
 	 */
 	public String[] getNewFiles() {
 		if (copyBrandingDirectory())

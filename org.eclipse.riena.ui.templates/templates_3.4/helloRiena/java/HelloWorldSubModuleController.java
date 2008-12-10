@@ -15,6 +15,10 @@ public class HelloWorldSubModuleController extends SubModuleController {
 		bean.setTxt("Hello World");
 		bean.setName("");
 	}
+	
+	public void configureRidgets() {
+		labelRidget = (ILabelRidget)getRidget("helloLabel");
+	}
 
 	/**
 	 * @see org.eclipse.riena.navigation.ui.controllers.SubModuleNodeViewController#afterBind()
@@ -59,14 +63,6 @@ public class HelloWorldSubModuleController extends SubModuleController {
 			this.txt = txt;
 		}
 
-	}
-
-	public ILabelRidget getLabelRidget() {
-		return labelRidget;
-	}
-
-	public void setLabelRidget(ILabelRidget labelRidget) {
-		this.labelRidget = labelRidget;
 	}
 
 }

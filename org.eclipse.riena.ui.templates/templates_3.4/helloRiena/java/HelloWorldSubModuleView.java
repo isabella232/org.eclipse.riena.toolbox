@@ -41,7 +41,7 @@ public class HelloWorldSubModuleView extends SubModuleView<HelloWorldSubModuleCo
 
 		FormLayout layout = new FormLayout();
 		parent.setLayout(layout);
-		addUIControl(helloLabel, "labelRidget");
+		addUIControl(helloLabel, "helloLabel");
 
 		// layout
 		FormData data = new FormData();

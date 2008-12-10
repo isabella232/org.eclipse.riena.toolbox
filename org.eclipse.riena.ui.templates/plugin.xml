@@ -57,5 +57,12 @@
       </wizard>
       <!-- contribute to rcp wizards -->
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.riena.ui.templates.category1"
+            name="name">
+      </category>
+   </extension>
 
 </plugin>
