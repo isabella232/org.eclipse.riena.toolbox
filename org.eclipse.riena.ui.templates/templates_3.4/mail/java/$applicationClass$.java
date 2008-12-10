@@ -5,60 +5,55 @@ import org.eclipse.riena.navigation.IModuleGroupNode;
 import org.eclipse.riena.navigation.IModuleNode;
 import org.eclipse.riena.navigation.ISubApplicationNode;
 import org.eclipse.riena.navigation.ISubModuleNode;
+import org.eclipse.riena.navigation.NavigationNodeId;
 import org.eclipse.riena.navigation.model.ApplicationNode;
 import org.eclipse.riena.navigation.model.ModuleGroupNode;
 import org.eclipse.riena.navigation.model.ModuleNode;
 import org.eclipse.riena.navigation.model.SubApplicationNode;
 import org.eclipse.riena.navigation.model.SubModuleNode;
 import org.eclipse.riena.navigation.ui.swt.application.SwtApplication;
-import org.eclipse.riena.navigation.ui.swt.presentation.SwtViewProvider;
-import org.eclipse.riena.navigation.ui.swt.presentation.SwtViewProviderAccessor;
+import org.eclipse.riena.ui.workarea.WorkareaManager;
 import org.osgi.framework.Bundle;
 
 /**
  * This class controls all aspects of the application's execution
  */
 public class Application extends SwtApplication {
+
+	public static final String ID_GROUP_MBOXES = "rcp.mail.groupMailboxes"; //$NON-NLS-1$
 	
 	@Override
 	protected IApplicationNode createModel() {
-		SwtViewProvider presentation = SwtViewProviderAccessor.getViewProvider();
-		
-		ApplicationNode app = new ApplicationNode("Riena Mail");
-		
-		ISubApplicationNode subApp = new SubApplicationNode("Your Mail");
+		ApplicationNode app = new ApplicationNode("Riena Mail"); //NON-NLS-1
+
+		ISubApplicationNode subApp = new SubApplicationNode("Your Mail"); //NON-NLS-1
 		app.addChild(subApp);
-		presentation.present(subApp, "rcp.mail.perspective");
-		
-		IModuleGroupNode groupMailboxes = new ModuleGroupNode();
+		WorkareaManager.getInstance().registerDefinition(subApp, "rcp.mail.perspective"); //NON-NLS-1
+
+		IModuleGroupNode groupMailboxes = new ModuleGroupNode(new NavigationNodeId(Application.ID_GROUP_MBOXES));
 		subApp.addChild(groupMailboxes);
-		
-		IModuleNode moduleAccount1 = createModule("me@this.com", groupMailboxes);
-		presentation.registerView(View.ID, false);
-		createSubMobule("Inbox", moduleAccount1, View.ID);
-		createSubMobule("Drafts", moduleAccount1, View.ID);
-		createSubMobule("Sent", moduleAccount1, View.ID);
-		
-		IModuleNode moduleAccount2 = createModule("other@aol.com", groupMailboxes);
-		createSubMobule("Inbox", moduleAccount2, View.ID);
+
+		IModuleNode moduleAccount1 = new ModuleNode("me@this.com"); //NON-NLS-1
+		groupMailboxes.addChild(moduleAccount1);
+		moduleAccount1.setClosable(false);
+
+		createSubMobule("Inbox", moduleAccount1, View.ID); //NON-NLS-1
+		createSubMobule("Drafts", moduleAccount1, View.ID); //NON-NLS-1
+		createSubMobule("Sent", moduleAccount1, View.ID); //NON-NLS-1
+
+
+		IModuleNode moduleAccount2 = new ModuleNode("other@aol.com"); //NON-NLS-1
+		groupMailboxes.addChild(moduleAccount2);
+		createSubMobule("Inbox", moduleAccount2, View.ID); //NON-NLS-1
 		
  		return app;
 	}
 
-	private IModuleNode createModule(String caption,
-			                         IModuleGroupNode parent) {
-		IModuleNode module = new ModuleNode(caption);
-		parent.addChild(module);
-		return module;
-	}
-	
-	private ISubModuleNode createSubMobule(String caption, 
-			                               IModuleNode parent, 
-			                               String viewId) {
-		ISubModuleNode subModule = new SubModuleNode(caption);
-		parent.addChild(subModule);
-		SwtViewProviderAccessor.getViewProvider().present(subModule, viewId);
-		return subModule;
+	public ISubModuleNode createSubMobule(String caption, IModuleNode parent, String viewId) {
+		ISubModuleNode result = new SubModuleNode(caption);
+		parent.addChild(result);
+		WorkareaManager.getInstance().registerDefinition(result, viewId);
+		return result;
 	}
 
 	@Override
