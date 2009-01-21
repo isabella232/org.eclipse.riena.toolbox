@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.riena.ui.templates.feature"
-      label="Riena UI Templates Feature"
-      version="1.0.0.M6">
+      label="Riena UI Templates Feature (Incubator)"
+      version="1.0.0.RC2">
 
    <description url="http://www.example.com/description">
       Riena Wizard for creating several UI projects from scratch to showcase Riena features.
@@ -20,7 +20,7 @@
          id="org.eclipse.riena.ui.templates"
          download-size="0"
          install-size="0"
-         version="1.0.0.M6"
+         version="1.0.0.RC2"
          unpack="false"/>
 
 </feature>
