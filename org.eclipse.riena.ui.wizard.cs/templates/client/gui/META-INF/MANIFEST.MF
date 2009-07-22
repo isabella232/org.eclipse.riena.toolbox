@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ${project} 
+Bundle-SymbolicName: ${plugin};singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: ${package}.CustomersClientActivator
+Bundle-ActivationPolicy: lazy
+Require-Bundle: ${plugin.common},
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.ui.workbench,
+ org.eclipse.riena.core,
+ org.eclipse.riena.communication.core,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.beans,
+ org.eclipse.jface.databinding,
+ org.eclipse.riena.client;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: ${executionEnvironment}
+

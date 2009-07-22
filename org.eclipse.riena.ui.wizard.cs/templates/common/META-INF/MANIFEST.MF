@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ${project} 
+Bundle-SymbolicName: ${plugin}
+Bundle-Version: 1.0.0
+Export-Package: ${package}
+Require-Bundle: org.eclipse.riena.communication.core
+Eclipse-RegisterBuddy: org.eclipse.riena.communication.core
+Bundle-RequiredExecutionEnvironment: ${executionEnvironment}

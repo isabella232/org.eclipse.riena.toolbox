@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ${project} 
+Bundle-SymbolicName: ${plugin};singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: ${package}.Activator
+Require-Bundle: ${plugin.common},
+ org.eclipse.riena.core,
+ org.eclipse.riena.communication.core
+Import-Package: org.osgi.framework
+Bundle-RequiredExecutionEnvironment: ${executionEnvironment}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.riena.ui.wizard.category"
+            name="Riena">
+      </category>
+      <wizard
+            canFinishEarly="false"
+            category="org.eclipse.riena.ui.wizard.category"
+            class="org.eclipse.riena.ui.wizard.cs.internal.RienaApplicationWizard"
+            finalPerspective="org.eclipse.pde.ui.PDEPerspective"
+            hasPages="true"
+            icon="icons/wizard.gif"
+            id="org.eclipse.riena.ui.wizard.cs"
+            name="Riena Remote Service Application"
+            project="true">
+      </wizard>
+   </extension>
+
+
+</plugin>
