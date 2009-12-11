@@ -38,7 +38,7 @@ public class MailTemplate extends RienaTemplateSection {
 		WizardPage page = createPage(0, IHelpContextIds.TEMPLATE_RCP_MAIL);
 		page.setTitle("Application window &title");
 		page
-				.setDescription("This template generates a standalone RCP application, complete with Riena's navigation, views, menu and toolbar actions, keybindings and a product definition.");
+				.setDescription("Creates a Riena application based on the Mail example, complete with navigation, views, menu and toolbar actions, keybindings and a product definition.");
 		wizard.addPage(page);
 		markPagesAdded();
 	}
