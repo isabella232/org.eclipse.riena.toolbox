@@ -41,4 +41,12 @@
          </description>
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.pde.core.targets">
+      <target
+            definition="targets/riena_1.2.0.rc1.target"
+            id="org.eclipse.riena.target.120rc1"
+            name="Riena Target 1.2.0.RC1">
+      </target>
+   </extension>
 </plugin>
