@@ -15,6 +15,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -37,8 +38,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	public static final String VALUE_APPLICATION_ID = "application"; //$NON-NLS-1$
 
 	protected ResourceBundle getPluginResourceBundle() {
-		Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle()
-				.getSymbolicName());
+		Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle().getSymbolicName());
 		return Platform.getResourceBundle(bundle);
 	}
 
@@ -62,10 +62,10 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 
 	private String[] getDirectoryCandidates() {
 		double version = getTargetVersion();
-		ArrayList result = new ArrayList();
+		List<String> result = new ArrayList<String>();
 		if (version >= 3.4)
 			result.add("templates_3.4" + "/" + getSectionId() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		return (String[]) result.toArray(new String[result.size()]);
+		return result.toArray(new String[result.size()]);
 	}
 
 	/*
@@ -96,8 +96,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		super.generateFiles(monitor);
 		// Copy the default splash screen if the branding option is selected
 		if (copyBrandingDirectory()) {
-			super.generateFiles(monitor, Activator.getDefault().getBundle()
-					.getEntry("branding/")); //$NON-NLS-1$
+			super.generateFiles(monitor, Activator.getDefault().getBundle().getEntry("branding/")); //$NON-NLS-1$
 		}
 	}
 
@@ -116,8 +115,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		IPluginReference[] dep = new IPluginReference[2];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
 		return dep;
 	}
 
@@ -126,10 +124,8 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.core", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
-		dep[i++] = new PluginReference(
-				"org.eclipse.riena.communication.factory.hessian", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
+		dep[i++] = new PluginReference("org.eclipse.riena.communication.factory.hessian", null, 0); //$NON-NLS-1$
 		return dep;
 	}
 
@@ -160,8 +156,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 
 	@Override
 	public String getReplacementString(String fileName, String key) {
-		if ((fileName.endsWith(".launch") || fileName.endsWith(".java"))
-				&& key.startsWith("{") && key.contains("}")) {
+		if ((fileName.endsWith(".launch") || fileName.endsWith(".java")) && key.startsWith("{") && key.contains("}")) {
 			return "$" + key;
 		}
 		return super.getReplacementString(fileName, key);

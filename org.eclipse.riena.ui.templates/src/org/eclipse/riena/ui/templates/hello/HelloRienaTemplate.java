@@ -33,8 +33,7 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	}
 
 	public void addPages(Wizard wizard) {
-		WizardPage page = createPage(0, "");//IHelpContextIds.TEMPLATE_RCP_MAIL)
-		// ;
+		WizardPage page = createPage(0, "");// IHelpContextIds.TEMPLATE_RCP_MAIL);
 		page.setTitle("Application window &title");
 		page
 				.setDescription("This template creates a minimal standalone RCP application that consists of an application window with a title.");
@@ -43,13 +42,11 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	}
 
 	private void createOptions() {
-		addOption(KEY_WINDOW_TITLE, "Application window &title:",
-				"Hello Riena", 0); //$NON-NLS-1$ 
+		addOption(KEY_WINDOW_TITLE, "Application window &title:", "Hello Riena", 0); //$NON-NLS-1$ 
 
 		addOption(KEY_PACKAGE_NAME, "Pa&ckage name:", (String) null, 0);
 
-		addOption(KEY_APPLICATION_CLASS,
-				"App&lication class:", "Application", 0); //$NON-NLS-1$ 
+		addOption(KEY_APPLICATION_CLASS, "App&lication class:", "Application", 0); //$NON-NLS-1$ 
 
 		// createBrandingOptions();
 	}
@@ -62,8 +59,7 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	}
 
 	public void initializeFields(IPluginModelBase model) {
-		String packageName = getFormattedPackageName(model.getPluginBase()
-				.getId());
+		String packageName = getFormattedPackageName(model.getPluginBase().getId());
 		initializeOption(KEY_PACKAGE_NAME, packageName);
 	}
 
@@ -95,20 +91,16 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	private void createApplicationExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
 
-		IPluginExtension extension = createExtension(
-				"org.eclipse.core.runtime.applications", true); //$NON-NLS-1$
+		IPluginExtension extension = createExtension("org.eclipse.core.runtime.applications", true); //$NON-NLS-1$
 		extension.setId(VALUE_APPLICATION_ID);
 
-		IPluginElement element = model.getPluginFactory().createElement(
-				extension);
+		IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("application"); //$NON-NLS-1$
 		extension.add(element);
 
 		IPluginElement run = model.getPluginFactory().createElement(element);
 		run.setName("run"); //$NON-NLS-1$
-		run
-				.setAttribute(
-						"class", getStringOption(KEY_PACKAGE_NAME) + "." + getStringOption(KEY_APPLICATION_CLASS)); //$NON-NLS-1$ //$NON-NLS-2$
+		run.setAttribute("class", getStringOption(KEY_PACKAGE_NAME) + "." + getStringOption(KEY_APPLICATION_CLASS)); //$NON-NLS-1$ //$NON-NLS-2$
 		element.add(run);
 
 		if (!extension.isInTheModel())
@@ -118,14 +110,10 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	private void createPerspectiveExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
 
-		IPluginExtension extension = createExtension(
-				"org.eclipse.ui.perspectives", true); //$NON-NLS-1$
-		IPluginElement element = model.getPluginFactory().createElement(
-				extension);
+		IPluginExtension extension = createExtension("org.eclipse.ui.perspectives", true); //$NON-NLS-1$
+		IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("perspective"); //$NON-NLS-1$
-		element
-				.setAttribute(
-						"class", "org.eclipse.riena.navigation.ui.swt.views.SubApplicationView"); //$NON-NLS-1$ //$NON-NLS-2$
+		element.setAttribute("class", "org.eclipse.riena.navigation.ui.swt.views.SubApplicationView"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("name", VALUE_PERSPECTIVE_NAME); //$NON-NLS-1$
 		element.setAttribute("id", "helloWorldSubApplication"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(element);
@@ -137,14 +125,11 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	private void createViewExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
 		String id = plugin.getId();
-		IPluginExtension extension = createExtension(
-				"org.eclipse.ui.views", true); //$NON-NLS-1$
+		IPluginExtension extension = createExtension("org.eclipse.ui.views", true); //$NON-NLS-1$
 
 		IPluginElement view = model.getPluginFactory().createElement(extension);
 		view.setName("view"); //$NON-NLS-1$
-		view
-				.setAttribute(
-						"class", getStringOption(KEY_PACKAGE_NAME) + ".HelloWorldSubModuleView"); //$NON-NLS-1$ //$NON-NLS-2$
+		view.setAttribute("class", getStringOption(KEY_PACKAGE_NAME) + ".HelloWorldSubModuleView"); //$NON-NLS-1$ //$NON-NLS-2$
 		view.setAttribute("name", "View"); //$NON-NLS-1$ //$NON-NLS-2$
 		view.setAttribute("id", id + ".HelloWorldSubModuleView"); //$NON-NLS-1$ //$NON-NLS-2$
 		view.setAttribute("allowMultiple", "true");
@@ -157,45 +142,38 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	private void createNavigationExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
 		String id = plugin.getId();
-		IPluginExtension extension = createExtension(
-				"org.eclipse.riena.navigation.assemblies", true);
+		IPluginExtension extension = createExtension("org.eclipse.riena.navigation.assemblies", true);
 
-		IPluginElement assembly = model.getPluginFactory().createElement(
-				extension);
+		IPluginElement assembly = model.getPluginFactory().createElement(extension);
 		assembly.setName("assembly");
 		assembly.setAttribute("autostartsequence", "1");
 		assembly.setAttribute("parentTypeId", "application");
 		assembly.setAttribute("id", "assembly.1");
 		extension.add(assembly);
 
-		IPluginElement subapplication = model.getPluginFactory().createElement(
-				assembly);
+		IPluginElement subapplication = model.getPluginFactory().createElement(assembly);
 		subapplication.setName("subapplication");
 		subapplication.setAttribute("label", "HelloWorldSubapplication");
 		subapplication.setAttribute("typeId", "subapplication.1");
 		subapplication.setAttribute("view", "helloWorldSubApplication");
 		assembly.add(subapplication);
 
-		IPluginElement modulegroup = model.getPluginFactory().createElement(
-				subapplication);
+		IPluginElement modulegroup = model.getPluginFactory().createElement(subapplication);
 		modulegroup.setName("modulegroup");
 		modulegroup.setAttribute("name", "modulegroup");
 		modulegroup.setAttribute("typeId", "moduleGroup.1");
 		subapplication.add(modulegroup);
 
-		IPluginElement module = model.getPluginFactory().createElement(
-				modulegroup);
+		IPluginElement module = model.getPluginFactory().createElement(modulegroup);
 		module.setName("module");
 		module.setAttribute("label", "Hello World");
-		module.setAttribute("uncloseable", "false");
+		module.setAttribute("unclosable", "false");
 		module.setAttribute("typeId", "module.1");
 		modulegroup.add(module);
 
-		IPluginElement submodule = model.getPluginFactory().createElement(
-				module);
+		IPluginElement submodule = model.getPluginFactory().createElement(module);
 		submodule.setName("submodule");
-		submodule.setAttribute("controller", getStringOption(KEY_PACKAGE_NAME)
-				+ ".HelloWorldSubModuleController");
+		submodule.setAttribute("controller", getStringOption(KEY_PACKAGE_NAME) + ".HelloWorldSubModuleController");
 		submodule.setAttribute("shared", "false");
 		submodule.setAttribute("typeId", "submodule.1");
 		submodule.setAttribute("label", "Hello World View");
@@ -208,23 +186,20 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 
 	private void createProductExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
-		IPluginExtension extension = createExtension(
-				"org.eclipse.core.runtime.products", true); //$NON-NLS-1$
+		IPluginExtension extension = createExtension("org.eclipse.core.runtime.products", true); //$NON-NLS-1$
 		extension.setId(VALUE_PRODUCT_ID);
 
 		IPluginElement element = model.getFactory().createElement(extension);
 		element.setName("product"); //$NON-NLS-1$
 		element.setAttribute("name", getStringOption(KEY_WINDOW_TITLE)); //$NON-NLS-1$  
-		element.setAttribute(
-				"application", plugin.getId() + "." + VALUE_APPLICATION_ID); //$NON-NLS-1$ //$NON-NLS-2$
+		element.setAttribute("application", plugin.getId() + "." + VALUE_APPLICATION_ID); //$NON-NLS-1$ //$NON-NLS-2$
 
 		IPluginElement property = model.getFactory().createElement(element);
 
 		property = model.getFactory().createElement(element);
 		property.setName("property"); //$NON-NLS-1$
 		property.setAttribute("name", "windowImages"); //$NON-NLS-1$ //$NON-NLS-2$
-		property.setAttribute(
-				"value", "icons/alt_window_16.gif,icons/alt_window_32.gif"); //$NON-NLS-1$ //$NON-NLS-2$
+		property.setAttribute("value", "icons/alt_window_16.gif,icons/alt_window_32.gif"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.add(property);
 
 		extension.add(element);
