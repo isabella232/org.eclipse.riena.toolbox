@@ -1,5 +1,7 @@
 package $packageName$;
 
+import org.eclipse.core.runtime.Platform;
+
 import org.eclipse.riena.navigation.IApplicationNode;
 import org.eclipse.riena.navigation.model.ApplicationNode;
 import org.eclipse.riena.navigation.ui.swt.application.SwtApplication;
@@ -23,7 +25,7 @@ public class $applicationClass$ extends SwtApplication {
 
 	@Override
 	protected Bundle getBundle() {
-		return Activator.getDefault().getBundle();
+		return Platform.getBundle("$pluginId$");
 	}
 
 }
