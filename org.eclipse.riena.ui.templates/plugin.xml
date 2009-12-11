@@ -7,7 +7,7 @@
       <wizard
             class="org.eclipse.riena.ui.templates.hello.HelloRienaNewWizard"
             icon="$nl$/icons/etool16/newexprj_wiz.gif"
-            id="org.eclipse.riena.internal.ui.templates.HelloRienaWizard"
+            id="org.eclipse.riena.ui.templates.hello.HelloRienaNewWizard"
             java="true"
             name="%helloRiena.name"
             rcp="true"
@@ -19,7 +19,7 @@
       <wizard
             class="org.eclipse.riena.ui.templates.mail.MailNewWizard"
             icon="$nl$/icons/etool16/newexprj_wiz.gif"
-            id="org.eclipse.riena.internal.ui.templates.MailRienaWizard"
+            id="org.eclipse.riena.ui.templates.mail.MailNewWizard"
             java="true"
             name="%mailRiena.name"
             rcp="true"
@@ -28,6 +28,19 @@
             %mailRiena.desc
          </description>
       </wizard>
+      <wizard
+            class="org.eclipse.riena.ui.templates.cs.ClientServerNewWizard"
+            icon="$nl$/icons/etool16/newexprj_wiz.gif"
+            id="org.eclipse.riena.ui.templates.cs.MailNewWizard"
+            java="true"
+            name="%cs.name"
+            rcp="true"
+            ui-content="true">
+         <description>
+            %cs.desc
+         </description>
+      </wizard>
+<!--
       <wizard
             class="org.eclipse.riena.ui.templates.rienaCustomerSample.RienaClientWizard"
             icon="$nl$/icons/etool16/newexprj_wiz.gif"
@@ -55,14 +68,6 @@
             rcp="true"
             ui-content="true">
       </wizard>
-      <!-- contribute to rcp wizards -->
+-->
    </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.riena.ui.templates.category1"
-            name="name">
-      </category>
-   </extension>
-
 </plugin>

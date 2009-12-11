@@ -36,7 +36,7 @@ public class MailTemplate extends RienaTemplateSection {
 
 	public void addPages(Wizard wizard) {
 		WizardPage page = createPage(0, IHelpContextIds.TEMPLATE_RCP_MAIL);
-		page.setTitle("Application window &title");
+		page.setTitle("Riena Mail Template");
 		page
 				.setDescription("Creates a Riena application based on the Mail example, complete with navigation, views, menu and toolbar actions, keybindings and a product definition.");
 		wizard.addPage(page);

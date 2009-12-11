@@ -34,7 +34,7 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 
 	public void addPages(Wizard wizard) {
 		WizardPage page = createPage(0, "");// IHelpContextIds.TEMPLATE_RCP_MAIL);
-		page.setTitle("Application window &title");
+		page.setTitle("Riena Hello World");
 		page.setDescription("Creates a small Riena application, with a navigation area and one view.");
 		wizard.addPage(page);
 		markPagesAdded();

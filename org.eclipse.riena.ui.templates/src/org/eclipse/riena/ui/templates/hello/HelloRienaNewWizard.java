@@ -16,19 +16,27 @@ import org.eclipse.pde.ui.templates.NewPluginTemplateWizard;
 
 public class HelloRienaNewWizard extends NewPluginTemplateWizard {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.pde.ui.templates.AbstractNewPluginTemplateWizard#init(org.eclipse.pde.ui.IFieldData)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.pde.ui.templates.AbstractNewPluginTemplateWizard#init(org
+	 * .eclipse.pde.ui.IFieldData)
 	 */
 	public void init(IFieldData data) {
 		super.init(data);
-		setWindowTitle("Hello World Riena");
+		setWindowTitle("Riena Hello World");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.pde.ui.templates.NewPluginTemplateWizard#createTemplateSections()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.pde.ui.templates.NewPluginTemplateWizard#createTemplateSections
+	 * ()
 	 */
 	public ITemplateSection[] createTemplateSections() {
-		return new ITemplateSection[] {new HelloRienaTemplate()};
+		return new ITemplateSection[] { new HelloRienaTemplate() };
 	}
 
 }

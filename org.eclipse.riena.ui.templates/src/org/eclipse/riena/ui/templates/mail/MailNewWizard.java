@@ -16,19 +16,27 @@ import org.eclipse.pde.ui.templates.NewPluginTemplateWizard;
 
 public class MailNewWizard extends NewPluginTemplateWizard {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.pde.ui.templates.AbstractNewPluginTemplateWizard#init(org.eclipse.pde.ui.IFieldData)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.pde.ui.templates.AbstractNewPluginTemplateWizard#init(org
+	 * .eclipse.pde.ui.IFieldData)
 	 */
 	public void init(IFieldData data) {
 		super.init(data);
-		setWindowTitle("New plug-in project with an Riena mail template");
+		setWindowTitle("Riena Mail Template");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.pde.ui.templates.NewPluginTemplateWizard#createTemplateSections()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.pde.ui.templates.NewPluginTemplateWizard#createTemplateSections
+	 * ()
 	 */
 	public ITemplateSection[] createTemplateSections() {
-		return new ITemplateSection[] {new MailTemplate()};
+		return new ITemplateSection[] { new MailTemplate() };
 	}
 
 }
