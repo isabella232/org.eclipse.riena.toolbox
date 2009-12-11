@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 compeople AG and others.
+ * Copyright (c) 2007, 2009 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,14 +10,16 @@
  *******************************************************************************/
 package $packageName$;
 
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.riena.navigation.ISubModuleNode;
 import org.eclipse.riena.navigation.ui.swt.views.SubModuleView;
+import org.eclipse.riena.ui.swt.lnf.LnfKeyConstants;
+import org.eclipse.riena.ui.swt.lnf.LnfManager;
+import org.eclipse.riena.ui.swt.utils.UIControlsFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * Very simple sub module view, that displays only a label with the text "Hello
@@ -29,27 +31,21 @@ public class HelloWorldSubModuleView extends SubModuleView<HelloWorldSubModuleCo
 	public static final String ID = "$pluginId$.HelloWorldSubModuleView";
 
 	/**
-	 * Add a label with the text "Hello World!" to the view.
-	 * 
-	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+	 * Add a Text widget with the text "Hello World!" to the view.
 	 */
 	@Override
 	public void basicCreatePartControl(Composite parent) {
-		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		final Label helloLabel = new Label(parent, SWT.CENTER);
-		helloLabel.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-
-		FormLayout layout = new FormLayout();
-		parent.setLayout(layout);
-		addUIControl(helloLabel, "helloLabel");
-
-		// layout
-		FormData data = new FormData();
-		data.height = 20;
-		data.width = 90;
-		data.top = new FormAttachment(0, 25);
-		data.left = new FormAttachment(0, 5);
-		helloLabel.setLayoutData(data);
+		parent.setBackground(LnfManager.getLnf().getColor(LnfKeyConstants.SUB_MODULE_BACKGROUND));
+		parent.setLayout(new GridLayout(2, false));
+		GridDataFactory gdf = GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT);
+		
+		UIControlsFactory.createLabel(parent, "First Name:");
+		Text txtFirst = UIControlsFactory.createText(parent, SWT.NONE, "txtFirst");
+		gdf.applyTo(txtFirst);
+		
+		UIControlsFactory.createLabel(parent, "Last Name:");
+		Text txtLast = UIControlsFactory.createText(parent, SWT.NONE, "txtLast");
+		gdf.applyTo(txtLast);
 	}
 
 	@Override

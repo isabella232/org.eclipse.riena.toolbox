@@ -1,68 +1,39 @@
+/*******************************************************************************
+ * Copyright (c) 2007, 2009 compeople AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    compeople AG - initial API and implementation
+ *******************************************************************************/
 package $packageName$;
 
+import org.eclipse.riena.beans.common.Person;
 import org.eclipse.riena.navigation.ISubModuleNode;
 import org.eclipse.riena.navigation.ui.controllers.SubModuleController;
-import org.eclipse.riena.ui.ridgets.ILabelRidget;
+import org.eclipse.riena.ui.ridgets.ITextRidget;
 
 public class HelloWorldSubModuleController extends SubModuleController {
 
-	private ILabelRidget labelRidget;
-	private TxtBean bean;
+	private Person bean;
 
 	public HelloWorldSubModuleController(ISubModuleNode navigationNode) {
 		super(navigationNode);
-		bean = new TxtBean();
-		bean.setTxt("Hello World");
-		bean.setName("");
+		bean = new Person("Zuse", "Konrad");
 	}
 	
 	public void configureRidgets() {
-		labelRidget = (ILabelRidget)getRidget("helloLabel");
-	}
-
-	/**
-	 * @see org.eclipse.riena.navigation.ui.controllers.SubModuleNodeViewController#afterBind()
-	 */
-	@Override
-	public void afterBind() {
-		super.afterBind();
-		initLabelRidget();
-	}
-
-	/**
-	 * Binds and updates the label.
-	 */
-	private void initLabelRidget() {
-		if (labelRidget != null) {
-			labelRidget.bindToModel(bean, "txt");
-			labelRidget.updateFromModel();
-		}
-	}
-
-	/**
-	 * The model of this sub module controller.
-	 */
-	private class TxtBean {
-
-		private String txt;
-		private String name;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getTxt() {
-			return txt;
-		}
-
-		public void setTxt(String txt) {
-			this.txt = txt;
-		}
-
+		ITextRidget txtFirst = (ITextRidget) getRidget("txtFirst");
+		txtFirst.bindToModel(bean, "firstname");
+		txtFirst.setMandatory(true);
+		
+		ITextRidget txtLast = (ITextRidget) getRidget("txtLast");
+		txtLast.bindToModel(bean, "lastname");
+		txtLast.setMandatory(true);
+		
+		updateAllRidgetsFromModel();
 	}
 
 }
