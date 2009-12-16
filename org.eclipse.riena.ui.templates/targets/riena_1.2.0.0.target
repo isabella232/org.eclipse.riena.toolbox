@@ -12,12 +12,12 @@
 <repository location="http://download.eclipse.org/releases/galileo"/>
 </location>
 <location includeAllPlatforms="false" includeMode="planner" type="InstallableUnit">
-<unit id="org.eclipse.riena.build.feature.core.source.feature.group" version="1.2.0.M2-v20091214_1_2_0_0"/>
-<unit id="org.eclipse.riena.build.feature.core.sdk.feature.group" version="1.2.0.M2-v20091214_1_2_0_0"/>
-<unit id="org.eclipse.riena.build.feature.sdk.feature.group" version="1.2.0.M2-v20091214_1_2_0_0"/>
-<unit id="org.eclipse.riena.build.feature.feature.group" version="1.2.0.M2-v20091214_1_2_0_0"/>
-<unit id="org.eclipse.riena.build.feature.samples.source.feature.group" version="1.2.0.M2-v20091214_1_2_0_0"/>
-<unit id="org.eclipse.riena.build.feature.samples.sdk.feature.group" version="1.2.0.M2-v20091214_1_2_0_0"/>
+<unit id="org.eclipse.riena.build.feature.core.sdk.feature.group" version="1.2.0.v20091214_1_2_0_0"/>
+<unit id="org.eclipse.riena.build.feature.core.source.feature.group" version="1.2.0.v20091214_1_2_0_0"/>
+<unit id="org.eclipse.riena.build.feature.sdk.feature.group" version="1.2.0.v20091214_1_2_0_0"/>
+<unit id="org.eclipse.riena.build.feature.feature.group" version="1.2.0.v20091214_1_2_0_0"/>
+<unit id="org.eclipse.riena.build.feature.samples.source.feature.group" version="1.2.0.v20091214_1_2_0_0"/>
+<unit id="org.eclipse.riena.build.feature.samples.sdk.feature.group" version="1.2.0.v20091214_1_2_0_0"/>
 <repository location="http://download.eclipse.org/rt/riena/1.2.0.0/update/"/>
 </location>
 </locations>
