@@ -28,7 +28,7 @@ public class RienaWizardPlugin extends AbstractUIPlugin {
 
 	public static RienaWizardPlugin getDefault() {
 		if (instance == null)
-			throw new NullPointerException("Plugon instance is not available"); //$NON-NLS-1$
+			throw new NullPointerException("Plugin instance is not available"); //$NON-NLS-1$
 
 		return instance;
 	}

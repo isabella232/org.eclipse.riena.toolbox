@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.riena.ui.templates.feature"
       label="Riena Wizard"
-      version="1.2.0.v20091215">
+      version="2.0.0.qualifier">
 
    <description>
       Riena Wizard for creating several UI projects from scratch to
@@ -29,6 +29,13 @@ v1.0
 
    <plugin
          id="org.eclipse.riena.ui.templates"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.riena.ui.wizard.cs"
          download-size="0"
          install-size="0"
          version="0.0.0"
