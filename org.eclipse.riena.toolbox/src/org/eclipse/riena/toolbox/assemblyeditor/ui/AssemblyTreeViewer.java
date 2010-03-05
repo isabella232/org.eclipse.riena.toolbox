@@ -142,13 +142,13 @@ public class AssemblyTreeViewer extends FilteredTree {
 		public TreeLabelProvider() {
 			images = new HashMap<Class, Image>();
 
-			imgAssembly = Activator.getImageDescriptor("/icons/ass.png").createImage();
-			imgAssemblyAutostart = Activator.getImageDescriptor("/icons/ass_s.png").createImage();
-			images.put(ModuleNode.class, Activator.getImageDescriptor("/icons/module.png").createImage());
-			images.put(ModuleGroupNode.class, Activator.getImageDescriptor("/icons/modulegroup.png").createImage());
-			images.put(SubModuleNode.class, Activator.getImageDescriptor("/icons/submodule.png").createImage());
-			images.put(SubApplicationNode.class, Activator.getImageDescriptor("/icons/subapplication.png").createImage());
-			images.put(BundleNode.class, Activator.getImageDescriptor("/icons/bundle.png").createImage());
+			imgAssembly = Activator.getImageDescriptor("icons/ass.png").createImage(); //$NON-NLS-1$
+			imgAssemblyAutostart = Activator.getImageDescriptor("icons/ass_s.png").createImage(); //$NON-NLS-1$
+			images.put(ModuleNode.class, Activator.getImageDescriptor("icons/module.png").createImage()); //$NON-NLS-1$
+			images.put(ModuleGroupNode.class, Activator.getImageDescriptor("icons/modulegroup.png").createImage()); //$NON-NLS-1$
+			images.put(SubModuleNode.class, Activator.getImageDescriptor("icons/submodule.png").createImage()); //$NON-NLS-1$
+			images.put(SubApplicationNode.class, Activator.getImageDescriptor("icons/subapplication.png").createImage()); //$NON-NLS-1$
+			images.put(BundleNode.class, Activator.getImageDescriptor("icons/bundle.png").createImage()); //$NON-NLS-1$
 		}
 
 		@Override
