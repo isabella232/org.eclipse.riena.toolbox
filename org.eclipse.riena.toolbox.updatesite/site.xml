@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.compeople.scp.toolbox.feature_1.0.3.201001291031.jar" id="de.compeople.scp.toolbox.feature" version="1.0.3.201001291031">
+      <category name="rienatoolbox"/>
+   </feature>
+   <category-def name="rienatoolbox" label="Riena Toolbox"/>
+</site>
