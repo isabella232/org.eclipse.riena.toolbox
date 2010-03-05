@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright (c) 2007, 2009 compeople AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    compeople AG - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.riena.toolbox.assemblyeditor.ui;
+
+import org.eclipse.core.internal.resources.File;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.ui.model.BaseWorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
+
+/**
+ * Textfield with a Button, that opens a IconSelectorDialog. All Images in the
+ * current Bundle (JavaProject) that have the Extension (.gif, .jpg, .png) are selectable by the user. 
+ * 
+ */
+public class IconSelectorText extends TextButtonComposite {
+
+	private IProject project;
+
+	public IProject getProject() {
+		return project;
+	}
+
+	public void setProject(IProject project) {
+		this.project = project;
+	}
+
+	public IconSelectorText(final Composite parent, Color background) {
+		super(parent, background);
+
+		getBrowseButton().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (null == project) {
+					return;
+				}
+
+				ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(parent.getShell(), 
+													new WorkbenchLabelProvider(),
+													new BaseWorkbenchContentProvider());
+				
+				dialog.setTitle("Tree Selection");
+				dialog.setMessage("Select the elements from the tree:");
+				dialog.setInput(project);
+				dialog.addFilter(new ImageFilter());
+				dialog.open();
+
+				Object[] result = dialog.getResult();
+
+				if (null != result) {
+					for (Object obj : result) {
+						File file = (File) obj;
+						getText().setText(file.getName());
+					}
+				}
+			}
+
+		});
+	}
+	
+	private static class ImageFilter extends ViewerFilter {
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			if (element instanceof File){
+				File file = (File) element;
+				return (file.getName().endsWith(".gif") ||
+						file.getName().endsWith(".jpg") ||
+						file.getName().endsWith(".png"));
+			}
+			return true; 
+		}
+	}
+
+}

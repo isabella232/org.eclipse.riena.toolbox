@@ -1,0 +1,18 @@
+Bugs:
+- Wenn eine Controller/View Klasse angelegt wird und es bereits eine Klasse mit dem selben Namen aber anderem Case gibt, wird eine Exception geworfen: https://bugs.eclipse.org/bugs/show_bug.cgi?id=3140
+- Beim Refreshen geht die aktuelle Selection im Baum verloren
+- Beim Löschen von SubModuleNodes für alle Kinder die gewählten Aktionen (unregister, delete view etc.) ausführen
+- Wenn keine Autostartsequence angegeben wurde, Leerstring schreiben
+- Wenn generateViewController aufgerufen wird, überprüfen ob bereits ein Name vergeben wurde
+- Perspective deregistrieren, wenn Knoten gelöscht wird
+- Wenn Perspective generiert wurde, muß auch die Liste der Perspective aktualisiert werden oder immer Neuparsen
+- Vorbelegung der AuswahlDialog in SubModuleComposite ViewSelector und SubApplication PerspectiveSelector
+- Autostart 0 muß als Leerstring gespeichert werden
+- Register Perspective Action nur aktivieren, wenn noch keine Perspective vorhanden ist
+
+
+TODO:
+- Wenn neues Projekt angelegt wird, AssemblyModel updaten (Der Event kommt schon im iResourceChangedListener an, wird aber nciht weiter verarbeitet)
+- Kindknoten in Assembly hinzufügen erlauben
+
+
