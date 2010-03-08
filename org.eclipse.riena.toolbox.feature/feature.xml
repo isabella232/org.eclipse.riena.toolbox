@@ -9,7 +9,7 @@
    </description>
 
    <copyright url="http://www.example.com/copyright">
-            *******************************************************************************
+      *******************************************************************************
 * Copyright (c) 2007, 2008, 2009 compeople AG and others.
 * All rights reserved. This program and the accompanying materials
 * are made available under the terms of the Eclipse Public License
@@ -119,6 +119,13 @@ v1.0
 
    <plugin
          id="org.eclipse.riena.toolbox"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.pushingpixels.trident"
          download-size="0"
          install-size="0"
          version="0.0.0"
