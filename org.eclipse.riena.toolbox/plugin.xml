@@ -13,15 +13,15 @@
             icon="icons/sample.gif"
             category="de.compeople.toolbox.category"
             class="org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView"
-            id="de.compeople.toolbox.assemblyeditor.ui.views.AssemblyView">
+            id="org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="de.compeople.scp.toolbox.assemblyeditor.editors.NodeEditor"
+            class="org.eclipse.riena.toolbox.assemblyeditor.editors.NodeEditor"
             icon="icons/sample.gif"
-            id="de.compeople.scp.toolbox.assemblyeditor.editors.NodeEditor"
+            id="org.eclipse.riena.toolbox.assemblyeditor.editors.NodeEditor"
             name="NodeEditor">
       </editor>
    </extension>

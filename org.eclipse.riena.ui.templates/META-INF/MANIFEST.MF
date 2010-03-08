@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Riena Templates Plug-in
 Bundle-SymbolicName: org.eclipse.riena.ui.templates;singleton:=true
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-Localization: plugin
 Bundle-Activator: org.eclipse.riena.ui.templates.Activator
 Require-Bundle: org.eclipse.core.resources,

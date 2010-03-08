@@ -141,7 +141,7 @@ public class CustomerDetailsSubModuleView extends SubModuleView<CustomerDetailsS
 	}
 
 	public Image getIcon() {
-		return AbstractUIPlugin.imageDescriptorFromPlugin("de.compeople.scp.sample.client", "/icons/user_16.png")
+		return AbstractUIPlugin.imageDescriptorFromPlugin("${project}", "/icons/user_16.png")
 				.createImage();
 	}
 
