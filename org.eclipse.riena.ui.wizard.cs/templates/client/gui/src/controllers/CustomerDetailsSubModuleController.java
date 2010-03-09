@@ -42,28 +42,28 @@ public class CustomerDetailsSubModuleController extends SubModuleController {
 
 		Customer customer = getCustomer();
 
-		ITextRidget customerNumber = (ITextRidget) getRidget(RIDGET_ID_CUSTOMER_NUMBER);
+		ITextRidget customerNumber = getRidget(ITextRidget.class, RIDGET_ID_CUSTOMER_NUMBER);
 		customerNumber.setOutputOnly(true);
 		customerNumber.bindToModel(customer, "customerNumber");
 		customerNumber.updateFromModel();
 
-		ITextRidget lastName = (ITextRidget) getRidget(RIDGET_ID_LAST_NAME);
+		ITextRidget lastName = getRidget(ITextRidget.class, RIDGET_ID_LAST_NAME);
 		lastName.bindToModel(customer, "lastName");
 		lastName.updateFromModel();
 
-		ITextRidget firstName = (ITextRidget) getRidget(RIDGET_ID_FIRST_NAME);
+		ITextRidget firstName = getRidget(ITextRidget.class, RIDGET_ID_FIRST_NAME);
 		firstName.bindToModel(customer, "firstName");
 		firstName.updateFromModel();
 
-		ITextRidget birthPlace = (ITextRidget) getRidget(RIDGET_ID_BIRTHPLACE);
+		ITextRidget birthPlace = getRidget(ITextRidget.class, RIDGET_ID_BIRTHPLACE);
 		birthPlace.bindToModel(customer.getBirth(), "birthPlace");
 		birthPlace.updateFromModel();
 
-		IActionRidget saveAction = (IActionRidget) getRidget(RIDGET_ID_SAVE);
+		IActionRidget saveAction = getRidget(IActionRidget.class, RIDGET_ID_SAVE);
 		saveAction.addListener(new SaveCallback());
 		saveAction.setText("Save");
 
-		IActionRidget closeAction = (IActionRidget) getRidget(RIDGET_ID_CLOSE);
+		IActionRidget closeAction = getRidget(IActionRidget.class, RIDGET_ID_CLOSE);
 		closeAction.addListener(new CloseCallback());
 		closeAction.setText("Close");
 	}

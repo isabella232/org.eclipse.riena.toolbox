@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-public class CustomerDetailsSubModuleView extends SubModuleView<CustomerDetailsSubModuleController> implements ViewConstants {
+public class CustomerDetailsSubModuleView extends SubModuleView implements ViewConstants {
 	public final static String ID = CustomerDetailsSubModuleView.class.getName();
 
 	private Composite contentArea;

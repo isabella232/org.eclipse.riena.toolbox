@@ -21,7 +21,7 @@ import ${package}.controllers.CustomerSearchSubModuleController;
 import ${package.common}.Customer;
 import org.eclipse.riena.ui.workarea.WorkareaManager;
 
-public class CustomerSearchSubModuleView extends SubModuleView<CustomerSearchSubModuleController> implements ViewConstants {
+public class CustomerSearchSubModuleView extends SubModuleView implements ViewConstants {
 	public final static String ID = CustomerSearchSubModuleView.class.getName();
 
 

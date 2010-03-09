@@ -51,12 +51,12 @@ public class CustomerSearchSubModuleController extends SubModuleController {
 
 	@Override
 	public void configureRidgets() {
-		resultTable = (ITableRidget) getRidget("tableRidget");
-		searchAction = (IActionRidget) getRidget("searchAction");
-		clearAction = (IActionRidget) getRidget("clearAction");
-		openAction = (IActionRidget) getRidget("openAction");
-		firstNameRidget = (ITextRidget) getRidget("firstNameRidget");
-		lastNameRidget = (ITextRidget) getRidget("lastNameRidget");
+		resultTable = getRidget(ITableRidget.class, "tableRidget");
+		searchAction = getRidget(IActionRidget.class, "searchAction");
+		clearAction = getRidget(IActionRidget.class, "clearAction");
+		openAction = getRidget(IActionRidget.class, "openAction");
+		firstNameRidget = getRidget(ITextRidget.class, "firstNameRidget");
+		lastNameRidget = getRidget(ITextRidget.class, "lastNameRidget");
 	}
 
 	@Override

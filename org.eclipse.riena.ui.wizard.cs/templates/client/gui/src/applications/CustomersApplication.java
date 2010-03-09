@@ -42,9 +42,4 @@ public class CustomersApplication extends SwtApplication {
 		return application;
 
 	}
-
-	@Override
-	protected Bundle getBundle() {
-		return CustomersClientActivator.getDefault().getBundle();
-	}
 }
