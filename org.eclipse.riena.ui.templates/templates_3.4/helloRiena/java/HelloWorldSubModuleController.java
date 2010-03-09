@@ -25,11 +25,11 @@ public class HelloWorldSubModuleController extends SubModuleController {
 	}
 	
 	public void configureRidgets() {
-		ITextRidget txtFirst = (ITextRidget) getRidget("txtFirst");
+		ITextRidget txtFirst = getRidget(ITextRidget.class, "txtFirst");
 		txtFirst.bindToModel(bean, "firstname");
 		txtFirst.setMandatory(true);
 		
-		ITextRidget txtLast = (ITextRidget) getRidget("txtLast");
+		ITextRidget txtLast = getRidget(ITextRidget.class, "txtLast");
 		txtLast.bindToModel(bean, "lastname");
 		txtLast.setMandatory(true);
 		

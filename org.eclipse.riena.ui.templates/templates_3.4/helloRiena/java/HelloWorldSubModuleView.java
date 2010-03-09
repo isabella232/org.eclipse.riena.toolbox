@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
  * World!".
  * 
  */
-public class HelloWorldSubModuleView extends SubModuleView<HelloWorldSubModuleController> {
+public class HelloWorldSubModuleView extends SubModuleView {
 
 	public static final String ID = "$pluginId$.HelloWorldSubModuleView";
 

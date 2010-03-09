@@ -43,9 +43,4 @@ public class $applicationClass$ extends SwtApplication {
 
 		return app;
 	}
-
-	@Override
-	protected Bundle getBundle() {
-		return Platform.getBundle("$pluginId$");
-	}
 }

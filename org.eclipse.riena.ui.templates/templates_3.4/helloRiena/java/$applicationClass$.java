@@ -23,9 +23,4 @@ public class $applicationClass$ extends SwtApplication {
 		return new ApplicationNode("Hello World Application");
 	}
 
-	@Override
-	protected Bundle getBundle() {
-		return Platform.getBundle("$pluginId$");
-	}
-
 }
