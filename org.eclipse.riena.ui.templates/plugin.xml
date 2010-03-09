@@ -28,7 +28,7 @@
             %mailRiena.desc
          </description>
       </wizard>
-      <wizard
+      <!--wizard
             class="org.eclipse.riena.ui.templates.cs.ClientServerNewWizard"
             icon="$nl$/icons/etool16/newexprj_wiz.gif"
             id="org.eclipse.riena.ui.templates.cs.MailNewWizard"
@@ -39,7 +39,7 @@
          <description>
             %cs.desc
          </description>
-      </wizard>
+      </wizard-->
    </extension>
    <extension
          point="org.eclipse.pde.core.targets">
