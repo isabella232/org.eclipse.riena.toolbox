@@ -26,7 +26,7 @@ public class SwtControl {
 	public SwtControl(String swtControlClassName, String ridgetId, Class<?> ridgetClass) {
 		super();
 		this.swtControlClassName = swtControlClassName;
-		this.ridgetId = ridgetId;
+		this.ridgetId = ridgetId.replaceAll("[^a-zA-Z0-9]", "");
 		this.ridgetClass = ridgetClass;
 	}
 

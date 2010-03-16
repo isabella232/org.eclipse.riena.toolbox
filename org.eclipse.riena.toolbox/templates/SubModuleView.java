@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.SWT;
 
-public class $ClassName extends SubModuleView<SubModuleController> {
+public class $ClassName extends SubModuleView {
 
 	@Override
 	protected void basicCreatePartControl(Composite parent) {

@@ -77,7 +77,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "de.compeople.toolbox.assemblyeditor.ui.views.AssemblyView"; //$NON-NLS-1$
+	public static final String ID = "org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView"; //$NON-NLS-1$
 	private AssemblyTreeViewer assemblyTree;
 	private boolean dirtyState = false;
 	private IAction addAssemblyAction, addSubAppAction, addModuleGroupAction, addModuleAction, addSubModuleAction, deleteNodeAction,
@@ -448,7 +448,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 		public DeleteNodeAction() {
 			setText("Delete");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.deletenode.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.deletenode.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -499,7 +499,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public AddSubModuleAction(INodeFactory nodeFactory) {
 			super(nodeFactory);
 			setText("New SubModule");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.add.submodule.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.add.submodule.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -512,7 +512,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public AddModuleAction(INodeFactory nodeFactory) {
 			super(nodeFactory);
 			setText("New Module");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.add.module.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.add.module.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -525,7 +525,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public AddAssemblyAction(INodeFactory nodeFactory) {
 			super(nodeFactory);
 			setText("New Assembly");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.add.assembly.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.add.assembly.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -538,7 +538,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public AddModuleGroupAction(INodeFactory nodeFactory) {
 			super(nodeFactory);
 			setText("New ModuleGroup");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.add.modulegroup.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.add.modulegroup.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -551,7 +551,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public AddSubApplication(INodeFactory nodeFactory) {
 			super(nodeFactory);
 			setText("New SubApplication");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.add.subapplication.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.add.subapplication.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -563,7 +563,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private class GenerateViewControllerAction extends Action {
 		public GenerateViewControllerAction() {
 			setText("Generate View/Controller");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.generateviewcontroller.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.generateviewcontroller.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -586,7 +586,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private static class MoveNodeUpAction extends Action {
 		public MoveNodeUpAction() {
 			setImageDescriptor(Activator.getImageDescriptor("/icons/move_up.gif"));
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.movenodeup.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.movenodeup.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -608,7 +608,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private static class MoveNodeDownAction extends Action {
 		public MoveNodeDownAction() {
 			setImageDescriptor(Activator.getImageDescriptor("/icons/move_down.gif"));
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.movenodedown.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.movenodedown.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -629,7 +629,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private static class GenerateRidgetsAction extends Action {
 		public GenerateRidgetsAction() {
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.generateridgets.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.generateridgets.action"); //$NON-NLS-1$
 			setText("Generate configureRidgets");
 		}
 
@@ -650,7 +650,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				RCPView rcpView = ((SubModuleNode) selectedNode).getRcpView();
 
 				if (null != rcpView) {
-					System.err.println("No ViewClass found for node: " + selectedNode);
 					String className = rcpView.getViewClass();
 					RidgetGenerator generator = new RidgetGenerator(selectedNode.getBundle().getProject());
 
@@ -663,6 +662,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 									+ control.getRidgetId());
 						}
 					}
+				} else {
+					System.err.println("No ViewClass found for node: " + selectedNode);
 				}
 
 			}
@@ -672,7 +673,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private class OpenControllerAction extends Action {
 		public OpenControllerAction() {
 			setText("Open Controller-Class");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.opencontroller.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.opencontroller.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -697,7 +698,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private class OpenViewAction extends Action {
 		public OpenViewAction() {
 			setText("Open View-Class");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.openview.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.openview.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -723,7 +724,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private static class GenerateAddUIControlCallsAction extends Action {
 		public GenerateAddUIControlCallsAction() {
 			setText("Generate missing addUIControl Calls");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.generateadduicontrolcalls.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.generateadduicontrolcalls.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -752,7 +753,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public RefreshAction() {
 			setToolTipText("Refresh");
 			setImageDescriptor(Activator.getImageDescriptor("/icons/refresh.png"));
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.refresh.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.refresh.action"); //$NON-NLS-1$
 		}
 
 		@Override
@@ -778,7 +779,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private class RegisterPerspectiveAction extends Action {
 		public RegisterPerspectiveAction() {
 			setText("Register Perspective");
-			setId("de.compeople.toolbox.assemblyeditor.ui.views.registerperspective.action"); //$NON-NLS-1$
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.registerperspective.action"); //$NON-NLS-1$
 		}
 
 		@Override
