@@ -175,23 +175,36 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 		Assert.isNotNull(model);
 		Assert.isNotNull(xmlRenderer);
 		for (BundleNode bundle : model.getChildren()) {
-
+			
 			// ensure that plugin.xml exists
 			if (null == bundle.getPluginXml() || !bundle.getPluginXml().exists()) {
 
 				if (bundle.getChildren()!=null && bundle.getChildren().size() != 0) {
-
+					// plugin.xml does not exist, assemblies exist
 					IFile pluginXml = bundle.getProject().getFile(PLUGIN_XML);
 					try {
-						String dummy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
-						dummy += "<?eclipse version=\"3.4\"?>";
-						dummy += "<plugin></plugin>\n";
+						String dummy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"; //$NON-NLS-1$
+						dummy += "<?eclipse version=\"3.4\"?>"; //$NON-NLS-1$
+						dummy += "<plugin></plugin>\n"; //$NON-NLS-1$
 
 						pluginXml.create(new ByteArrayInputStream(dummy.getBytes()), true, null);
 						bundle.setPluginXml(pluginXml);
 					} catch (CoreException e) {
 						e.printStackTrace();
 					}
+					xmlRenderer.saveDocument(bundle);
+				} else {
+					// plugin.xml does not exist, assemblies do not exist
+					// DO NOTHING
+				}
+			} else {
+				if (bundle.getChildren()!=null && bundle.getChildren().size() != 0) {
+					// plugin.xml does exist, assemblies exist
+					// store what you have
+					xmlRenderer.saveDocument(bundle);
+				} else {
+					// plugin.xml does exist, assemblies do not exist
+					// store in case an assembly got removed
 					xmlRenderer.saveDocument(bundle);
 				}
 			}
