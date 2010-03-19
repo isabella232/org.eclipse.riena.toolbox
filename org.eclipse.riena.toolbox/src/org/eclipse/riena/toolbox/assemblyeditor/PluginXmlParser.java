@@ -37,45 +37,49 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlParser {
 
-public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlParser {
-	
 	public List<AssemblyNode> parseDocument(BundleNode bundleNode) {
 		return parseDocument(bundleNode, getDocument(bundleNode));
-				
+
 	}
-	
+
 	public Set<RCPView> getRcpViews(BundleNode bundleNode) {
 		return parseViewIds(getDocument(bundleNode));
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlParser#getRcpPerspectives(org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @seeorg.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlParser#
+	 * getRcpPerspectives
+	 * (org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode)
 	 */
 	public Set<RCPPerspective> getRcpPerspectives(BundleNode bundleNode) {
 		return parsePerspectiveIds(getDocument(bundleNode));
 	}
-	
-	private Set<RCPPerspective> parsePerspectiveIds(Document doc){
+
+	private Set<RCPPerspective> parsePerspectiveIds(Document doc) {
 		Set<RCPPerspective> viewIds = new HashSet<RCPPerspective>();
-		
-		if (null == doc){
+
+		if (null == doc) {
 			return viewIds;
 		}
-		
+
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES), doc, XPathConstants.NODESET); //$NON-NLS-1$
-			
-			for (int i=0; i < nlViewExtensions.getLength(); i++){
+			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format(
+					"//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES), doc, XPathConstants.NODESET); //$NON-NLS-1$
+
+			for (int i = 0; i < nlViewExtensions.getLength(); i++) {
 				Element elmViewExtension = (Element) nlViewExtensions.item(i);
 				NodeList nlViews = elmViewExtension.getElementsByTagName(ELEM_PERSPECTIVE);
-				
-				for (int j=0; j < nlViews.getLength(); j++){
+
+				for (int j = 0; j < nlViews.getLength(); j++) {
 					Element elmPersp = (Element) nlViews.item(j);
-					
+
 					RCPPerspective persp = parsePerspective(elmPersp);
-					if (RCPPerspective.PERSPECTIVE_CLASS_NAME.equals(persp.getPerspectiveClass())){
+					if (RCPPerspective.PERSPECTIVE_CLASS_NAME.equals(persp.getPerspectiveClass())) {
 						viewIds.add(persp);
 					}
 				}
@@ -85,25 +89,26 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		}
 		return viewIds;
 	}
-	
-	private Set<RCPView> parseViewIds(Document doc){
+
+	private Set<RCPView> parseViewIds(Document doc) {
 		Set<RCPView> viewIds = new HashSet<RCPView>();
-		
-		if (null == doc){
+
+		if (null == doc) {
 			return viewIds;
 		}
-		
+
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), doc, XPathConstants.NODESET); //$NON-NLS-1$
-			
-			for (int i=0; i < nlViewExtensions.getLength(); i++){
+			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format(
+					"//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), doc, XPathConstants.NODESET); //$NON-NLS-1$
+
+			for (int i = 0; i < nlViewExtensions.getLength(); i++) {
 				Element elmViewExtension = (Element) nlViewExtensions.item(i);
 				NodeList nlViews = elmViewExtension.getElementsByTagName(ELEM_VIEW);
-				
-				for (int j=0; j < nlViews.getLength(); j++){
+
+				for (int j = 0; j < nlViews.getLength(); j++) {
 					Element elmView = (Element) nlViews.item(j);
-					
+
 					RCPView view = parseView(elmView);
 					viewIds.add(view);
 				}
@@ -113,9 +118,8 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		}
 		return viewIds;
 	}
-	
-	
-	private RCPPerspective parsePerspective(Element elm){
+
+	private RCPPerspective parsePerspective(Element elm) {
 		RCPPerspective view = new RCPPerspective();
 		view.setId(elm.getAttribute("id"));
 		view.setPerspectiveClass(elm.getAttribute("class"));
@@ -123,8 +127,7 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		return view;
 	}
 
-	
-	private RCPView parseView(Element elm){
+	private RCPView parseView(Element elm) {
 		RCPView view = new RCPView();
 		view.setId(elm.getAttribute(ATTR_VIEW_ID));
 		view.setViewClass(elm.getAttribute(ATTR_VIEW_CLASS));
@@ -134,10 +137,10 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 
 	private List<AssemblyNode> parseDocument(BundleNode parent, Document doc) {
 		List<AssemblyNode> assemblyList = new ArrayList<AssemblyNode>();
-		
-		if (null == doc){
+
+		if (null == doc) {
 			return assemblyList;
-			
+
 		}
 
 		NodeList lstAssembly = doc.getElementsByTagName(ELEM_ASSEMBLY);
@@ -152,7 +155,7 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 				assemblyNode.add(subAppNode);
 			}
 
-			Element elemModuleGroup = getFirstChild(elmAssembly,ELEM_MODULE_GROUP);
+			Element elemModuleGroup = getFirstChild(elmAssembly, ELEM_MODULE_GROUP);
 			if (null != elemModuleGroup) {
 				ModuleGroupNode moduleGroupNode = parseModuleGroup(assemblyNode, elemModuleGroup);
 				assemblyNode.add(moduleGroupNode);
@@ -166,8 +169,7 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 
 			Element elemSubModule = getFirstChild(elmAssembly, ELEM_SUBMODULE);
 			if (null != elemSubModule) {
-				SubModuleNode subModuleNode = parseSubModule(assemblyNode,
-						elemSubModule);
+				SubModuleNode subModuleNode = parseSubModule(assemblyNode, elemSubModule);
 				assemblyNode.add(subModuleNode);
 			}
 
@@ -175,51 +177,51 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		}
 		return assemblyList;
 	}
-	
-	
+
 	private void computePreSuffixe(AssemblyNode typedNode) {
 		String name = typedNode.getName();
 		String typeId = typedNode.getId();
-		
-		if (null == typeId){
+
+		if (null == typeId) {
 			return;
 		}
-		
-		Pattern pattern = Pattern.compile("(.*?)\\."+name+"\\.(.*?)");
+
+		Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)");
 		Matcher matcher = pattern.matcher(typeId);
-		if (matcher.matches()){
+		if (matcher.matches()) {
 			String prefix = matcher.group(1);
 			String suffix = matcher.group(2);
-			typedNode.setPrefix(prefix+".");
-			typedNode.setSuffix("."+suffix);
+			typedNode.setPrefix(prefix + ".");
+			typedNode.setSuffix("." + suffix);
 		}
-		
+
 	}
-	
+
 	/**
-	 * Trys to compute the pre- and suffix by splitting the typeId in prefix - name - suffix parts. 
+	 * Trys to compute the pre- and suffix by splitting the typeId in prefix -
+	 * name - suffix parts.
 	 * 
 	 * @param typedNode
 	 */
-	private void computePreSuffixe(AbstractTypedNode typedNode){
+	private void computePreSuffixe(AbstractTypedNode typedNode) {
 		String name = typedNode.getName();
 		String typeId = typedNode.getTypeId();
-		
-		if (null == typeId){
+
+		if (null == typeId) {
 			return;
 		}
-		
-		Pattern pattern = Pattern.compile("(.*?)\\."+name+"\\.(.*?)");
+
+		Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)");
 		Matcher matcher = pattern.matcher(typeId);
-		if (matcher.matches()){
+		if (matcher.matches()) {
 			String prefix = matcher.group(1);
 			String suffix = matcher.group(2);
-			typedNode.setPrefix(prefix+".");
-			typedNode.setSuffix("."+suffix);
+			typedNode.setPrefix(prefix + ".");
+			typedNode.setSuffix("." + suffix);
 		}
 	}
 
-	private AssemblyNode parseAssembly(BundleNode parent, Element elm){
+	private AssemblyNode parseAssembly(BundleNode parent, Element elm) {
 		final AssemblyNode assemblyNode = new AssemblyNode(parent);
 		assemblyNode.setId(elm.getAttribute(ATTR_ASSEMBLY_ID));
 		assemblyNode.setAssembler(elm.getAttribute(ATTR_ASSEMBLY_ASSEMBLER));
@@ -231,8 +233,6 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		computePreSuffixe(assemblyNode);
 		return assemblyNode;
 	}
-	
-	
 
 	private SubApplicationNode parseSubApplication(AbstractAssemblyNode parent, Element elm) {
 		final SubApplicationNode subapp = new SubApplicationNode(parent);
@@ -280,7 +280,7 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		module.setTypeId(elm.getAttribute(ATTR_MODULE_TYPE_ID));
 		module.setInstanceId(elm.getAttribute(ATTR_MODULE_INSTANCE_ID));
 		module.setIcon(elm.getAttribute(ATTR_MODULE_ICON));
-		module.setUncloseable(parseBoolean(elm, ATTR_MODULE_UNCLOSABLE));
+		module.setUncloseable(parseBoolean(elm, ATTR_MODULE_UNCLOSABLE, false));
 		module.setBundle(bundleNode);
 		computePreSuffixe(module);
 		parent.add(module);
@@ -302,25 +302,24 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		sub.setTypeId(elm.getAttribute(ATTR_SUBMOD_TYPE_ID));
 		sub.setInstanceId(elm.getAttribute(ATTR_SUBMOD_INSTANCE_ID));
 		sub.setController(elm.getAttribute(ATTR_SUBMOD_CONTROLLER));
-		sub.setShared(parseBoolean(elm, ATTR_SUBMOD_SHARED));
+		sub.setShared(parseBoolean(elm, ATTR_SUBMOD_SHARED, false));
 		sub.setIcon(elm.getAttribute(ATTR_SUBMOD_ICON));
-		sub.setSelectable(parseBoolean(elm, ATTR_SUBMOD_SELECTABLE));
+		sub.setSelectable(parseBoolean(elm, ATTR_SUBMOD_SELECTABLE, true));
 		sub.setBundle(bundleNode);
 		computePreSuffixe(sub);
-		
+
 		String rcpViewId = elm.getAttribute(ATTR_SUBMOD_VIEW);
-		if (null != rcpViewId){
+		if (null != rcpViewId) {
 			sub.setRcpView(new RCPView(elm.getAttribute(ATTR_SUBMOD_VIEW)));
 			RCPView rcpView = parent.getBundle().findRcpView(rcpViewId);
-			
-			if (null != rcpView){
+
+			if (null != rcpView) {
 				sub.setRcpView(rcpView);
-			}
-			else{
+			} else {
 				System.err.println("rcpView not found for subModule " + sub);
 			}
 		}
-		
+
 		parent.add(sub);
 
 		new NodeIterator(elm, ELEM_SUBMODULE) {
@@ -334,26 +333,25 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 
 	public boolean unregisterView(SubModuleNode subModule) {
 		Document doc = getDocument(subModule.getBundle());
-		
-		if (null == doc){
+
+		if (null == doc) {
 			return false;
 		}
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), doc, XPathConstants.NODESET); //$NON-NLS-1$
-			
-			for (int i=0; i < nlViewExtensions.getLength(); i++){
+			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format(
+					"//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), doc, XPathConstants.NODESET); //$NON-NLS-1$
+
+			for (int i = 0; i < nlViewExtensions.getLength(); i++) {
 				Element elmViewExtension = (Element) nlViewExtensions.item(i);
 				NodeList nlViews = elmViewExtension.getElementsByTagName(ELEM_VIEW);
-				
-				for (int j=0; j < nlViews.getLength(); j++){
+
+				for (int j = 0; j < nlViews.getLength(); j++) {
 					Element elmView = (Element) nlViews.item(j);
 					String viewId = elmView.getAttribute(ATTR_VIEW_ID);
-					
-					
-					if (null != viewId &&
-						viewId.equals(subModule.getRcpView().getId())){
+
+					if (null != viewId && viewId.equals(subModule.getRcpView().getId())) {
 						elmViewExtension.removeChild(elmView);
 						saveDocument(doc, bundleNode);
 						return true;
@@ -363,7 +361,7 @@ public class PluginXmlParser  extends AbstractXmlProvider implements IPluginXmlP
 		} catch (XPathExpressionException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		return false;
 	}
 }
