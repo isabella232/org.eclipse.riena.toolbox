@@ -133,12 +133,12 @@ public class AbstractXmlProvider {
 		return null;
 	}
 	
-	protected static boolean parseBoolean(Element elm, String attributeName) {
+	protected static boolean parseBoolean(Element elm, String attributeName, boolean defaultValue) {
 		String attr = elm.getAttribute(attributeName);
-		if (null != attr) {
+		if (null != attr && attr.length()>0) {
 			return "true".equals(attr); //$NON-NLS-1$
 		}
-		return false;
+		return defaultValue;
 	}
 	
 	protected static Integer parseInteger(Element elm, String attributeName) {
