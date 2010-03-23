@@ -13,17 +13,19 @@ package org.eclipse.riena.toolbox.assemblyeditor.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.velocity.util.StringUtils;
+import org.eclipse.riena.toolbox.Util;
+
 /**
  * This node represents a Assembly in Riena.
  * 
  */
 public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 	private String id;
-	private String parentTypeId;
-	private String name;
-	private Integer autostartSequence;
 	private String assembler;
-	private String ref;
+	private String parentNodeId;
+	private Integer startOrder;
+	
 	private String prefix;
 	private String suffix;
 	private List<AbstractTypedNode> children;
@@ -57,14 +59,6 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		this.assembler = assembler;
 	}
 
-	public String getRef() {
-		return ref;
-	}
-
-	public void setRef(String ref) {
-		this.ref = ref;
-	}
-
 	public String getId() {
 		return id;
 	}
@@ -73,52 +67,44 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		this.id = id;
 	}
 
-	public String getParentTypeId() {
-		return parentTypeId;
+	public String getNodeTypeId() {
+		return parentNodeId;
 	}
 
-	public void setParentTypeId(String parentTypeId) {
-		this.parentTypeId = parentTypeId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setNodeTypeId(String parentTypeId) {
+		this.parentNodeId = parentTypeId;
 	}
 
 	public Integer getAutostartSequence() {
-		return autostartSequence;
+		return startOrder;
 	}
 
 	public void setAutostartSequence(Integer autostartSequence) {
-		this.autostartSequence = autostartSequence;
+		this.startOrder = autostartSequence;
 	}
 
+	@Override
 	public boolean add(AbstractTypedNode resultNode) {
-		children.clear();
 		children.add(resultNode);
 		return true;
 	}
 
+	@Override
 	public List<AbstractTypedNode> getChildren() {
 		return children;
 	}
 
 	@Override
-	public String toString() {
-		return "AssemblyNode [assembler=" + assembler + ", autostartSequence=" + autostartSequence + ", id=" + id + ", name=" + name
-				+ ", parentTypeId=" + parentTypeId + ", ref=" + ref + "]";
+	public String getTreeLabel() {
+		if (Util.isGiven(name)) {
+			return name;
+		}
+		return "(id="+id+")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
-	public String getTreeLabel() {
-		if (name != null && name.length()>0) {
-			return name;
-		}
-		return "(id="+id+")";
+	public String toString() {
+		return "AssemblyNode [id=" + id + ", assembler=" + assembler + ", parentNodeId=" + parentNodeId + ", name=" + name //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ ", startOrder=" + startOrder + ", prefix=" + prefix + ", suffix=" + suffix + ", children=" + children + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
-
 }

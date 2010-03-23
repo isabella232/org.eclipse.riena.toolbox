@@ -15,47 +15,37 @@ import java.util.List;
 
 import org.eclipse.riena.toolbox.Util;
 
-
 /**
  * This class represents a SubModule in the Riena-Navigation.
- *
+ * 
  */
 public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 	private List<SubModuleNode> subModules;
-	private String instanceId;
 	private RCPView rcpView;
 	private String controller;
 	private boolean shared;
 	private String icon;
 	private boolean selectable;
-	private String label;
+	private boolean requiresPreparation;
 
 	public SubModuleNode(AbstractAssemblyNode parent) {
 		super(parent);
 		subModules = new ArrayList<SubModuleNode>();
 	}
 
-	public boolean hasViewClass(){
-		if (null != getRcpView()){
+	public boolean isRequiresPreparation() {
+		return requiresPreparation;
+	}
+
+	public void setRequiresPreparation(boolean requiresPreparation) {
+		this.requiresPreparation = requiresPreparation;
+	}
+
+	public boolean hasViewClass() {
+		if (null != getRcpView()) {
 			return Util.isGiven(getRcpView().getViewClass());
 		}
 		return false;
-	}
-	
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public String getInstanceId() {
-		return instanceId;
-	}
-
-	public void setInstanceId(String instanceId) {
-		this.instanceId = instanceId;
 	}
 
 	public RCPView getRcpView() {
@@ -109,16 +99,14 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 	}
 
 	@Override
-	public String toString() {
-		return "SubModuleNode [controller=" + controller + ", icon=" + icon
-				+ ", instanceId=" + instanceId + ", label=" + label
-				+ ", prefix=" + getPrefix() + ", selectable=" + selectable
-				+ ", shared=" + shared + ", subModules=" + subModules
-				+ ", suffix=" + getSuffix() + ", viewId=" + rcpView + "]";
+	protected String getTreeLabelValue() {
+		return name;
 	}
 
 	@Override
-	public String getTreeLabel() {
-		return name;
+	public String toString() {
+		return "SubModuleNode [subModules=" + subModules + ", rcpView=" + rcpView + ", controller=" + controller + ", shared=" + shared //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ ", icon=" + icon + ", selectable=" + selectable + ", requiresPreparation=" + requiresPreparation + ", nodeId=" + nodeId //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ ", name=" + name + "]"; //$NON-NLS-1$
 	}
 }

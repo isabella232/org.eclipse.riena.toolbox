@@ -24,6 +24,11 @@ public class RCPPerspective {
 		super();
 	}
 
+	public RCPPerspective(String id) {
+		super();
+		this.id = id;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -75,6 +80,6 @@ public class RCPPerspective {
 
 	@Override
 	public String toString() {
-		return "RCPPerspective [id=" + id + ", perspectiveClass=" + perspectiveClass + ", name=" + name + "]";
+		return "RCPPerspective [id=" + id + ", perspectiveClass=" + perspectiveClass + ", name=" + name + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }

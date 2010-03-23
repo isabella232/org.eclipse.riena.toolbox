@@ -20,32 +20,14 @@ import java.util.List;
 public class SubApplicationNode extends AbstractTypedNode<ModuleGroupNode> {
 
 	private List<ModuleGroupNode> moduleGroups;
-	private String instanceId;
-	private String icon;
 	private String perspective;
-	private String label;
-	
+	private String icon;
 
 	public SubApplicationNode(AbstractAssemblyNode parent) {
 		super(parent);
 		this.moduleGroups = new ArrayList<ModuleGroupNode>();
 	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	public String getInstanceId() {
-		return instanceId;
-	}
-
-	public void setInstanceId(String instanceId) {
-		this.instanceId = instanceId;
-	}
-
+	
 	public String getIcon() {
 		return icon;
 	}
@@ -62,6 +44,7 @@ public class SubApplicationNode extends AbstractTypedNode<ModuleGroupNode> {
 		this.perspective = view;
 	}
 
+	@Override
 	public List<ModuleGroupNode> getChildren() {
 		return moduleGroups;
 	}
@@ -70,18 +53,15 @@ public class SubApplicationNode extends AbstractTypedNode<ModuleGroupNode> {
 	public boolean add(ModuleGroupNode arg0) {
 		return moduleGroups.add(arg0);
 	}
-
+	
 	@Override
-	public String toString() {
-		return "SubApplicationNode [icon=" + icon + ", instanceId="
-				+ instanceId + ", label=" + label + ", moduleGroups="
-				+ moduleGroups + ", typeId=" + getTypeId() + ", view=" + perspective + "]";
-	}
-
-	@Override
-	public String getTreeLabel() {
+	protected String getTreeLabelValue(){
 		return name;
 	}
 
-
+	@Override
+	public String toString() {
+		return "SubApplicationNode [moduleGroups=" + moduleGroups + ", perspective=" + perspective + ", icon=" + icon + ", nodeId=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ nodeId + ", name=" + name + "]";  //$NON-NLS-1$//$NON-NLS-2$
+	}
 }

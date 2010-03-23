@@ -145,34 +145,26 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 
 		NodeList lstAssembly = doc.getElementsByTagName(ELEM_ASSEMBLY);
 		for (int i = 0; i < lstAssembly.getLength(); i++) {
-			Element elmAssembly = (Element) lstAssembly.item(i);
-
+			final Element elmAssembly = (Element) lstAssembly.item(i);
 			final AssemblyNode assemblyNode = parseAssembly(parent, elmAssembly);
-
-			Element elemSubApp = getFirstChild(elmAssembly, ELEM_SUBAPPLICATION);
-			if (null != elemSubApp) {
-				SubApplicationNode subAppNode = parseSubApplication(assemblyNode, elemSubApp);
-				assemblyNode.add(subAppNode);
-			}
-
-			Element elemModuleGroup = getFirstChild(elmAssembly, ELEM_MODULE_GROUP);
-			if (null != elemModuleGroup) {
-				ModuleGroupNode moduleGroupNode = parseModuleGroup(assemblyNode, elemModuleGroup);
-				assemblyNode.add(moduleGroupNode);
-			}
-
-			Element elemModule = getFirstChild(elmAssembly, ELEM_MODULE);
-			if (null != elemModule) {
-				ModuleNode moduleNode = parseModule(assemblyNode, elemModule);
-				assemblyNode.add(moduleNode);
-			}
-
-			Element elemSubModule = getFirstChild(elmAssembly, ELEM_SUBMODULE);
-			if (null != elemSubModule) {
-				SubModuleNode subModuleNode = parseSubModule(assemblyNode, elemSubModule);
-				assemblyNode.add(subModuleNode);
-			}
-
+			
+			new NodeIterator(elmAssembly, ELEM_SUBAPP, ELEM_MODULE_GROUP, ELEM_MODULE, ELEM_SUBMODULE) {
+				@Override
+				public void handle(Element childElement) {
+					if (ELEM_SUBAPP.equals(childElement.getNodeName())){
+						parseSubApplication(assemblyNode, childElement);
+					}
+					else if (ELEM_MODULE_GROUP.equals(childElement.getNodeName())){
+						parseModuleGroup(assemblyNode, childElement);
+					}
+					else if (ELEM_MODULE.equals(childElement.getNodeName())){
+						parseModule(assemblyNode, childElement);
+					}
+					else if (ELEM_SUBMODULE.equals(childElement.getNodeName())){
+						parseSubModule(assemblyNode, childElement);
+					}
+				}
+			}.iterate();
 			assemblyList.add(assemblyNode);
 		}
 		return assemblyList;
@@ -205,14 +197,14 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 	 */
 	private void computePreSuffixe(AbstractTypedNode typedNode) {
 		String name = typedNode.getName();
-		String typeId = typedNode.getTypeId();
+		String nodeId = typedNode.getNodeId();
 
-		if (null == typeId) {
+		if (null == nodeId) {
 			return;
 		}
 
 		Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)");
-		Matcher matcher = pattern.matcher(typeId);
+		Matcher matcher = pattern.matcher(nodeId);
 		if (matcher.matches()) {
 			String prefix = matcher.group(1);
 			String suffix = matcher.group(2);
@@ -225,10 +217,9 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		final AssemblyNode assemblyNode = new AssemblyNode(parent);
 		assemblyNode.setId(elm.getAttribute(ATTR_ASSEMBLY_ID));
 		assemblyNode.setAssembler(elm.getAttribute(ATTR_ASSEMBLY_ASSEMBLER));
-		assemblyNode.setParentTypeId(elm.getAttribute(ATTR_ASSEMBLY_PARENT_TYPE_ID));
+		assemblyNode.setNodeTypeId(elm.getAttribute(ATTR_ASSEMBLY_PARENT_NODE_ID));
 		assemblyNode.setName(elm.getAttribute(ATTR_ASSEMBLY_NAME));
-		assemblyNode.setAutostartSequence(parseInteger(elm, ATTR_ASSEMBLY_AUTOSTARTSEQUENCE));
-		assemblyNode.setRef(elm.getAttribute(ATTR_ASSEMBLY_REF));
+		assemblyNode.setAutostartSequence(parseInteger(elm, ATTR_ASSEMBLY_START_ORDER));
 		assemblyNode.setBundle(bundleNode);
 		computePreSuffixe(assemblyNode);
 		return assemblyNode;
@@ -236,12 +227,10 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 
 	private SubApplicationNode parseSubApplication(AbstractAssemblyNode parent, Element elm) {
 		final SubApplicationNode subapp = new SubApplicationNode(parent);
+		subapp.setNodeId(elm.getAttribute(ATTR_SUBAPP_NODE_ID));
+		subapp.setPerspective(elm.getAttribute(ATTR_SUBAPP_PERSPECTIVE_ID));
 		subapp.setName(elm.getAttribute(ATTR_SUBAPP_NAME));
-		subapp.setTypeId(elm.getAttribute(ATTR_SUBAPP_TYPE_ID));
-		subapp.setInstanceId(elm.getAttribute(ATTR_SUBAPP_INSTANCE_ID));
-		subapp.setLabel(elm.getAttribute(ATTR_SUBAPP_LABEL));
 		subapp.setIcon(elm.getAttribute(ATTR_SUBAPP_ICON));
-		subapp.setPerspective(elm.getAttribute(ATTR_SUBAPP_VIEW));
 		subapp.setBundle(bundleNode);
 		computePreSuffixe(subapp);
 		parent.add(subapp);
@@ -257,9 +246,8 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 
 	private ModuleGroupNode parseModuleGroup(AbstractAssemblyNode parent, Element elm) {
 		final ModuleGroupNode moduleGroup = new ModuleGroupNode(parent);
+		moduleGroup.setNodeId(elm.getAttribute(ATTR_MODGROUP_NODE_ID));
 		moduleGroup.setName(elm.getAttribute(ATTR_MODGROUP_NAME));
-		moduleGroup.setTypeId(elm.getAttribute(ATTR_MODGROUP_TYPE_ID));
-		moduleGroup.setInstanceId(elm.getAttribute(ATTR_MODGROUP_INSTANCE_ID));
 		moduleGroup.setBundle(bundleNode);
 		computePreSuffixe(moduleGroup);
 		parent.add(moduleGroup);
@@ -275,12 +263,11 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 
 	private ModuleNode parseModule(AbstractAssemblyNode parent, Element elm) {
 		final ModuleNode module = new ModuleNode(parent);
+		module.setNodeId(elm.getAttribute(ATTR_MODULE_NODE_ID));
 		module.setName(elm.getAttribute(ATTR_MODULE_NAME));
-		module.setLabel(elm.getAttribute(ATTR_MODULE_LABEL));
-		module.setTypeId(elm.getAttribute(ATTR_MODULE_TYPE_ID));
-		module.setInstanceId(elm.getAttribute(ATTR_MODULE_INSTANCE_ID));
 		module.setIcon(elm.getAttribute(ATTR_MODULE_ICON));
-		module.setUncloseable(parseBoolean(elm, ATTR_MODULE_UNCLOSABLE, false));
+		module.setCloseable(parseBoolean(elm, ATTR_MODULE_CLOSABLE, true));
+		
 		module.setBundle(bundleNode);
 		computePreSuffixe(module);
 		parent.add(module);
@@ -298,13 +285,12 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 	private SubModuleNode parseSubModule(AbstractAssemblyNode parent, Element elm) {
 		final SubModuleNode sub = new SubModuleNode(parent);
 		sub.setName(elm.getAttribute(ATTR_SUBMOD_NAME));
-		sub.setLabel(elm.getAttribute(ATTR_SUBMOD_LABEL));
-		sub.setTypeId(elm.getAttribute(ATTR_SUBMOD_TYPE_ID));
-		sub.setInstanceId(elm.getAttribute(ATTR_SUBMOD_INSTANCE_ID));
+		sub.setNodeId(elm.getAttribute(ATTR_SUBMOD_NODE_ID));
 		sub.setController(elm.getAttribute(ATTR_SUBMOD_CONTROLLER));
 		sub.setShared(parseBoolean(elm, ATTR_SUBMOD_SHARED, false));
 		sub.setIcon(elm.getAttribute(ATTR_SUBMOD_ICON));
 		sub.setSelectable(parseBoolean(elm, ATTR_SUBMOD_SELECTABLE, true));
+		sub.setRequiresPreparation(parseBoolean(elm, ATTR_SUBMOD_REQUIRES_PREPARATION, false));
 		sub.setBundle(bundleNode);
 		computePreSuffixe(sub);
 

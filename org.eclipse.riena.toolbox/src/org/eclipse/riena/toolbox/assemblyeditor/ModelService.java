@@ -42,8 +42,8 @@ public class ModelService implements IModelService{
 				for (AbstractTypedNode typeNode : ass.getChildren()){
 					
 					if (!typeNode.equals(ignoreNode) &&
-						Util.isGiven(typeNode.getTypeId())){
-						typeIds.add(typeNode.getTypeId());
+						Util.isGiven(typeNode.getNodeId())){
+						typeIds.add(typeNode.getNodeId());
 					}
 					
 					findTypeIds(typeIds, typeNode, ignoreNode);
@@ -58,8 +58,8 @@ public class ModelService implements IModelService{
 			AbstractTypedNode abs = (AbstractTypedNode) typeNode;
 			
 			if (!typeNode.equals(ignoreNode)){
-				if (null != abs && Util.isGiven(abs.getTypeId())){
-					ids.add(abs.getTypeId());
+				if (null != abs && Util.isGiven(abs.getNodeId())){
+					ids.add(abs.getNodeId());
 				}
 			}
 			

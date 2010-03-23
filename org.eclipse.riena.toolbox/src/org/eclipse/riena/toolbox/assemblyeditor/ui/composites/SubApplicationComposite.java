@@ -28,9 +28,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class SubApplicationComposite extends AbstractDetailComposite<SubApplicationNode>{
 	private Text txtName;
-	private VerifyTypeIdText txtTypeId;
-	private Text txtInstanceId;
-	private Text txtLabel;
+	private VerifyTypeIdText txtNodeId;
 	private IconSelectorText txtIcon;
 	private IdSelectorText txtPerspective;
 
@@ -49,8 +47,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 					return;
 				}
 				String simpleName = txtName.getText().trim();
-				txtLabel.setText(simpleName);
-				txtTypeId.getText().setText(node.getPrefix()+simpleName+node.getSuffix());
+				txtNodeId.getText().setText(node.getPrefix()+simpleName+node.getSuffix());
 			}
 		});
 		
@@ -61,10 +58,8 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 		}
 		
 		
-		txtTypeId.getText().setText(getTextSave(node.getTypeId()));
-		txtTypeId.setIgnoreNode(node);
-		txtInstanceId.setText(getTextSave(node.getInstanceId()));
-		txtLabel.setText(getTextSave(node.getLabel()));
+		txtNodeId.getText().setText(getTextSave(node.getNodeId()));
+		txtNodeId.setIgnoreNode(node);
 		txtIcon.getText().setText(getTextSave(node.getIcon()));
 		txtIcon.setProject(node.getBundle().getProject());
 		txtPerspective.getText().setText(getTextSave(node.getPerspective()));
@@ -77,9 +72,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 	@Override
 	public void unbind() {
 		node.setName(txtName.getText());
-		node.setTypeId(txtTypeId.getText().getText());
-		node.setInstanceId(txtInstanceId.getText());
-		node.setLabel(txtLabel.getText());
+		node.setNodeId(txtNodeId.getText().getText());
 		node.setIcon(txtIcon.getText().getText());
 		node.setPerspective(txtPerspective.getText().getText());
 	}
@@ -88,15 +81,13 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 	protected void createWorkarea(Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
-		txtTypeId = createLabeledVerifyText(parent,"TypeId");
-		txtInstanceId = createLabeledText(parent,"InstanceId");
-		txtLabel = createLabeledText(parent,"Label");
+		txtNodeId = createLabeledVerifyText(parent,"NodeId");
 		txtIcon = createLabeledIconSelector(parent, "Icon");
 		buildViewSection(parent);
 	}
 	
 	private void buildViewSection(Composite parent) {
-		Label lblPersp = UIControlsFactory.createLabel(parent, "Perspective");
+		Label lblPersp = UIControlsFactory.createLabel(parent, "PerspectiveId");
 		GridDataFactory.swtDefaults().applyTo(lblPersp);
 		txtPerspective = new IdSelectorText(parent, workareaBackground, "Perspective Selection", "Select a Perspective (* = any string, ? = any char):");
 		txtPerspective.setIds(Activator.getDefault().getAssemblyModel().getRcpPerspectiveIds());  // FIXME PerspectiveIds have to be set on bind()

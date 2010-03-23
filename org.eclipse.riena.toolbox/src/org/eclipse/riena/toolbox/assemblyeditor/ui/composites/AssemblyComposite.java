@@ -31,7 +31,6 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 	private Text txtName;
 	private Text txtAssembler;
 	private Text txtAutostartsequence;
-	private Text txtRef;
 	private ContentProposalAdapter contentProposalTypeId;
 
 	public AssemblyComposite(Composite parent) {
@@ -44,7 +43,7 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 		
 		txtId.setText(getTextSave(node.getId()));
 		txtAssembler.setText(getTextSave(node.getAssembler()));
-		txtParentTypeId.setText(getTextSave(node.getParentTypeId()));
+		txtParentTypeId.setText(getTextSave(node.getNodeTypeId()));
 		
 		Set<String> typeIds = Activator.getDefault().getModelService().getAllParentTypeIds(Activator.getDefault().getAssemblyModel()); 
 		String[] typeIdsArray = typeIds.toArray(new String[typeIds.size()]);
@@ -58,8 +57,6 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 		else{
 			txtAutostartsequence.setText("");
 		}
-		
-		txtRef.setText(getTextSave(node.getRef()));
 	}
 	
 	@Override
@@ -71,7 +68,7 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 	public void unbind() {
 		node.setId(txtId.getText());
 		node.setAssembler(txtAssembler.getText());
-		node.setParentTypeId(txtParentTypeId.getText());
+		node.setNodeTypeId(txtParentTypeId.getText());
 		node.setName(txtName.getText());
 		
 		if (Util.isGiven(txtAutostartsequence.getText())){
@@ -79,8 +76,6 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 		} else{
 			node.setAutostartSequence(null);
 		}
-		
-		node.setRef(txtRef.getText());
 	}
 
 	@Override
@@ -100,7 +95,7 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 		
 		txtId = createLabeledText(parent, "Id");
 		txtAssembler = createLabeledText(parent, "Assembler");
-		txtParentTypeId = createLabeledText(parent, "ParentTypeId");
+		txtParentTypeId = createLabeledText(parent, "ParentNodeId");
 		contentProposalTypeId = new ContentProposalAdapter(
 				txtParentTypeId, 
 				new TextContentAdapter(), 
@@ -108,7 +103,6 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode>{
 				null, 
 				null);
 		contentProposalTypeId.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
-		txtAutostartsequence = createLabeledText(parent, "Autostartsequence");
-		txtRef = createLabeledText(parent, "Ref");
+		txtAutostartsequence = createLabeledText(parent, "StartOrder");
 	}
 }

@@ -18,21 +18,11 @@ import java.util.List;
  *
  */
 public class ModuleGroupNode extends AbstractTypedNode<ModuleNode> {
-
 	private List<ModuleNode> modules;
-	private String instanceId;
 	
 	public ModuleGroupNode(AbstractAssemblyNode parent) {
 		super(parent);
 		modules = new ArrayList<ModuleNode>();
-	}
-
-	public String getInstanceId() {
-		return instanceId;
-	}
-
-	public void setInstanceId(String instanceId) {
-		this.instanceId = instanceId;
 	}
 
 	@Override
@@ -47,15 +37,12 @@ public class ModuleGroupNode extends AbstractTypedNode<ModuleNode> {
 	}
 
 	@Override
-	public String toString() {
-		return "ModuleGroupNode [instanceId=" + instanceId + ", modules="
-				+ modules + ", typeId=" + getTypeId() + "]";
-	}
-
-	@Override
-	public String getTreeLabel() {
+	protected String getTreeLabelValue() {
 		return name;
 	}
 
-
+	@Override
+	public String toString() {
+		return "ModuleGroupNode [modules=" + modules + ", nodeId=" + nodeId + ", name=" + name + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+	}
 }

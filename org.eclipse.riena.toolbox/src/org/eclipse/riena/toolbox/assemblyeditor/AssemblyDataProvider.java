@@ -187,6 +187,8 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 						dummy += "<?eclipse version=\"3.4\"?>"; //$NON-NLS-1$
 						dummy += "<plugin></plugin>\n"; //$NON-NLS-1$
 
+						// FIXME check if Resource is writeable (ERROR: org.eclipse.core.internal.resources.ResourceException: Resource '/de.compeople.scp.toolbox.rienademo' is not open.)
+						
 						pluginXml.create(new ByteArrayInputStream(dummy.getBytes()), true, null);
 						bundle.setPluginXml(pluginXml);
 					} catch (CoreException e) {

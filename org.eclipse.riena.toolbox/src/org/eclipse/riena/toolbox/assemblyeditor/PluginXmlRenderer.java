@@ -54,19 +54,21 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 			doc = builder.parse(pluginXml);
 			removeOldAssemblies();
-			if (bundleNode.getChildren() != null && bundleNode.getChildren().size() != 0) {
+			
+			// render the given BundleNode, unless it has no childelemetns
+			if (bundleNode.getChildren() != null && !bundleNode.getChildren().isEmpty()) {
 				Element elmExt = doc.createElement(ELEM_EXTENSION);
-				elmExt.setAttribute(ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ORG_ASSEMBLIES);
+				elmExt.setAttribute(ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ASSEMBLIES);
 
 				NodeList nlPlugin = doc.getElementsByTagName(ELEM_PLUGIN);
 				nlPlugin.item(0).appendChild(elmExt);
-
+				System.out.println("saveDocument " + bundleNode);
 				renderModel(elmExt, bundleNode);
-				Transformer xformer = TransformerFactory.newInstance().newTransformer();
-				xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				xformer.transform(new DOMSource(doc), new StreamResult(pluginXml));
 			}
-
+			
+			Transformer xformer = TransformerFactory.newInstance().newTransformer();
+			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			xformer.transform(new DOMSource(doc), new StreamResult(pluginXml));
 		} catch (SAXException e) {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
@@ -218,8 +220,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			elm.setAttribute(ATTR_ASSEMBLY_ASSEMBLER, ass.getAssembler());
 		}
 
-		if (Util.isGiven(ass.getParentTypeId())) {
-			elm.setAttribute(ATTR_ASSEMBLY_PARENT_TYPE_ID, ass.getParentTypeId());
+		if (Util.isGiven(ass.getNodeTypeId())) {
+			elm.setAttribute(ATTR_ASSEMBLY_PARENT_NODE_ID, ass.getNodeTypeId());
 		}
 
 		if (Util.isGiven(ass.getName())) {
@@ -227,11 +229,7 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		}
 
 		if (null != ass.getAutostartSequence()) {
-			elm.setAttribute(ATTR_ASSEMBLY_AUTOSTARTSEQUENCE, ass.getAutostartSequence().intValue() + ""); //$NON-NLS-1$
-		}
-
-		if (Util.isGiven(ass.getRef())) {
-			elm.setAttribute(ATTR_ASSEMBLY_REF, ass.getRef());
+			elm.setAttribute(ATTR_ASSEMBLY_START_ORDER, ass.getAutostartSequence().intValue() + ""); //$NON-NLS-1$
 		}
 
 		elmExtension.appendChild(elm);
@@ -240,22 +238,14 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	}
 
 	private void renderSubApplication(Element parent, SubApplicationNode ass) {
-		Element elm = doc.createElement(ELEM_SUBAPPLICATION);
+		Element elm = doc.createElement(ELEM_SUBAPP);
 
 		if (Util.isGiven(ass.getName())) {
 			elm.setAttribute(ATTR_SUBAPP_NAME, ass.getName());
 		}
 
-		if (Util.isGiven(ass.getTypeId())) {
-			elm.setAttribute(ATTR_SUBAPP_TYPE_ID, ass.getTypeId());
-		}
-
-		if (Util.isGiven(ass.getInstanceId())) {
-			elm.setAttribute(ATTR_SUBAPP_INSTANCE_ID, ass.getInstanceId());
-		}
-
-		if (Util.isGiven(ass.getLabel())) {
-			elm.setAttribute(ATTR_SUBAPP_LABEL, ass.getLabel());
+		if (Util.isGiven(ass.getNodeId())) {
+			elm.setAttribute(ATTR_SUBAPP_NODE_ID, ass.getNodeId());
 		}
 
 		if (Util.isGiven(ass.getIcon())) {
@@ -263,7 +253,7 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		}
 
 		if (Util.isGiven(ass.getPerspective())) {
-			elm.setAttribute(ATTR_SUBAPP_VIEW, ass.getPerspective());
+			elm.setAttribute(ATTR_SUBAPP_PERSPECTIVE_ID, ass.getPerspective());
 		}
 
 		for (ModuleGroupNode mod : ass.getChildren()) {
@@ -280,13 +270,10 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			elm.setAttribute(ATTR_MODGROUP_NAME, ass.getName());
 		}
 
-		if (Util.isGiven(ass.getTypeId())) {
-			elm.setAttribute(ATTR_MODGROUP_TYPE_ID, ass.getTypeId());
+		if (Util.isGiven(ass.getNodeId())) {
+			elm.setAttribute(ATTR_MODGROUP_NODE_ID, ass.getNodeId());
 		}
 
-		if (Util.isGiven(ass.getInstanceId())) {
-			elm.setAttribute(ATTR_MODGROUP_INSTANCE_ID, ass.getInstanceId());
-		}
 
 		for (ModuleNode mod : ass.getChildren()) {
 			renderModule(elm, mod);
@@ -298,27 +285,21 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	private void renderModule(Element parent, ModuleNode ass) {
 		Element elm = doc.createElement(ELEM_MODULE);
 
-		if (Util.isGiven(ass.getLabel())) {
-			elm.setAttribute(ATTR_MODULE_LABEL, ass.getLabel());
-		}
 
 		if (Util.isGiven(ass.getName())) {
 			elm.setAttribute(ATTR_MODULE_NAME, ass.getName());
 		}
 
-		if (Util.isGiven(ass.getTypeId())) {
-			elm.setAttribute(ATTR_MODULE_TYPE_ID, ass.getTypeId());
+		if (Util.isGiven(ass.getNodeId())) {
+			elm.setAttribute(ATTR_MODULE_NODE_ID, ass.getNodeId());
 		}
 
-		if (Util.isGiven(ass.getInstanceId())) {
-			elm.setAttribute(ATTR_MODULE_INSTANCE_ID, ass.getInstanceId());
-		}
 
 		if (Util.isGiven(ass.getIcon())) {
 			elm.setAttribute(ATTR_MODULE_ICON, ass.getIcon());
 		}
 
-		elm.setAttribute(ATTR_MODULE_UNCLOSABLE, ass.isUncloseable() + ""); //$NON-NLS-1$
+		elm.setAttribute(ATTR_MODULE_CLOSABLE, ass.isCloseable() + ""); //$NON-NLS-1$
 
 		for (SubModuleNode mod : ass.getChildren()) {
 			renderSubModule(elm, mod);
@@ -330,12 +311,12 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	private void renderSubModule(Element parent, SubModuleNode subMod) {
 		Element elm = doc.createElement(ELEM_SUBMODULE);
 
+		if (Util.isGiven(subMod.getNodeId())) {
+			elm.setAttribute(ATTR_SUBMOD_NODE_ID, subMod.getNodeId());
+		}
+		
 		if (Util.isGiven(subMod.getController())) {
 			elm.setAttribute(ATTR_SUBMOD_CONTROLLER, subMod.getController());
-		}
-
-		if (Util.isGiven(subMod.getLabel())) {
-			elm.setAttribute(ATTR_SUBMOD_LABEL, subMod.getLabel());
 		}
 
 		if (Util.isGiven(subMod.getName())) {
@@ -344,16 +325,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 		elm.setAttribute(ATTR_SUBMOD_SELECTABLE, subMod.isSelectable() + ""); //$NON-NLS-1$
 
-		if (Util.isGiven(subMod.getTypeId())) {
-			elm.setAttribute(ATTR_SUBMOD_TYPE_ID, subMod.getTypeId());
-		}
-
 		if (Util.isGiven(subMod.getRcpView().getId())) {
 			elm.setAttribute(ATTR_SUBMOD_VIEW, subMod.getRcpView().getId());
-		}
-
-		if (Util.isGiven(subMod.getInstanceId())) {
-			elm.setAttribute(ATTR_SUBMOD_INSTANCE_ID, subMod.getInstanceId());
 		}
 
 		if (Util.isGiven(subMod.getIcon())) {
@@ -361,6 +334,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		}
 
 		elm.setAttribute(ATTR_SUBMOD_SHARED, subMod.isShared() + ""); //$NON-NLS-1$
+		
+		elm.setAttribute(ATTR_SUBMOD_REQUIRES_PREPARATION, subMod.isRequiresPreparation() + ""); //$NON-NLS-1$
 
 		for (SubModuleNode mod : subMod.getChildren()) {
 			renderSubModule(elm, mod);

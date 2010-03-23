@@ -43,6 +43,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.RidgetGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.SwtControl;
 import org.eclipse.riena.toolbox.assemblyeditor.api.INodeFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
+import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractTypedNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
@@ -55,8 +56,11 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.AssemblyTreeViewer;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.DetailSection;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IDirtyListener;
+import org.eclipse.riena.ui.swt.MessageBox;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -188,13 +192,52 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			openViewAction.setEnabled(false);
 			registerPerspectiveAction.setEnabled(false);
 		} else if (treeNode instanceof AssemblyNode) {
-			boolean enabled = !treeNode.hasChildren();
+			AssemblyNode assNode = (AssemblyNode) treeNode;
+			
+			// if the assemblyNode has a NodeBuilder, than it can't have any childNodes
+			if (Util.isGiven(assNode.getAssembler())){
+				addSubAppAction.setEnabled(false);
+				addModuleGroupAction.setEnabled(false);
+				addModuleAction.setEnabled(false);
+				addSubModuleAction.setEnabled(false);
+			}else{
+				
+				// if the assemblyNode already has a child, only child nodes of the same type are allowed
+				if (!assNode.getChildren().isEmpty()){
+					AbstractTypedNode firstChild = assNode.getChildren().get(0);
+					
+					if (firstChild instanceof SubApplicationNode){
+						addSubAppAction.setEnabled(true);
+						addModuleGroupAction.setEnabled(false);
+						addModuleAction.setEnabled(false);
+						addSubModuleAction.setEnabled(false);
+					}
+					else if (firstChild instanceof ModuleGroupNode){
+						addSubAppAction.setEnabled(false);
+						addModuleGroupAction.setEnabled(true);
+						addModuleAction.setEnabled(false);
+						addSubModuleAction.setEnabled(false);
+					}else if (firstChild instanceof ModuleNode){
+						addSubAppAction.setEnabled(false);
+						addModuleGroupAction.setEnabled(false);
+						addModuleAction.setEnabled(true);
+						addSubModuleAction.setEnabled(false);
+					}
+					else if (firstChild instanceof SubModuleNode){
+						addSubAppAction.setEnabled(false);
+						addModuleGroupAction.setEnabled(false);
+						addModuleAction.setEnabled(false);
+						addSubModuleAction.setEnabled(true);
+					}
+				}else{
+					addSubAppAction.setEnabled(true);
+					addModuleGroupAction.setEnabled(true);
+					addModuleAction.setEnabled(true);
+					addSubModuleAction.setEnabled(true);
+				}
+			}
+			
 			addAssemblyAction.setEnabled(false);
-
-			addSubAppAction.setEnabled(enabled);
-			addModuleGroupAction.setEnabled(enabled);
-			addModuleAction.setEnabled(enabled);
-			addSubModuleAction.setEnabled(enabled);
 			generateViewControllerAction.setEnabled(false);
 			generateRidgetsActions.setEnabled(false);
 			generateAddUIControlCallsAction.setEnabled(false);
@@ -212,7 +255,16 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			generateAddUIControlCallsAction.setEnabled(false);
 			openControllerAction.setEnabled(false);
 			openViewAction.setEnabled(false);
-			registerPerspectiveAction.setEnabled(true); // FIXME only enable, when Perspective does not already exist
+			
+			// RegisterPerspectiveAction is active, when a persepectiveId is given and it is not yet registered
+			String perspectiveId = ((SubApplicationNode)treeNode).getPerspective();
+			if (Util.isGiven(perspectiveId)){
+				boolean isPerspectiveRgistered = treeNode.getBundle().getRegisteredRcpPerspectives().contains(new RCPPerspective(perspectiveId));
+				registerPerspectiveAction.setEnabled(!isPerspectiveRgistered);
+			}
+			else {
+				registerPerspectiveAction.setEnabled(true);
+			}
 		} else if (treeNode instanceof ModuleGroupNode) {
 			addAssemblyAction.setEnabled(false);
 			addSubAppAction.setEnabled(false);
@@ -248,10 +300,13 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 			boolean enableViewControllerAction = false;
 			if (null != subMod.getRcpView()) {
-				enableViewControllerAction = Util.isGiven(subMod.getRcpView().getId()) && Util.isGiven(subMod.getController());
+//				enableViewControllerAction = !Util.isGiven(subMod.getRcpView().getId()) && 
+//											 !Util.isGiven(subMod.getController()) && 
+//											 Util.isGiven(subMod.getName());
+				enableViewControllerAction =  Util.isGiven(subMod.getName());
 			}
 
-			generateViewControllerAction.setEnabled(!enableViewControllerAction);
+			generateViewControllerAction.setEnabled(enableViewControllerAction);
 			generateRidgetsActions.setEnabled(Util.isGiven(subMod.getController()));
 			generateAddUIControlCallsAction.setEnabled(subMod.hasViewClass());
 
@@ -306,6 +361,18 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 					setDirty(isDirty);
 				}
 			});
+			
+			assemblyTree.getTree().addKeyListener(new KeyListener() {
+				public void keyReleased(KeyEvent e) {
+				}
+				
+				public void keyPressed(KeyEvent e) {
+					if (e.keyCode == SWT.DEL){
+						deleteNodeAction.run();
+					}
+				}
+			});
+
 
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(assemblyTree.getTree());
 			
@@ -435,6 +502,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			assemblyView.expandNode(parentNode);
 			assemblyView.selectNode(newChild);
 			detailSection.showDetails(newChild);
+			checkActionEnabledState();
 		}
 
 		protected abstract AbstractAssemblyNode createNode(AbstractAssemblyNode parent);
@@ -489,9 +557,12 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		private void deleteNode(AssemblyView assemblyView, AbstractAssemblyNode treeNode) {
+			// save the selection, to reset it after the tree is rebuilt
+			AbstractAssemblyNode newSelection = treeNode.getParent();
 			treeNode.delete();
 			assemblyView.updateTreeAndDetailSection();
 			assemblyView.doSave(null);
+			assemblyView.getAssemblyTree().getTreeViewer().setSelection(new StructuredSelection(newSelection));
 		}
 	}
 
@@ -573,6 +644,13 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
+			String subModuleName = subMod.getName();
+			if (!Util.isGiven(subModuleName)){
+				MessageBox mb = new MessageBox(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+				mb.show("Warning", "Could not generate the View/Controller classes, because the SubModuleName was not given", SWT.ERROR, new String[]{"OK"});
+				return;
+			}
+			
 			String controllerClassName = Activator.getDefault().getCodeGenerator().generateController(subMod);
 			RCPView rcpView = Activator.getDefault().getCodeGenerator().generateView(subMod);
 			Activator.getDefault().getDataProvider().getXmlRenderer().registerView(subMod.getBundle(), rcpView);
@@ -778,7 +856,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	
 	private class RegisterPerspectiveAction extends Action {
 		public RegisterPerspectiveAction() {
-			setText("Register Perspective");
+			setText("Generate/Register Perspective");
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.registerperspective.action"); //$NON-NLS-1$
 		}
 
@@ -795,7 +873,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 					subapp.setPerspective(perspective.getId());
 					detailSection.update(subapp);
 					doSave(null);
-					System.out.println("generate persp " + perspective);
+					checkActionEnabledState();
 				}
 			}
 		}

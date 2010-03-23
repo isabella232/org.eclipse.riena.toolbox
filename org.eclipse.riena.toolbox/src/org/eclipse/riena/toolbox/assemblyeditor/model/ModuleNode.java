@@ -19,31 +19,13 @@ import java.util.List;
  */
 public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
 	private List<SubModuleNode> subModules;
-	private String instanceId;
 	private String icon;
-	private boolean uncloseable;
-	private String label;
+	private boolean closeable;
 	
 
 	public ModuleNode(AbstractAssemblyNode parent) {
 		super(parent);
 		this.subModules = new ArrayList<SubModuleNode>();
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public String getInstanceId() {
-		return instanceId;
-	}
-
-	public void setInstanceId(String instanceId) {
-		this.instanceId = instanceId;
 	}
 
 	public String getIcon() {
@@ -54,12 +36,12 @@ public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
 		this.icon = icon;
 	}
 
-	public boolean isUncloseable() {
-		return uncloseable;
+	public boolean isCloseable() {
+		return closeable;
 	}
 
-	public void setUncloseable(boolean uncloseable) {
-		this.uncloseable = uncloseable;
+	public void setCloseable(boolean uncloseable) {
+		this.closeable = uncloseable;
 	}
 
 	@Override
@@ -73,16 +55,13 @@ public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
 	}
 
 	@Override
-	public String toString() {
-		return "ModuleNode [icon=" + icon + ", instanceId=" + instanceId
-				+ ", label=" + label + ", subModules=" + subModules
-				+ ", typeId=" + getTypeId() + ", uncloseable=" + uncloseable + "]";
-	}
-
-	@Override
-	public String getTreeLabel() {
+	protected String getTreeLabelValue() {
 		return name;
 	}
 
-
+	@Override
+	public String toString() {
+		return "ModuleNode [subModules=" + subModules + ", icon=" + icon + ", closeable=" + closeable + ", nodeId=" + nodeId + ", name=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				+ name + "]"; //$NON-NLS-1$
+	}
 }

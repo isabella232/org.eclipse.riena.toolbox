@@ -32,6 +32,8 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubApplicationNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -66,7 +68,7 @@ public class AssemblyTreeViewer extends FilteredTree {
 				}
 			}
 		});
-
+		
 	}
 	
 	public TreeViewer getTreeViewer(){

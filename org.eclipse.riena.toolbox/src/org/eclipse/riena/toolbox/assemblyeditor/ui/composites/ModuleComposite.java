@@ -22,12 +22,10 @@ import org.eclipse.swt.widgets.Text;
 
 
 public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
-	private Text txtInstanceId;
-	private VerifyTypeIdText txtTypeId;
+	private VerifyTypeIdText txtNodeId;
 	private IconSelectorText txtIcon;
 	private Button btnUncloseable;
 	private Text txtName;
-	private Text txtLabel;
 
 	public ModuleComposite(Composite parent) {
 		super(parent, "module_li.png","module_re.png");
@@ -36,12 +34,11 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
 	@Override
 	public void bind(final ModuleNode node) {
 		this.node = node;
-		txtInstanceId.setText(getTextSave(node.getInstanceId()));
-		txtTypeId.getText().setText(getTextSave(node.getTypeId()));
-		txtTypeId.setIgnoreNode(node);
+		txtNodeId.getText().setText(getTextSave(node.getNodeId()));
+		txtNodeId.setIgnoreNode(node);
 		txtIcon.getText().setText(getTextSave(node.getIcon()));
 		txtIcon.setProject(node.getBundle().getProject());
-		btnUncloseable.setSelection(node.isUncloseable());
+		btnUncloseable.setSelection(node.isCloseable());
 		txtName.setText(getTextSave(node.getName()));
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
@@ -50,13 +47,9 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
 					return;
 				}
 				String simpleName = txtName.getText().trim();
-				txtLabel.setText(simpleName);
-				txtTypeId.getText().setText(node.getPrefix()+simpleName+node.getSuffix());
+				txtNodeId.getText().setText(node.getPrefix()+simpleName+node.getSuffix());
 			}
 		});
-		
-		
-		txtLabel.setText(getTextSave(node.getLabel()));
 	}
 	
 	@Override
@@ -66,22 +59,18 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
 
 	@Override
 	public void unbind() {
-		node.setInstanceId(txtInstanceId.getText());
-		node.setTypeId(txtTypeId.getText().getText());
+		node.setNodeId(txtNodeId.getText().getText());
 		node.setIcon(txtIcon.getText().getText());
-		node.setUncloseable(btnUncloseable.getSelection());
+		node.setCloseable(btnUncloseable.getSelection());
 		node.setName(txtName.getText());
-		node.setLabel(txtLabel.getText());
 	}
 
 	@Override
 	protected void createWorkarea(Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
-		txtLabel = createLabeledText(parent,"Label");
-		txtTypeId = createLabeledVerifyText(parent,"TypeId");
-		txtInstanceId = createLabeledText(parent,"InstanceId");
+		txtNodeId = createLabeledVerifyText(parent,"NodeId");
 		txtIcon = createLabeledIconSelector(parent, "Icon");
-		btnUncloseable = createLabeledCheckbox(parent,"Unclosable");
+		btnUncloseable = createLabeledCheckbox(parent,"Closable");
 	}
 }

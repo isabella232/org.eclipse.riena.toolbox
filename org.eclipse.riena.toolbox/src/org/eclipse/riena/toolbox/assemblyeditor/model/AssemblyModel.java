@@ -117,7 +117,7 @@ public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
 
 	@Override
 	public String toString() {
-		return "AssemblyModel [bundles=" + bundles + "]";
+		return "AssemblyModel [bundles=" + bundles + "]";  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	public boolean addAll(Collection<? extends BundleNode> c) {
@@ -139,9 +139,4 @@ public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
 	public void setBundle(BundleNode bundle) {
 		throw new UnsupportedOperationException();
 	}
-
-	
-	
-	
-	
 }

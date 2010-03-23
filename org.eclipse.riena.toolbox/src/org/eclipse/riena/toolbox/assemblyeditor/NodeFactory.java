@@ -39,7 +39,7 @@ public class NodeFactory implements INodeFactory{
 		AssemblyNode ass = new AssemblyNode(parentBundle);
 		setPreSuffixes(parentBundle, ass, SUFFIX_ASSEMBLY);
 		ass.setName(CONST_NEW_IDENTIFIER);
-		ass.setParentTypeId("application");
+		ass.setNodeTypeId("application");
 		ass.setBundle(parentBundle);
 		return ass;
 	}
@@ -48,8 +48,8 @@ public class NodeFactory implements INodeFactory{
 		ModuleNode node = new ModuleNode(parent);
 		setPreSuffixes(parentBundle, node, SUFFIX_MODULE);
 		node.setName(CONST_NEW_IDENTIFIER);
-		node.setLabel(CONST_NEW_IDENTIFIER);
 		node.setBundle(parentBundle);
+		node.setCloseable(true);
 		return node;
 	}
 
@@ -66,7 +66,6 @@ public class NodeFactory implements INodeFactory{
 		setPreSuffixes(parentBundle, node, SUFFIX_SUBAPPLICATION);
 		node.setBundle(parentBundle);
 		node.setName(CONST_NEW_IDENTIFIER);
-		node.setLabel(CONST_NEW_IDENTIFIER);
 		return node;
 	}
 
@@ -75,7 +74,6 @@ public class NodeFactory implements INodeFactory{
 		SubModuleNode node = new SubModuleNode(parent);
 		setPreSuffixes(parentBundle, node, SUFFIX_SUBMODULE);
 		node.setName(CONST_NEW_IDENTIFIER);
-		node.setLabel(CONST_NEW_IDENTIFIER);
 		node.setBundle(parentBundle);
 		node.setSelectable(true);
 		return node;
@@ -103,7 +101,7 @@ public class NodeFactory implements INodeFactory{
 	private void setPreSuffixes(AbstractAssemblyNode parent, AbstractTypedNode typedNode, String suffix){
 		typedNode.setPrefix(parent.getName()+SEP);
 		typedNode.setSuffix(SEP+ suffix);
-		typedNode.setTypeId(typedNode.getPrefix() + CONST_NEW_IDENTIFIER + typedNode.getSuffix());
+		typedNode.setNodeId(typedNode.getPrefix() + CONST_NEW_IDENTIFIER + typedNode.getSuffix());
 		
 	}
 

@@ -13,6 +13,8 @@ package org.eclipse.riena.toolbox.assemblyeditor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,42 +37,52 @@ import org.xml.sax.SAXException;
 
 
 public class AbstractXmlProvider {
+	
+	// ######### SubModule
+	protected static final String ELEM_SUBMODULE = "subModule"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_SELECTABLE = "selectable"; //$NON-NLS-1$
-	protected static final String ATTR_SUBMOD_VIEW = "view"; //$NON-NLS-1$
-	protected static final String ATTR_SUBMOD_TYPE_ID = "typeId"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_VIEW = "viewId"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_NODE_ID = "nodeId"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_NAME = "name"; //$NON-NLS-1$
-	protected static final String ATTR_SUBMOD_LABEL = "label"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_SHARED = "shared"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_ICON = "icon"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_CONTROLLER = "controller"; //$NON-NLS-1$
-	protected static final String ATTR_MODULE_UNCLOSABLE = "unclosable"; //$NON-NLS-1$
-	protected static final String ATTR_MODULE_NAME = ATTR_SUBMOD_NAME;
-	protected static final String ATTR_MODULE_LABEL = ATTR_SUBMOD_LABEL;
-	protected static final String ATTR_MODGROUP_TYPE_ID = ATTR_SUBMOD_TYPE_ID;
-	protected static final String ATTR_MODGROUP_NAME = ATTR_MODULE_NAME;
-	protected static final String ATTR_SUBAPP_VIEW = ATTR_SUBMOD_VIEW;
-	protected static final String ATTR_SUBAPP_TYPE_ID = ATTR_MODGROUP_TYPE_ID;
-	protected static final String ATTR_SUBAPP_LABEL = ATTR_MODULE_LABEL;
-	protected static final String ATTR_ASSEMBLY_ID = "id"; //$NON-NLS-1$
-	protected static final String ATTR_ASSEMBLY_PARENT_TYPE_ID = "parentTypeId"; //$NON-NLS-1$
-	protected static final String ATTR_ASSEMBLY_NAME = "name"; //$NON-NLS-1$
-	protected static final String ATTR_ASSEMBLY_AUTOSTARTSEQUENCE = "autostartsequence"; //$NON-NLS-1$
-	protected static final String ELEM_ASSEMBLY = "assembly"; //$NON-NLS-1$
-	protected static final String ELEM_SUBAPPLICATION = "subapplication"; //$NON-NLS-1$
-	protected static final String ELEM_MODULE_GROUP = "modulegroup"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_REQUIRES_PREPARATION = "requiresPreparation"; //$NON-NLS-1$
+	
+	// ##### Module
 	protected static final String ELEM_MODULE = "module"; //$NON-NLS-1$
-	protected static final String ELEM_SUBMODULE = "submodule"; //$NON-NLS-1$
-	protected static final String ATTR_ASSEMBLY_REF = "ref"; //$NON-NLS-1$
-	protected static final String ATTR_ASSEMBLY_ASSEMBLER = "assembler"; //$NON-NLS-1$
+	protected static final String ATTR_MODULE_CLOSABLE = "closable"; //$NON-NLS-1$
+	protected static final String ATTR_MODULE_NAME = "name"; //$NON-NLS-1$
+	protected static final String ATTR_MODULE_ICON = "icon"; //$NON-NLS-1$
+	protected static final String ATTR_MODULE_NODE_ID = "nodeId"; //$NON-NLS-1$
+	
+	
+	// ########## ModuleGroup
+	protected static final String ELEM_MODULE_GROUP = "moduleGroup"; //$NON-NLS-1$
+	protected static final String ATTR_MODGROUP_NODE_ID = "nodeId"; //$NON-NLS-1$
+	protected static final String ATTR_MODGROUP_NAME = "name"; //$NON-NLS-1$
+	
+	// ##########   Subapplication
+	protected static final String ELEM_SUBAPP = "subApplication"; //$NON-NLS-1$
+	protected static final String ATTR_SUBAPP_PERSPECTIVE_ID = "perspectiveId"; //$NON-NLS-1$
+	protected static final String ATTR_SUBAPP_NODE_ID = "nodeId"; //$NON-NLS-1$
 	protected static final String ATTR_SUBAPP_ICON = "icon"; //$NON-NLS-1$
 	protected static final String ATTR_SUBAPP_INSTANCE_ID = "instanceId"; //$NON-NLS-1$
 	protected static final String ATTR_SUBAPP_NAME = "name"; //$NON-NLS-1$
-	protected static final String ATTR_MODGROUP_INSTANCE_ID = ATTR_SUBAPP_INSTANCE_ID;
-	protected static final String ATTR_MODULE_ICON = ATTR_SUBAPP_ICON;
-	protected static final String ATTR_MODULE_INSTANCE_ID = ATTR_MODGROUP_INSTANCE_ID;
-	protected static final String ATTR_MODULE_TYPE_ID = "typeId"; //$NON-NLS-1$
-	protected static final String ATTR_SUBMOD_SHARED = "shared"; //$NON-NLS-1$
-	protected static final String ATTR_SUBMOD_ICON = ATTR_MODULE_ICON;
-	protected static final String ATTR_SUBMOD_INSTANCE_ID = ATTR_MODULE_INSTANCE_ID;
+	
+	
+	// ######## Assembly
+	protected static final String ELEM_ASSEMBLY = "assembly2"; //$NON-NLS-1$
+	protected static final String ATTR_ASSEMBLY_ID = "id"; //$NON-NLS-1$
+	protected static final String ATTR_ASSEMBLY_PARENT_NODE_ID = "parentNodeId"; //$NON-NLS-1$
+	protected static final String ATTR_ASSEMBLY_NAME = "name"; //$NON-NLS-1$
+	protected static final String ATTR_ASSEMBLY_START_ORDER = "startOrder"; //$NON-NLS-1$
+	protected static final String ATTR_ASSEMBLY_ASSEMBLER = "assembler"; //$NON-NLS-1$
+	
+	
 	protected static final String ATTR_EXTENSION_POINT = "point"; //$NON-NLS-1$
+	
+	// ###### RCP-View
 	protected static final String ATTR_VIEW_ALLOW_MULTIPLE = "allowMultiple"; //$NON-NLS-1$
 	protected static final String ATTR_VIEW_CLASS = "class"; //$NON-NLS-1$
 	protected static final String ATTR_VIEW_NAME = "name"; //$NON-NLS-1$
@@ -83,11 +95,10 @@ public class AbstractXmlProvider {
 	protected static final String ELEM_PERSPECTIVE = "perspective"; //$NON-NLS-1$
 	protected static final String ELEM_POINT = "point"; //$NON-NLS-1$
 	
-	protected static final String VALUE_EXT_POINT_ORG_ASSEMBLIES = "org.eclipse.riena.navigation.assemblies"; //$NON-NLS-1$
-	protected static final String VALUE_EXT_POINT_ASSEMBLIES = "org.eclipse.riena.navigation.assemblies"; //$NON-NLS-1$
+	// ###### Extensionpoint Values
+	protected static final String VALUE_EXT_POINT_ASSEMBLIES = "org.eclipse.riena.navigation.assemblies2"; //$NON-NLS-1$
 	protected static final String VALUE_EXT_POINT_VIEWS = "org.eclipse.ui.views"; //$NON-NLS-1$
 	protected static final String VALUE_EXT_POINT_PERSPECTIVES = "org.eclipse.ui.perspectives"; //$NON-NLS-1$
-	
 	
 	
 	protected DocumentBuilder builder;
@@ -166,18 +177,18 @@ public class AbstractXmlProvider {
 
 	protected abstract class NodeIterator {
 		private final Element rootElement;
-		private final String childElementName;
+		private final List<String> childElementNames;
 
-		public NodeIterator(Element element, String childElement) {
+		public NodeIterator(Element element, String... childElements) {
 			this.rootElement = element;
-			this.childElementName = childElement;
+			this.childElementNames = Arrays.asList(childElements);
 		}
 
 		public void iterate() {
 			NodeList elementList = rootElement.getChildNodes();
 			for (int i = 0; i < elementList.getLength(); i++) {
 				Node childNode =  elementList.item(i);
-				if (childNode instanceof Element && childNode.getNodeName().equals(childElementName)){
+				if (childNode instanceof Element && childElementNames.contains(childNode.getNodeName())){
 					Element elm = (Element) childNode;
 					handle(elm);
 				}

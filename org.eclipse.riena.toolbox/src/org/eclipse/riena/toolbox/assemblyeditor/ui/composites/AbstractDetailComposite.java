@@ -54,9 +54,7 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		dirtyListener = new ArrayList<IDirtyListener>();
 		dirtyChecker = new DirtyChecker();
 		workareaBackground = getDisplay().getSystemColor(SWT.COLOR_WHITE);
-		// headerBackground = new Color(getShell().getDisplay(), 220, 220, 220);
 		headerBackground = getDisplay().getSystemColor(SWT.COLOR_WHITE);
-
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(this);
@@ -153,7 +151,6 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		}
 
 		GridDataFactory.fillDefaults().grab(true, true).align(SWT.RIGHT, SWT.CENTER).applyTo(lblImageRight);
-		new Separator(parent);
 	}
 
 	private class Separator extends Canvas {

@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor.model;
 
+import org.eclipse.riena.toolbox.Util;
+
 /**
  * A Node that has a typeId
  *
@@ -21,7 +23,7 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 		super(parent);
 	}
 
-	protected String typeId;
+	protected String nodeId;
 	
 	private String prefix;
 	private String suffix;
@@ -45,19 +47,27 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 	}
 
 
-	public String getTypeId() {
-		return typeId;
+	public String getNodeId() {
+		return nodeId;
 	}
 
-	public void setTypeId(String typeId) {
-		this.typeId = typeId;
+	public void setNodeId(String typeId) {
+		this.nodeId = typeId;
 	}
+	
+	@Override
+	public String getTreeLabel() {
+		String treeLabelValue = getTreeLabelValue();
+		return Util.isGiven(treeLabelValue) ? treeLabelValue : "(nodeId="+nodeId+")"; //$NON-NLS-1$ //$NON-NLS-2$;
+	}
+	
+	protected abstract String getTreeLabelValue();
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((typeId == null) ? 0 : typeId.hashCode());
+		result = prime * result + ((nodeId == null) ? 0 : nodeId.hashCode());
 		return result;
 	}
 
@@ -70,10 +80,10 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractTypedNode other = (AbstractTypedNode) obj;
-		if (typeId == null) {
-			if (other.typeId != null)
+		if (nodeId == null) {
+			if (other.nodeId != null)
 				return false;
-		} else if (!typeId.equals(other.typeId))
+		} else if (!nodeId.equals(other.nodeId))
 			return false;
 		return true;
 	}

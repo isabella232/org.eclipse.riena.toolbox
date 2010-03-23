@@ -20,8 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 
 public class ModuleGroupComposite extends AbstractDetailComposite<ModuleGroupNode>{
-	private Text txtTypeId;
-	private VerifyTypeIdText txtInstanceId;
+	private Text txtNodeId;
 	private Text txtName;
 
 	public ModuleGroupComposite(Composite parent) {
@@ -39,13 +38,11 @@ public class ModuleGroupComposite extends AbstractDetailComposite<ModuleGroupNod
 					return;
 				}
 				String simpleName = txtName.getText().trim();
-				txtTypeId.setText(node.getPrefix()+simpleName+node.getSuffix());
+				txtNodeId.setText(node.getPrefix()+simpleName+node.getSuffix());
 			}
 		});
 		
-		txtTypeId.setText(getTextSave(node.getTypeId()));
-		txtInstanceId.getText().setText(getTextSave(node.getInstanceId()));
-		txtInstanceId.setIgnoreNode(node);
+		txtNodeId.setText(getTextSave(node.getNodeId()));
 	}
 	
 	@Override
@@ -56,15 +53,13 @@ public class ModuleGroupComposite extends AbstractDetailComposite<ModuleGroupNod
 	@Override
 	public void unbind() {
 		node.setName(txtName.getText());
-		node.setTypeId(txtTypeId.getText());
-		node.setInstanceId(txtInstanceId.getText().getText());
+		node.setNodeId(txtNodeId.getText());
 	}
 
 	@Override
 	protected void createWorkarea(Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent,"Name");
-		txtTypeId = createLabeledText(parent,"TypeId");
-		txtInstanceId = createLabeledVerifyText(parent,"InstanceId");
+		txtNodeId = createLabeledText(parent,"NodeId");
 	}
 }

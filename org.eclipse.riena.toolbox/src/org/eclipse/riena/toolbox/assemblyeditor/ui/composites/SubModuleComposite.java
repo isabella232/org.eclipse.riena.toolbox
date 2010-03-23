@@ -44,9 +44,7 @@ import org.eclipse.ui.PlatformUI;
 public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 
 	private Text txtName;
-	private Text txtLabel;
-	private VerifyTypeIdText txtTypeId;
-	private Text txtInstanceId;
+	private VerifyTypeIdText txtNodeId;
 	private IdSelectorText txtView;
 	private BrowseControllerComposite txtController;
 	private OpenClassLink lnkController;
@@ -54,6 +52,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	private Button btnShared;
 	private IconSelectorText txtIcon;
 	private Button btnSelectable;
+	private Button btnRequiresPreparation;
 
 	public SubModuleComposite(Composite parent) {
 		super(parent, "submodule_li.png","submodule_re.png");
@@ -63,10 +62,8 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	public void bind(final SubModuleNode node) {
 		this.node = node;
 		txtName.setText(getTextSave(node.getName()));
-		txtLabel.setText(getTextSave(node.getLabel()));
-		txtTypeId.getText().setText(getTextSave(node.getTypeId()));
-		txtTypeId.setIgnoreNode(node);
-		txtInstanceId.setText(getTextSave(node.getInstanceId()));
+		txtNodeId.getText().setText(getTextSave(node.getNodeId()));
+		txtNodeId.setIgnoreNode(node);
 
 		if (null != node.getRcpView()) {
 			txtView.getText().setText(getTextSave(node.getRcpView().getId()));
@@ -93,6 +90,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		txtIcon.getText().setText(getTextSave(node.getIcon()));
 		txtIcon.setProject(node.getBundle().getProject());
 		btnSelectable.setSelection(node.isSelectable());
+		btnRequiresPreparation.setSelection(node.isRequiresPreparation());
 	}
 
 	@Override
@@ -103,9 +101,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	@Override
 	public void unbind() {
 		node.setName(txtName.getText());
-		node.setLabel(txtLabel.getText());
-		node.setTypeId(txtTypeId.getText().getText());
-		node.setInstanceId(txtInstanceId.getText());
+		node.setNodeId(txtNodeId.getText().getText());
 
 		if (null == node.getRcpView()) {
 			node.setRcpView(new RCPView());
@@ -116,6 +112,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		node.setShared(btnShared.getSelection());
 		node.setIcon(txtIcon.getText().getText());
 		node.setSelectable(btnSelectable.getSelection());
+		node.setRequiresPreparation(btnRequiresPreparation.getSelection());
 	}
 
 	@Override
@@ -129,24 +126,22 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 					return;
 				}
 				String simpleName = txtName.getText().trim();
-				txtLabel.setText(simpleName);
-				txtTypeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
+				txtNodeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
 			}
 		});
-		txtLabel = createLabeledText(parent, "Label");
-		txtTypeId = createLabeledVerifyText(parent, "TypeId");
-		txtInstanceId = createLabeledText(parent, "InstanceId");
+		txtNodeId = createLabeledVerifyText(parent, "NodeId");
 
 		buildViewSection(parent);
 		buildControllerSection(parent);
 
-		btnShared = createLabeledCheckbox(parent, "Shared");
 		txtIcon = createLabeledIconSelector(parent, "Icon");
+		btnShared = createLabeledCheckbox(parent, "SharedView");
 		btnSelectable = createLabeledCheckbox(parent, "Selectable");
+		btnRequiresPreparation = createLabeledCheckbox(parent, "RequiresPreparation");
 	}
 
 	private void buildViewSection(Composite parent) {
-		lnkView = new OpenClassLink(parent, "View");
+		lnkView = new OpenClassLink(parent, "ViewId");
 		lnkView.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lnkView);
 		txtView = new IdSelectorText(parent, workareaBackground, "View Selection", "Select a View (* = any string, ? = any char):");

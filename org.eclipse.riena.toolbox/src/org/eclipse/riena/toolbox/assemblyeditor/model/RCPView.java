@@ -62,9 +62,9 @@ public class RCPView {
 
 	@Override
 	public String toString() {
-		return "RCPView [allowMultiple=" + allowMultiple + ", clazz=" + viewClass
-				+ ", id=" + id + ", name=" + name + ", restorable="
-				+ restorable + "]";
+		return "RCPView [allowMultiple=" + allowMultiple + ", clazz=" + viewClass //$NON-NLS-1$ //$NON-NLS-2$
+				+ ", id=" + id + ", name=" + name + ", restorable="  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+				+ restorable + "]"; //$NON-NLS-1$
 	}
 
 	@Override
