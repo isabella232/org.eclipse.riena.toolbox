@@ -141,42 +141,42 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 	private void createNavigationExtension() throws CoreException {
 		IPluginBase plugin = model.getPluginBase();
 		String id = plugin.getId();
-		IPluginExtension extension = createExtension("org.eclipse.riena.navigation.assemblies", true);
+		IPluginExtension extension = createExtension("org.eclipse.riena.navigation.assemblies2", true);
 
 		IPluginElement assembly = model.getPluginFactory().createElement(extension);
-		assembly.setName("assembly");
-		assembly.setAttribute("autostartsequence", "1");
-		assembly.setAttribute("parentTypeId", "application");
+		assembly.setName("assembly2");
+		assembly.setAttribute("startOrder", "1");
+		assembly.setAttribute("parentNodeId", "application");
 		assembly.setAttribute("id", "assembly.1");
 		extension.add(assembly);
 
 		IPluginElement subapplication = model.getPluginFactory().createElement(assembly);
-		subapplication.setName("subapplication");
-		subapplication.setAttribute("label", "HelloWorldSubapplication");
-		subapplication.setAttribute("typeId", "subapplication.1");
-		subapplication.setAttribute("view", "helloWorldSubApplication");
+		subapplication.setName("subApplication");
+		subapplication.setAttribute("name", "HelloWorldSubapplication");
+		subapplication.setAttribute("nodeId", "subapplication.1");
+		subapplication.setAttribute("perspectiveId", "helloWorldSubApplication");
 		assembly.add(subapplication);
 
 		IPluginElement modulegroup = model.getPluginFactory().createElement(subapplication);
-		modulegroup.setName("modulegroup");
+		modulegroup.setName("moduleGroup");
 		modulegroup.setAttribute("name", "modulegroup");
-		modulegroup.setAttribute("typeId", "moduleGroup.1");
+		modulegroup.setAttribute("nodeId", "moduleGroup.1");
 		subapplication.add(modulegroup);
 
 		IPluginElement module = model.getPluginFactory().createElement(modulegroup);
 		module.setName("module");
-		module.setAttribute("label", "Hello World");
+		module.setAttribute("name", "Hello World");
 		module.setAttribute("unclosable", "false");
-		module.setAttribute("typeId", "module.1");
+		module.setAttribute("nodeId", "module.1");
 		modulegroup.add(module);
 
 		IPluginElement submodule = model.getPluginFactory().createElement(module);
-		submodule.setName("submodule");
+		submodule.setName("subModule");
 		submodule.setAttribute("controller", getStringOption(KEY_PACKAGE_NAME) + ".HelloWorldSubModuleController");
 		submodule.setAttribute("shared", "false");
-		submodule.setAttribute("typeId", "submodule.1");
-		submodule.setAttribute("label", "Hello World View");
-		submodule.setAttribute("view", id + ".HelloWorldSubModuleView");
+		submodule.setAttribute("nodeId", "submodule.1");
+		submodule.setAttribute("name", "Hello World View");
+		submodule.setAttribute("viewId", id + ".HelloWorldSubModuleView");
 		module.add(submodule);
 
 		if (!extension.isInTheModel())
