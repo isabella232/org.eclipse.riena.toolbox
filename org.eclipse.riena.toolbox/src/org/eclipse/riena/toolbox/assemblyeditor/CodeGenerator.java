@@ -34,7 +34,8 @@ import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.api.ICodeGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
-
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.PlatformUI;
 
 public class CodeGenerator implements ICodeGenerator {
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
@@ -53,9 +54,16 @@ public class CodeGenerator implements ICodeGenerator {
 
 	public CodeGenerator() {
 		Properties p = new Properties();
-		p.setProperty("resource.loader", "file"); //$NON-NLS-1$ //$NON-NLS-2$
-		p.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader"); //$NON-NLS-1$ //$NON-NLS-2$
-		p.setProperty("file.resource.loader.path", getBaseDir().getAbsolutePath()); //$NON-NLS-1$
+		final String baseAbsolutePath = getBaseDir();
+		if (baseAbsolutePath.contains(".jar!")) { //$NON-NLS-1$
+			p.setProperty("resource.loader", "url"); //$NON-NLS-1$ //$NON-NLS-2$
+			p.setProperty("url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader "); //$NON-NLS-1$ //$NON-NLS-2$
+			p.setProperty("url.resource.loader.root", baseAbsolutePath); //$NON-NLS-1$
+		} else {
+			p.setProperty("resource.loader", "file"); //$NON-NLS-1$ //$NON-NLS-2$
+			p.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader"); //$NON-NLS-1$ //$NON-NLS-2$
+			p.setProperty("file.resource.loader.path", baseAbsolutePath); //$NON-NLS-1$
+		}
 
 		try {
 			velocityEngine = new VelocityEngine(p);
@@ -68,26 +76,26 @@ public class CodeGenerator implements ICodeGenerator {
 	public String generateController(SubModuleNode subModule) {
 		String packageName = subModule.getBundle().getName() + PACKAGE_SEPARATOR + DEFAULT_PACKAGE_CONTROLLER;
 		packageName = packageName.toLowerCase();
-		String className = subModule.getName()+CONTROLLER_SUFFIX;
-		
+		String className = subModule.getName() + CONTROLLER_SUFFIX;
+
 		Map<String, String> properties = new HashMap<String, String>();
-		properties.put(VAR_CLASS_NAME, className); 
+		properties.put(VAR_CLASS_NAME, className);
 		properties.put(VAR_PACKAGE_NAME, packageName);
-		String fullClassName = generateClass(packageName, className,  subModule, TEMPLATE_SUB_MODULE_CONTROLLER, properties);
+		String fullClassName = generateClass(packageName, className, subModule, TEMPLATE_SUB_MODULE_CONTROLLER, properties);
 		return fullClassName;
 	}
 
 	public RCPView generateView(SubModuleNode subModule) {
 		String packageName = subModule.getBundle().getName() + PACKAGE_SEPARATOR + DEFAULT_PACKAGE_VIEWS;
 		packageName = packageName.toLowerCase();
-		
-		String className = subModule.getName()+VIEW_SUFFIX;
-		
+
+		String className = subModule.getName() + VIEW_SUFFIX;
+
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put(VAR_CLASS_NAME, className);
 		properties.put(VAR_PACKAGE_NAME, packageName);
 		String classFileName = generateClass(packageName, className, subModule, TEMPLATE_SUB_MODULE_VIEW, properties);
-		
+
 		RCPView view = new RCPView();
 		view.setViewClass(classFileName);
 		view.setId(classFileName);
@@ -97,8 +105,8 @@ public class CodeGenerator implements ICodeGenerator {
 
 	private boolean createFile(IFile outFile, String data) {
 		ByteArrayInputStream bis = new ByteArrayInputStream(data.getBytes());
-		
-		if (!outFile.exists()){
+
+		if (!outFile.exists()) {
 			try {
 				outFile.create(bis, true, null);
 				return true;
@@ -108,18 +116,24 @@ public class CodeGenerator implements ICodeGenerator {
 		}
 		return false;
 	}
-	
-	private File getBaseDir() {
+
+	private String getBaseDir() {
 		try {
 			File bundle = FileLocator.getBundleFile(Activator.getDefault().getBundle());
-			File template = new File(bundle.getAbsolutePath() + File.separator+ DIR_TEMPLATES);
-			return template;
+			String bundleAbsolutePath = bundle.getAbsolutePath();
+			if (bundleAbsolutePath.endsWith(".jar")) { //$NON-NLS-1$
+				bundleAbsolutePath=bundleAbsolutePath.replace('\\', '/');
+				bundleAbsolutePath = "jar:file:/" + bundleAbsolutePath + "!/"+DIR_TEMPLATES+"/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				return bundleAbsolutePath;
+			}
+			return bundleAbsolutePath + "/" + DIR_TEMPLATES; //$NON-NLS-1$
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private String generateClass(String packageName, String className, SubModuleNode subModule, String templateName, Map<String, String> properties) {
+	private String generateClass(String packageName, String className, SubModuleNode subModule, String templateName,
+			Map<String, String> properties) {
 		StringWriter writer = null;
 		try {
 			Template t = velocityEngine.getTemplate(templateName);
@@ -137,43 +151,42 @@ public class CodeGenerator implements ICodeGenerator {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		
-		IFolder packageFolder = subModule.getBundle().getProject().getFolder(subModule.getBundle().getSourceFolder()+File.separator + packageName.replace(PACKAGE_SEPARATOR, File.separator));
+
+		IFolder packageFolder = subModule.getBundle().getProject().getFolder(
+				subModule.getBundle().getSourceFolder() + File.separator + packageName.replace(PACKAGE_SEPARATOR, File.separator));
 		createFolder(packageFolder);
 		IFile classFile = packageFolder.getFile(className + EXTENSION_JAVA);
 		createFile(classFile, writer.toString());
-		return packageName+PACKAGE_SEPARATOR+className;
+		return packageName + PACKAGE_SEPARATOR + className;
 	}
-	
-	private void createFolder(IFolder folder)
-	{
-	  IContainer parent = folder.getParent();
-	  if (parent instanceof IFolder){
-	    createFolder((IFolder)parent);
-	  }
-	  if (!folder.exists())
-	  {
-	    try {
-			folder.create(true, true, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
+
+	private void createFolder(IFolder folder) {
+		IContainer parent = folder.getParent();
+		if (parent instanceof IFolder) {
+			createFolder((IFolder) parent);
 		}
-	  }
+		if (!folder.exists()) {
+			try {
+				folder.create(true, true, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
-	private boolean deleteSourceFile(SubModuleNode subModule, String className){
-		if (!Util.isGiven(className)){
+
+	private boolean deleteSourceFile(SubModuleNode subModule, String className) {
+		if (!Util.isGiven(className)) {
 			System.err.println("ClassName is null subModule " + subModule);
 			return false;
 		}
-		 
-		
+
 		IProject project = subModule.getBundle().getProject();
-		String fileName  = subModule.getBundle().getSourceFolder()+File.separator+className.replace(PACKAGE_SEPARATOR, File.separator)+EXTENSION_JAVA;
-		
+		String fileName = subModule.getBundle().getSourceFolder() + File.separator + className.replace(PACKAGE_SEPARATOR, File.separator)
+				+ EXTENSION_JAVA;
+
 		IFile file = project.getFile(fileName);
-		
-		if (file.exists()){
+
+		if (file.exists()) {
 			try {
 				file.delete(true, null);
 				return true;
@@ -186,22 +199,22 @@ public class CodeGenerator implements ICodeGenerator {
 	}
 
 	public void deleteControllerClass(SubModuleNode subModule) {
-		if (null == subModule){
+		if (null == subModule) {
 			return;
 		}
-		
+
 		deleteSourceFile(subModule, subModule.getController());
 	}
 
 	public void deleteViewClass(SubModuleNode subModule) {
-		if (null == subModule){
+		if (null == subModule) {
 			return;
 		}
-		
-		if (null == subModule.getRcpView()){
+
+		if (null == subModule.getRcpView()) {
 			return;
 		}
-		
+
 		deleteSourceFile(subModule, subModule.getRcpView().getViewClass());
 	}
 }
