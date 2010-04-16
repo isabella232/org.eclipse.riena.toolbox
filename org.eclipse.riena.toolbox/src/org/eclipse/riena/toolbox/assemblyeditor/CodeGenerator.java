@@ -17,12 +17,13 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -34,8 +35,6 @@ import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.api.ICodeGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.PlatformUI;
 
 public class CodeGenerator implements ICodeGenerator {
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
@@ -51,10 +50,11 @@ public class CodeGenerator implements ICodeGenerator {
 	private static final String VAR_PACKAGE_NAME = "PackageName"; //$NON-NLS-1$
 
 	private VelocityEngine velocityEngine;
+	private String baseAbsolutePath;
 
 	public CodeGenerator() {
 		Properties p = new Properties();
-		final String baseAbsolutePath = getBaseDir();
+		baseAbsolutePath = getBaseDir();
 		if (baseAbsolutePath.contains(".jar!")) { //$NON-NLS-1$
 			p.setProperty("resource.loader", "url"); //$NON-NLS-1$ //$NON-NLS-2$
 			p.setProperty("url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader "); //$NON-NLS-1$ //$NON-NLS-2$
@@ -123,6 +123,9 @@ public class CodeGenerator implements ICodeGenerator {
 			String bundleAbsolutePath = bundle.getAbsolutePath();
 			if (bundleAbsolutePath.endsWith(".jar")) { //$NON-NLS-1$
 				bundleAbsolutePath=bundleAbsolutePath.replace('\\', '/');
+				if (bundleAbsolutePath.startsWith("/")) {
+					bundleAbsolutePath=bundleAbsolutePath.substring(1);
+				}
 				bundleAbsolutePath = "jar:file:/" + bundleAbsolutePath + "!/"+DIR_TEMPLATES+"/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				return bundleAbsolutePath;
 			}
@@ -149,7 +152,7 @@ public class CodeGenerator implements ICodeGenerator {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new RuntimeException("exception in generateClass: basePath =" + baseAbsolutePath,e); //$NON-NLS-1$
 		}
 
 		IFolder packageFolder = subModule.getBundle().getProject().getFolder(
