@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.eclipse.riena.toolbox.feature_2.0.0.201004221103.jar" id="org.eclipse.riena.toolbox.feature" version="2.0.0.201004221103">
+   <feature url="features/org.eclipse.riena.toolbox.feature_2.0.0.qualifier.jar" id="org.eclipse.riena.toolbox.feature" version="2.0.0.qualifier">
       <category name="Riena Eclipse IDE Toolbox"/>
    </feature>
-   <feature url="features/org.eclipse.riena.ui.templates.feature_2.0.0.201004221103.jar" id="org.eclipse.riena.ui.templates.feature" version="2.0.0.201004221103">
+   <feature url="features/org.eclipse.riena.ui.templates.feature_2.0.0.qualifier.jar" id="org.eclipse.riena.ui.templates.feature" version="2.0.0.qualifier">
       <category name="Riena Eclipse IDE Toolbox"/>
    </feature>
    <category-def name="Riena Eclipse IDE Toolbox" label="Riena Toolbox"/>
