@@ -1,0 +1,5 @@
+#Mon Dec 15 11:55:17 CET 2008
+eclipse.preferences.version=1
+org.moreunit.prefixes=
+org.moreunit.unitsourcefolder=org.eclipse.riena.ui.swt\:src\:org.eclipse.riena.tests\:src
+org.moreunit.useprojectsettings=true
