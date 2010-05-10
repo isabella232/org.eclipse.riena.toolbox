@@ -18,6 +18,8 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.osgi.framework.Bundle;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -33,8 +35,8 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironmentsManager;
+
 import org.eclipse.riena.ui.wizard.cs.internal.generate.preprocessor.Preprocessor;
-import org.osgi.framework.Bundle;
 
 public class Generator {
 	private String path;
@@ -73,9 +75,10 @@ public class Generator {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void copy(String source, IContainer destination, String skip, IProgressMonitor monitor) throws CoreException {
+	private void copy(String source, IContainer destination, String skip, IProgressMonitor monitor)
+			throws CoreException {
 		Enumeration<URL> entries = bundle.findEntries(source, "*", true); //$NON-NLS-1$
-		
+
 		while (entries.hasMoreElements()) {
 			URL element = entries.nextElement();
 			String entry = element.getPath();
@@ -87,25 +90,27 @@ public class Generator {
 					if (GeneratorUtil.isFile(element)) { // if real file, not folder
 						String fileFolder = ""; //$NON-NLS-1$
 						String fileName = null;
-						
-						
+
 						int ix = entry.lastIndexOf('/');
 						if (ix > 0) { // see if it has a folder prefix (a/b/c in /a/b/c/MyFile.java)
 							fileFolder = entry.substring(0, ix);
-							fileName = entry.substring(ix+1);
+							fileName = entry.substring(ix + 1);
 							createSourceFolder(destination, monitor, fileFolder); // create folder for prefix
-						}else
+						} else
 							fileName = entry;
 
 						InputStream is = null;
 
 						try {
 							is = macro.process(element.openStream(), entry);
-							if(macro.getChangedFileName() != null)
+							if (macro.getChangedFileName() != null)
 								fileName = macro.getChangedFileName();
-							
-							IFile file = destination.getFile(new Path(fileFolder).append(fileName)); // get entry for file, relative to destination folder
+
+							IFile file = destination.getFile(new Path(fileFolder).append(fileName)); // get entry for file, relative to destination  folder
 							file.create(is, true, monitor); // copy it
+						} catch (Throwable t) {
+							t.printStackTrace();
+							throw new RuntimeException(t);
 						} finally {
 							if (is != null)
 								is.close();
@@ -119,12 +124,14 @@ public class Generator {
 		}
 	}
 
-	private IFolder createSourceFolder(IContainer source, IProgressMonitor monitor, String _package) throws CoreException {
+	private IFolder createSourceFolder(IContainer source, IProgressMonitor monitor, String _package)
+			throws CoreException {
 		IFolder current = null;
 
 		StringTokenizer segments = new StringTokenizer(_package, "./"); //$NON-NLS-1$
 		while (segments.hasMoreTokens()) {
-			current = current != null ? current.getFolder(segments.nextToken()) : source.getFolder(new Path(segments.nextToken()));
+			current = current != null ? current.getFolder(segments.nextToken()) : source.getFolder(new Path(segments
+					.nextToken()));
 
 			if (!current.exists())
 				current.create(true, true, monitor);
