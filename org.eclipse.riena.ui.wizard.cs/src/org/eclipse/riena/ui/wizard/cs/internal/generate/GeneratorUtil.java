@@ -18,11 +18,12 @@ public class GeneratorUtil {
 	// true if URL points to real file
 	public static boolean isFile(URL url) throws IOException {
 		InputStream is = null;
-
+		
 		try {
+			// check if we can read from the url, to 
+			//determine between a file and a directory
 			is = url.openStream();
-
-			return true;
+			return is.read() > -1;
 		} catch (IOException aEx) {
 			return false;
 		} finally {
