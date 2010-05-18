@@ -60,7 +60,7 @@ public class Activator extends AbstractUIPlugin {
 		dataProvider = new AssemblyDataProvider();
 		dataProvider.setXmlParser(new PluginXmlParser());
 		dataProvider.setXmlRenderer(new PluginXmlRenderer());
-		assemblyModel = dataProvider.getData();
+		assemblyModel = dataProvider.createData();
 		modelService = new ModelService();
 		nodeFactory = new NodeFactory();
 		codeGenerator = new CodeGenerator();

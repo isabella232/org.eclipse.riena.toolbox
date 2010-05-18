@@ -26,18 +26,19 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.riena.toolbox.Util;
-import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import org.eclipse.core.resources.IFile;
+
+import org.eclipse.riena.toolbox.Util;
+import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 
 public class AbstractXmlProvider {
-	
+
 	// ######### SubModule
 	protected static final String ELEM_SUBMODULE = "subModule"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_SELECTABLE = "selectable"; //$NON-NLS-1$
@@ -48,20 +49,21 @@ public class AbstractXmlProvider {
 	protected static final String ATTR_SUBMOD_ICON = "icon"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_CONTROLLER = "controller"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_REQUIRES_PREPARATION = "requiresPreparation"; //$NON-NLS-1$
-	
+	protected static final String ATTR_SUBMOD_EXPANDED = "expanded"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_VISIBLE = "visible"; //$NON-NLS-1$
+
 	// ##### Module
 	protected static final String ELEM_MODULE = "module"; //$NON-NLS-1$
 	protected static final String ATTR_MODULE_CLOSABLE = "closable"; //$NON-NLS-1$
 	protected static final String ATTR_MODULE_NAME = "name"; //$NON-NLS-1$
 	protected static final String ATTR_MODULE_ICON = "icon"; //$NON-NLS-1$
 	protected static final String ATTR_MODULE_NODE_ID = "nodeId"; //$NON-NLS-1$
-	
-	
+
 	// ########## ModuleGroup
 	protected static final String ELEM_MODULE_GROUP = "moduleGroup"; //$NON-NLS-1$
 	protected static final String ATTR_MODGROUP_NODE_ID = "nodeId"; //$NON-NLS-1$
 	protected static final String ATTR_MODGROUP_NAME = "name"; //$NON-NLS-1$
-	
+
 	// ##########   Subapplication
 	protected static final String ELEM_SUBAPP = "subApplication"; //$NON-NLS-1$
 	protected static final String ATTR_SUBAPP_PERSPECTIVE_ID = "perspectiveId"; //$NON-NLS-1$
@@ -69,8 +71,7 @@ public class AbstractXmlProvider {
 	protected static final String ATTR_SUBAPP_ICON = "icon"; //$NON-NLS-1$
 	protected static final String ATTR_SUBAPP_INSTANCE_ID = "instanceId"; //$NON-NLS-1$
 	protected static final String ATTR_SUBAPP_NAME = "name"; //$NON-NLS-1$
-	
-	
+
 	// ######## Assembly
 	protected static final String ELEM_ASSEMBLY = "assembly2"; //$NON-NLS-1$
 	protected static final String ATTR_ASSEMBLY_ID = "id"; //$NON-NLS-1$
@@ -78,29 +79,26 @@ public class AbstractXmlProvider {
 	protected static final String ATTR_ASSEMBLY_NAME = "name"; //$NON-NLS-1$
 	protected static final String ATTR_ASSEMBLY_START_ORDER = "startOrder"; //$NON-NLS-1$
 	protected static final String ATTR_ASSEMBLY_ASSEMBLER = "assembler"; //$NON-NLS-1$
-	
-	
+
 	protected static final String ATTR_EXTENSION_POINT = "point"; //$NON-NLS-1$
-	
+
 	// ###### RCP-View
 	protected static final String ATTR_VIEW_ALLOW_MULTIPLE = "allowMultiple"; //$NON-NLS-1$
 	protected static final String ATTR_VIEW_CLASS = "class"; //$NON-NLS-1$
 	protected static final String ATTR_VIEW_NAME = "name"; //$NON-NLS-1$
 	protected static final String ATTR_VIEW_ID = "id"; //$NON-NLS-1$
-	
-	
+
 	protected static final String ELEM_PLUGIN = "plugin"; //$NON-NLS-1$
 	protected static final String ELEM_EXTENSION = "extension"; //$NON-NLS-1$
 	protected static final String ELEM_VIEW = "view"; //$NON-NLS-1$
 	protected static final String ELEM_PERSPECTIVE = "perspective"; //$NON-NLS-1$
 	protected static final String ELEM_POINT = "point"; //$NON-NLS-1$
-	
+
 	// ###### Extensionpoint Values
 	protected static final String VALUE_EXT_POINT_ASSEMBLIES = "org.eclipse.riena.navigation.assemblies2"; //$NON-NLS-1$
 	protected static final String VALUE_EXT_POINT_VIEWS = "org.eclipse.ui.views"; //$NON-NLS-1$
 	protected static final String VALUE_EXT_POINT_PERSPECTIVES = "org.eclipse.ui.perspectives"; //$NON-NLS-1$
-	
-	
+
 	protected DocumentBuilder builder;
 	protected BundleNode bundleNode;
 
@@ -116,23 +114,44 @@ public class AbstractXmlProvider {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	protected File convertToFile(IFile pluginXml){
+
+	protected File convertToFile(IFile pluginXml) {
 		return new File(bundleNode.getPluginXml().getLocationURI());
 	}
-	
-	
-	protected void saveDocument(Document doc, BundleNode bundleNode){
+
+	protected Transformer createTransformer() throws TransformerException {
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
 		try {
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformerFactory.setAttribute("indent-number", new Integer(4)); //$NON-NLS-1$
+		} catch (IllegalArgumentException exception) {
+			// Ignore
+		}
+
+		Transformer transformer = transformerFactory.newTransformer();
+
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+
+		// Unless a width is set, there will be only line breaks but no indentation.
+		// The IBM JDK and the Sun JDK don't agree on the property name,
+		// so we set them both.
+		//
+		transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "4");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+		return transformer;
+	}
+
+	protected void saveDocument(Document doc, BundleNode bundleNode) {
+		try {
+			Transformer xformer = createTransformer();
 			xformer.transform(new DOMSource(doc), new StreamResult(convertToFile(bundleNode.getPluginXml())));
 		} catch (TransformerException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	protected Document getDocument(BundleNode bundleNode){
+
+	protected Document getDocument(BundleNode bundleNode) {
 		this.bundleNode = bundleNode;
 		try {
 			return builder.parse(new FileInputStream(convertToFile(bundleNode.getPluginXml())));
@@ -143,15 +162,15 @@ public class AbstractXmlProvider {
 		}
 		return null;
 	}
-	
+
 	protected static boolean parseBoolean(Element elm, String attributeName, boolean defaultValue) {
 		String attr = elm.getAttribute(attributeName);
-		if (null != attr && attr.length()>0) {
+		if (null != attr && attr.length() > 0) {
 			return "true".equals(attr); //$NON-NLS-1$
 		}
 		return defaultValue;
 	}
-	
+
 	protected static Integer parseInteger(Element elm, String attributeName) {
 		String attr = elm.getAttribute(attributeName);
 		if (Util.isGiven(attr)) {
@@ -187,13 +206,14 @@ public class AbstractXmlProvider {
 		public void iterate() {
 			NodeList elementList = rootElement.getChildNodes();
 			for (int i = 0; i < elementList.getLength(); i++) {
-				Node childNode =  elementList.item(i);
-				if (childNode instanceof Element && childElementNames.contains(childNode.getNodeName())){
+				Node childNode = elementList.item(i);
+				if (childNode instanceof Element && childElementNames.contains(childNode.getNodeName())) {
 					Element elm = (Element) childNode;
 					handle(elm);
 				}
 			}
 		}
+
 		public abstract void handle(Element childElement);
 	}
 }

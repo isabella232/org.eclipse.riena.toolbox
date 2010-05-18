@@ -12,6 +12,7 @@ package org.eclipse.riena.toolbox.assemblyeditor;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+
 import org.eclipse.riena.toolbox.assemblyeditor.api.IAssemblyDataProvider;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlParser;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlRenderer;
@@ -43,6 +45,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 	private IPluginXmlRenderer xmlRenderer;
 
 	private List<ResourceChangeListener> changeListener;
+	private Set<Long> receivedTimeStamps = new HashSet<Long>();
 
 	public AssemblyDataProvider() {
 		changeListener = new ArrayList<ResourceChangeListener>();
@@ -50,7 +53,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
 			public void resourceChanged(IResourceChangeEvent event) {
 				try {
-					PluginXmlVisitor pluginXmlVisitor = new PluginXmlVisitor();
+					PluginXmlVisitor pluginXmlVisitor = new PluginXmlVisitor(receivedTimeStamps);
 					event.getDelta().accept(pluginXmlVisitor);
 
 					final IProject changedProject = pluginXmlVisitor.getChangedProject();
@@ -89,14 +92,31 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 
 		private IProject changedProject;
 		private IProject addedProject;
+		private Set<Long> receivedTimeStamps;
+
+		/**
+		 * @param receivedTimeStamps
+		 */
+		public PluginXmlVisitor(Set<Long> receivedTimeStamps) {
+			super();
+			this.receivedTimeStamps = receivedTimeStamps;
+		}
 
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			IResource res = delta.getResource();
+
 			if (res.getType() == IResource.FILE) {
-				if (PLUGIN_XML.equals(res.getName())) {
-					changedProject = res.getProject();
-					return false;
+				Long currentTimestamp = res.getLocalTimeStamp();
+				if (!receivedTimeStamps.contains(currentTimestamp)) {
+					receivedTimeStamps.add(currentTimestamp);
+					if (PLUGIN_XML.equals(res.getName())) {
+						changedProject = res.getProject();
+						return false;
+					}
+				} else {
+					return true;
 				}
+
 			} else if (res.getType() == IResource.PROJECT) {
 				IProject project = (IProject) res;
 				if (delta.getKind() == IResourceDelta.ADDED) {
@@ -164,7 +184,8 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 				return false;
 			}
 
-			return null != project.getNature("org.eclipse.jdt.core.javanature"); //$NON-NLS-1$
+			//org.eclipse.jdt.core.javanature
+			return null != project.getNature("org.eclipse.pde.PluginNature"); //$NON-NLS-1$
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -174,33 +195,35 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 	public void saveData(AssemblyModel model) {
 		Assert.isNotNull(model);
 		Assert.isNotNull(xmlRenderer);
+
 		for (BundleNode bundle : model.getChildren()) {
-			
+
+			if (!bundle.isDirty()) {
+				continue;
+			}
+
 			// ensure that plugin.xml exists
 			if (null == bundle.getPluginXml() || !bundle.getPluginXml().exists()) {
-
-				if (bundle.getChildren()!=null && bundle.getChildren().size() != 0) {
+				if (bundle.getChildren() != null && bundle.getChildren().size() != 0) {
 					// plugin.xml does not exist, assemblies exist
 					IFile pluginXml = bundle.getProject().getFile(PLUGIN_XML);
 					try {
 						String dummy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"; //$NON-NLS-1$
 						dummy += "<?eclipse version=\"3.4\"?>"; //$NON-NLS-1$
 						dummy += "<plugin></plugin>\n"; //$NON-NLS-1$
-
-						// FIXME check if Resource is writeable (ERROR: org.eclipse.core.internal.resources.ResourceException: Resource '/de.compeople.scp.toolbox.rienademo' is not open.)
-						
 						pluginXml.create(new ByteArrayInputStream(dummy.getBytes()), true, null);
 						bundle.setPluginXml(pluginXml);
 					} catch (CoreException e) {
 						e.printStackTrace();
 					}
 					xmlRenderer.saveDocument(bundle);
+					bundle.setDirty(false);
 				} else {
 					// plugin.xml does not exist, assemblies do not exist
 					// DO NOTHING
 				}
 			} else {
-				if (bundle.getChildren()!=null && bundle.getChildren().size() != 0) {
+				if (bundle.getChildren() != null && bundle.getChildren().size() != 0) {
 					// plugin.xml does exist, assemblies exist
 					// store what you have
 					xmlRenderer.saveDocument(bundle);
@@ -213,14 +236,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.riena.toolbox.assemblyeditor.api.IAssemblyDataProvider#getData
-	 * ()
-	 */
-	public AssemblyModel getData() {
+	public AssemblyModel createData() {
 		AssemblyModel model = new AssemblyModel();
 		List<BundleNode> bundles = findBundles(model);
 		for (BundleNode bundle : bundles) {

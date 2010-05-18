@@ -13,16 +13,22 @@ package org.eclipse.riena.toolbox.assemblyeditor;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlRenderer;
@@ -35,11 +41,6 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.RCPPerspective;
 import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubApplicationNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXmlRenderer {
 	private Document doc;
@@ -54,26 +55,27 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 			doc = builder.parse(pluginXml);
 			removeOldAssemblies();
-			
-			// render the given BundleNode, unless it has no childelemetns
+
+			// render the given BundleNode, unless it has no childelements
 			if (bundleNode.getChildren() != null && !bundleNode.getChildren().isEmpty()) {
 				Element elmExt = doc.createElement(ELEM_EXTENSION);
 				elmExt.setAttribute(ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ASSEMBLIES);
 
 				NodeList nlPlugin = doc.getElementsByTagName(ELEM_PLUGIN);
 				nlPlugin.item(0).appendChild(elmExt);
-				System.out.println("saveDocument " + bundleNode);
 				renderModel(elmExt, bundleNode);
 			}
-			
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+			Transformer xformer = createTransformer();
 			xformer.transform(new DOMSource(doc), new StreamResult(pluginXml));
+			bundleNode.refreshPluginXml();
 		} catch (SAXException e) {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} catch (TransformerException e) {
+			throw new RuntimeException(e);
+		} catch (CoreException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -84,12 +86,6 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		elmView.setAttribute(ATTR_VIEW_CLASS, view.getViewClass());
 		elmView.setAttribute(ATTR_VIEW_ALLOW_MULTIPLE, view.isAllowMultiple() + ""); //$NON-NLS-1$
 	}
-
-	/*
-	 * <perspective
-	 * class="org.eclipse.riena.navigation.ui.swt.views.SubApplicationView"
-	 * id="org.eclipse.riena.toolbox.rienademo.mainSubapp" name="nameMain"/>
-	 */
 
 	private void renderRcpPerspective(Element elmView, RCPPerspective persp) {
 		elmView.setAttribute("class", persp.getPerspectiveClass());
@@ -106,8 +102,9 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format(
-					"//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES), currentDoc, XPathConstants.NODESET); //$NON-NLS-1$
+			NodeList nlViewExtensions = (NodeList) xpath
+					.evaluate(
+							String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES), currentDoc, XPathConstants.NODESET); //$NON-NLS-1$
 
 			Element elmPerspectiveExt = null;
 
@@ -145,8 +142,9 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath.evaluate(String.format(
-					"//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), currentDoc, XPathConstants.NODESET); //$NON-NLS-1$
+			NodeList nlViewExtensions = (NodeList) xpath
+					.evaluate(
+							String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), currentDoc, XPathConstants.NODESET); //$NON-NLS-1$
 
 			Element elmViewExt = null;
 
@@ -179,7 +177,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		// look for an element view with an ID = viewId anywhere under an
 		// extensionpoint org.eclipse.ui.views
-		String xpathQuery = String.format("//%s[@%s='%s']/view[@id='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS, viewId); //$NON-NLS-1$
+		String xpathQuery = String.format(
+				"//%s[@%s='%s']/view[@id='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS, viewId); //$NON-NLS-1$
 		NodeList nlViewExtensions = (NodeList) xpath.evaluate(xpathQuery, currentDoc, XPathConstants.NODESET);
 		return nlViewExtensions.getLength() > 0;
 	}
@@ -188,8 +187,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		// look for an element perspective with an ID = perspectiveId anywhere
 		// under an extensionpoint org.eclipse.ui.perspectives
-		String xpathQuery = String.format(
-				"//%s[@%s='%s']/view[@id='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES, perspectiveId); //$NON-NLS-1$
+		String xpathQuery = String
+				.format("//%s[@%s='%s']/view[@id='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES, perspectiveId); //$NON-NLS-1$
 		NodeList nlViewExtensions = (NodeList) xpath.evaluate(xpathQuery, currentDoc, XPathConstants.NODESET);
 		return nlViewExtensions.getLength() > 0;
 	}
@@ -274,7 +273,6 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			elm.setAttribute(ATTR_MODGROUP_NODE_ID, ass.getNodeId());
 		}
 
-
 		for (ModuleNode mod : ass.getChildren()) {
 			renderModule(elm, mod);
 		}
@@ -285,7 +283,6 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	private void renderModule(Element parent, ModuleNode ass) {
 		Element elm = doc.createElement(ELEM_MODULE);
 
-
 		if (Util.isGiven(ass.getName())) {
 			elm.setAttribute(ATTR_MODULE_NAME, ass.getName());
 		}
@@ -293,7 +290,6 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		if (Util.isGiven(ass.getNodeId())) {
 			elm.setAttribute(ATTR_MODULE_NODE_ID, ass.getNodeId());
 		}
-
 
 		if (Util.isGiven(ass.getIcon())) {
 			elm.setAttribute(ATTR_MODULE_ICON, ass.getIcon());
@@ -314,7 +310,7 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		if (Util.isGiven(subMod.getNodeId())) {
 			elm.setAttribute(ATTR_SUBMOD_NODE_ID, subMod.getNodeId());
 		}
-		
+
 		if (Util.isGiven(subMod.getController())) {
 			elm.setAttribute(ATTR_SUBMOD_CONTROLLER, subMod.getController());
 		}
@@ -334,8 +330,11 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		}
 
 		elm.setAttribute(ATTR_SUBMOD_SHARED, subMod.isShared() + ""); //$NON-NLS-1$
-		
+
 		elm.setAttribute(ATTR_SUBMOD_REQUIRES_PREPARATION, subMod.isRequiresPreparation() + ""); //$NON-NLS-1$
+
+		elm.setAttribute(ATTR_SUBMOD_EXPANDED, subMod.isExpanded() + ""); //$NON-NLS-1$
+		elm.setAttribute(ATTR_SUBMOD_VISIBLE, subMod.isVisible() + ""); //$NON-NLS-1$
 
 		for (SubModuleNode mod : subMod.getChildren()) {
 			renderSubModule(elm, mod);
@@ -347,8 +346,10 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	private void removeOldAssemblies() {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlExt = (NodeList) xpath.evaluate(String.format(
-					"//%s[@%s='%s']", ELEM_EXTENSION, ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ASSEMBLIES), doc, XPathConstants.NODESET); //$NON-NLS-1$
+			NodeList nlExt = (NodeList) xpath
+					.evaluate(
+							String.format(
+									"//%s[@%s='%s']", ELEM_EXTENSION, ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ASSEMBLIES), doc, XPathConstants.NODESET); //$NON-NLS-1$
 			for (int i = 0; i < nlExt.getLength(); i++) {
 				Node noAss = nlExt.item(i);
 				noAss.getParentNode().removeChild(noAss);

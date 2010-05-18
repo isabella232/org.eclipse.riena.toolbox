@@ -10,23 +10,23 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor;
 
-
 /**
- * Containerclass that consists of:
- * - the Name of the SwtControlClass in die SubModuleView<p>
- * - the ridgetId 
- * - the MainInterface of the Ridget for example TextRidget => ITextRidget
- *
+ * Containerclass that consists of: - the Name of the SwtControlClass in die
+ * SubModuleView
+ * <p>
+ * - the ridgetId - the MainInterface of the Ridget for example TextRidget =>
+ * ITextRidget
+ * 
  */
 public class SwtControl {
 	private String swtControlClassName;
 	private String ridgetId;
 	private Class<?> ridgetClass;
-	
+
 	public SwtControl(String swtControlClassName, String ridgetId, Class<?> ridgetClass) {
 		super();
 		this.swtControlClassName = swtControlClassName;
-		this.ridgetId = ridgetId.replaceAll("[^a-zA-Z0-9]", "");
+		this.ridgetId = ridgetId;
 		this.ridgetClass = ridgetClass;
 	}
 

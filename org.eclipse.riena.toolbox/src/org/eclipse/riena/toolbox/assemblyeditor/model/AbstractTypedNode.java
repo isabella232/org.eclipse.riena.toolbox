@@ -24,11 +24,8 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 	}
 
 	protected String nodeId;
-	
 	private String prefix;
 	private String suffix;
-	
-	
 	
 	public String getPrefix() {
 		return prefix;
@@ -46,13 +43,16 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 		this.suffix = suffix;
 	}
 
-
 	public String getNodeId() {
 		return nodeId;
 	}
 
 	public void setNodeId(String typeId) {
 		this.nodeId = typeId;
+	}
+	
+	public AssemblyNode getAssemblyNode(){
+		return Util.findParentOfType(this, AssemblyNode.class);
 	}
 	
 	@Override
@@ -67,6 +67,8 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		AssemblyNode ass = getAssemblyNode();
+		result = prime * result + ((ass == null) ? 0 : ass.hashCode());
 		result = prime * result + ((nodeId == null) ? 0 : nodeId.hashCode());
 		return result;
 	}
@@ -80,6 +82,14 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractTypedNode other = (AbstractTypedNode) obj;
+		AssemblyNode ass = getAssemblyNode();
+		AssemblyNode otherAss = other.getAssemblyNode();
+		
+		if (ass == null) {
+			if (otherAss != null)
+				return false;
+		} else if (!ass.equals(otherAss))
+			return false;
 		if (nodeId == null) {
 			if (other.nodeId != null)
 				return false;

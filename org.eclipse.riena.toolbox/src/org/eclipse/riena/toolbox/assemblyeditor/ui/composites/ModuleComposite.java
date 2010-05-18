@@ -11,24 +11,25 @@
 package org.eclipse.riena.toolbox.assemblyeditor.ui.composites;
 
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleNode;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import org.eclipse.riena.toolbox.Util;
+import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 
-public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
+public class ModuleComposite extends AbstractDetailComposite<ModuleNode> {
 	private VerifyTypeIdText txtNodeId;
 	private IconSelectorText txtIcon;
 	private Button btnUncloseable;
 	private Text txtName;
 
 	public ModuleComposite(Composite parent) {
-		super(parent, "module_li.png","module_re.png");
+		super(parent, "module_li.png", "module_re.png");
 	}
 
 	@Override
@@ -43,15 +44,20 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (null == node.getPrefix()){
+				if (null == node.getPrefix()) {
 					return;
 				}
-				String simpleName = txtName.getText().trim();
-				txtNodeId.getText().setText(node.getPrefix()+simpleName+node.getSuffix());
+
+				// if this Module has children, don't update the NodeId
+				if (node.hasChildren()) {
+					return;
+				}
+				String simpleName = Util.cleanNodeId(txtName.getText().trim());
+				txtNodeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
 			}
 		});
 	}
-	
+
 	@Override
 	public boolean setFocus() {
 		return txtName.setFocus();
@@ -69,8 +75,8 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode>{
 	protected void createWorkarea(Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
-		txtNodeId = createLabeledVerifyText(parent,"NodeId");
+		txtNodeId = createLabeledVerifyText(parent, "NodeId");
 		txtIcon = createLabeledIconSelector(parent, "Icon");
-		btnUncloseable = createLabeledCheckbox(parent,"Closable");
+		btnUncloseable = createLabeledCheckbox(parent, "Closable");
 	}
 }

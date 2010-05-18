@@ -15,7 +15,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 /**
- * Visitor to check, if a Call to getRidget("ridgetID") already exists.
+ * Visitor to check, if a Call to getRidget("ridgetID") or getRidget(RidgetType.class, "ridgetID") already exists.
  *
  */
 public class RidgetCallVisitor extends ASTVisitor{
@@ -28,9 +28,16 @@ public class RidgetCallVisitor extends ASTVisitor{
 	@Override
 	public boolean visit(MethodInvocation node) {
 		if (RidgetGenerator.METHOD_GET_RIDGET.equals(node.getName().getFullyQualifiedName())){
-			
 			if (!node.arguments().isEmpty()){
-				Object obj = node.arguments().get(0);
+				// check which getRidget-method is called (1 or 2 arguments)
+				// we just care for the last argument the ridgetId 
+				Object obj = null;
+				if (node.arguments().size() == 2){
+					obj = node.arguments().get(1);
+				}
+				else{
+					obj = node.arguments().get(0);
+				}
 				
 				if (obj instanceof StringLiteral){
 					StringLiteral arg = (StringLiteral) obj;
@@ -41,7 +48,6 @@ public class RidgetCallVisitor extends ASTVisitor{
 				}
 			}
 		}
-		
 		return true;
 	}
 

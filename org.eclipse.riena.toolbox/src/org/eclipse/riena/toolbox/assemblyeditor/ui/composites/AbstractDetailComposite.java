@@ -16,6 +16,19 @@ import java.util.List;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IDirtyListener;
@@ -24,21 +37,6 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.TextButtonComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.ViewSelectorText;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> extends Composite {
 	protected T node;
@@ -70,6 +68,13 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		addModifyListener(cmpWorkarea);
 	}
 
+	/**
+	 * @return the node
+	 */
+	public T getNode() {
+		return node;
+	}
+
 	public boolean isValid() {
 		for (Control cont : cmpWorkarea.getChildren()) {
 			if (cont instanceof VerifyTypeIdText) {
@@ -92,7 +97,7 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 
 	private void fireDirtyChanged(boolean isDirty) {
 		for (IDirtyListener l : dirtyListener) {
-			l.dirtyStateChanged(isDirty);
+			l.dirtyStateChanged(null, isDirty);
 		}
 	}
 
@@ -157,7 +162,8 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		public Separator(Composite parent) {
 			super(parent, SWT.None);
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
-			GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.END).hint(2000, 1).grab(true, false).applyTo(this);
+			GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.END).hint(2000, 1).grab(true, false)
+					.applyTo(this);
 		}
 	}
 

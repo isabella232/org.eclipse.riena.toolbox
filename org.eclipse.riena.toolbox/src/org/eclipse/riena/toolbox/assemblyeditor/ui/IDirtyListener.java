@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor.ui;
 
+import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
+
 public interface IDirtyListener {
-	void dirtyStateChanged(boolean isDirty);
+	void dirtyStateChanged(AbstractAssemblyNode node, boolean isDirty);
 }

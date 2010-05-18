@@ -178,6 +178,11 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 			return;
 		}
 
+		// dont calculate preSuffixe if there is a varname in the 'name' property
+		if (name.contains("${")) {
+			return;
+		}
+
 		Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)");
 		Matcher matcher = pattern.matcher(typeId);
 		if (matcher.matches()) {
@@ -190,7 +195,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 	}
 
 	/**
-	 * Trys to compute the pre- and suffix by splitting the typeId in prefix -
+	 * Tries to compute the pre- and suffix by splitting the typeId in prefix -
 	 * name - suffix parts.
 	 * 
 	 * @param typedNode
@@ -296,6 +301,9 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		sub.setIcon(elm.getAttribute(ATTR_SUBMOD_ICON));
 		sub.setSelectable(parseBoolean(elm, ATTR_SUBMOD_SELECTABLE, true));
 		sub.setRequiresPreparation(parseBoolean(elm, ATTR_SUBMOD_REQUIRES_PREPARATION, false));
+		sub.setVisible(parseBoolean(elm, ATTR_SUBMOD_VISIBLE, true));
+		sub.setExpanded(parseBoolean(elm, ATTR_SUBMOD_EXPANDED, false));
+		
 		sub.setBundle(bundleNode);
 		computePreSuffixe(sub);
 

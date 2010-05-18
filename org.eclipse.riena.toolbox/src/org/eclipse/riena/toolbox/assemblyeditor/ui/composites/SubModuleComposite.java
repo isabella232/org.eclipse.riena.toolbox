@@ -19,16 +19,6 @@ import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.riena.toolbox.Activator;
-import org.eclipse.riena.toolbox.Util;
-import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
-import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.IdSelectorText;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.OpenClassLink;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.TextButtonComposite;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,6 +30,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import org.eclipse.riena.toolbox.Activator;
+import org.eclipse.riena.toolbox.Util;
+import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
+import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.IdSelectorText;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.OpenClassLink;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.TextButtonComposite;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 
 public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 
@@ -53,9 +53,11 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	private IconSelectorText txtIcon;
 	private Button btnSelectable;
 	private Button btnRequiresPreparation;
+	private Button btnVisible;
+	private Button btnExpanded;
 
 	public SubModuleComposite(Composite parent) {
-		super(parent, "submodule_li.png","submodule_re.png");
+		super(parent, "submodule_li.png", "submodule_re.png");
 	}
 
 	@Override
@@ -76,7 +78,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		txtController.getText().setText(getTextSave(node.getController()));
 		txtController.setControllerName(node.getController());
 		txtController.setProject(node.getBundle().getProject());
-		
+
 		lnkController.setSubModule(node);
 		lnkController.setClassName(node.getController());
 
@@ -91,6 +93,8 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		txtIcon.setProject(node.getBundle().getProject());
 		btnSelectable.setSelection(node.isSelectable());
 		btnRequiresPreparation.setSelection(node.isRequiresPreparation());
+		btnVisible.setSelection(node.isVisible());
+		btnExpanded.setSelection(node.isExpanded());
 	}
 
 	@Override
@@ -113,6 +117,8 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		node.setIcon(txtIcon.getText().getText());
 		node.setSelectable(btnSelectable.getSelection());
 		node.setRequiresPreparation(btnRequiresPreparation.getSelection());
+		node.setVisible(btnVisible.getSelection());
+		node.setExpanded(btnExpanded.getSelection());
 	}
 
 	@Override
@@ -125,7 +131,13 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 				if (null == node.getPrefix()) {
 					return;
 				}
-				String simpleName = txtName.getText().trim();
+
+				// if the node already has a RCPView, don't update the nodeId
+				if (Util.isGiven(node.getRcpView().getViewClass())) {
+					return;
+				}
+
+				String simpleName = Util.cleanNodeId(txtName.getText().trim());
 				txtNodeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
 			}
 		});
@@ -138,16 +150,19 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		btnShared = createLabeledCheckbox(parent, "SharedView");
 		btnSelectable = createLabeledCheckbox(parent, "Selectable");
 		btnRequiresPreparation = createLabeledCheckbox(parent, "RequiresPreparation");
+		btnVisible = createLabeledCheckbox(parent, "Visible");
+		btnExpanded = createLabeledCheckbox(parent, "Expanded");
 	}
 
 	private void buildViewSection(Composite parent) {
 		lnkView = new OpenClassLink(parent, "ViewId");
 		lnkView.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lnkView);
-		txtView = new IdSelectorText(parent, workareaBackground, "View Selection", "Select a View (* = any string, ? = any char):");
+		txtView = new IdSelectorText(parent, workareaBackground, "View Selection",
+				"Select a View (* = any string, ? = any char):");
 		txtView.setIds(Activator.getDefault().getAssemblyModel().getRcpViewIds()); // FIXME
-																						// use
-																						// RCPViews
+																					// use
+																					// RCPViews
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtView);
 	}
 
@@ -174,16 +189,16 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 					Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
 
-					FilteredTypesSelectionDialog dia = new FilteredTypesSelectionDialog(shell, false, (IRunnableContext) null, searchScope,
-							IJavaSearchConstants.CLASS_AND_ENUM);
-					
-					if (Util.isGiven(controllerName)){
+					FilteredTypesSelectionDialog dia = new FilteredTypesSelectionDialog(shell, false,
+							(IRunnableContext) null, searchScope, IJavaSearchConstants.CLASS_AND_ENUM);
+
+					if (Util.isGiven(controllerName)) {
 						dia.setInitialPattern(controllerName, FilteredTypesSelectionDialog.FULL_SELECTION);
+					} else {
+						dia.setInitialPattern(project.getName() + ".controller.",
+								FilteredTypesSelectionDialog.FULL_SELECTION);
 					}
-					else{
-						dia.setInitialPattern(project.getName()+".controller.", FilteredTypesSelectionDialog.FULL_SELECTION);
-					}
-					
+
 					dia.open();
 					Object[] result = dia.getResult();
 
@@ -197,8 +212,6 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			});
 		}
 
-		
-		
 		public String getControllerName() {
 			return controllerName;
 		}

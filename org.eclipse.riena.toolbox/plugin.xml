@@ -31,5 +31,19 @@
             class="org.eclipse.riena.toolbox.assemblyeditor.StartupEditorListener">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.ToolboxConfigurationPreferencePage"
+            id="org.eclipse.riena.toolbox.preferences.ToolboxConfigurationPreference"
+            name="Riena Toolbox">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

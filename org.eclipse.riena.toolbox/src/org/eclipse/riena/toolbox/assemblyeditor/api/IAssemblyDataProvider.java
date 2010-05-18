@@ -20,7 +20,7 @@ public interface IAssemblyDataProvider {
 	 * 
 	 * @return the AssemblyModel
 	 */
-	public AssemblyModel getData();
+	public AssemblyModel createData();
 	
 	public IPluginXmlRenderer getXmlRenderer();
 

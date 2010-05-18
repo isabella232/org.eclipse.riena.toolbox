@@ -23,18 +23,20 @@ import java.util.Properties;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.exception.ResourceNotFoundException;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.api.ICodeGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 
 public class CodeGenerator implements ICodeGenerator {
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
@@ -42,8 +44,6 @@ public class CodeGenerator implements ICodeGenerator {
 	private static final String PACKAGE_SEPARATOR = "."; //$NON-NLS-1$
 	private static final String VIEW_SUFFIX = "View"; //$NON-NLS-1$
 	private static final String CONTROLLER_SUFFIX = "Controller"; //$NON-NLS-1$
-	private static final String DEFAULT_PACKAGE_VIEWS = "views"; //$NON-NLS-1$
-	private static final String DEFAULT_PACKAGE_CONTROLLER = "controller"; //$NON-NLS-1$
 	private static final String TEMPLATE_SUB_MODULE_VIEW = "SubModuleView.java"; //$NON-NLS-1$
 	private static final String TEMPLATE_SUB_MODULE_CONTROLLER = "SubModuleController.java"; //$NON-NLS-1$
 	private static final String VAR_CLASS_NAME = "ClassName"; //$NON-NLS-1$
@@ -61,7 +61,8 @@ public class CodeGenerator implements ICodeGenerator {
 			p.setProperty("url.resource.loader.root", baseAbsolutePath); //$NON-NLS-1$
 		} else {
 			p.setProperty("resource.loader", "file"); //$NON-NLS-1$ //$NON-NLS-2$
-			p.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader"); //$NON-NLS-1$ //$NON-NLS-2$
+			p.setProperty(
+					"class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader"); //$NON-NLS-1$ //$NON-NLS-2$
 			p.setProperty("file.resource.loader.path", baseAbsolutePath); //$NON-NLS-1$
 		}
 
@@ -73,23 +74,34 @@ public class CodeGenerator implements ICodeGenerator {
 		}
 	}
 
+	private String getPreference(String key) {
+		String defaultPackageController = Activator.getDefault().getPreferenceStore().getString(key);
+		if (!Util.isGiven(defaultPackageController)) {
+			defaultPackageController = Activator.getDefault().getPreferenceStore().getDefaultString(key);
+		}
+		return defaultPackageController;
+	}
+
 	public String generateController(SubModuleNode subModule) {
-		String packageName = subModule.getBundle().getName() + PACKAGE_SEPARATOR + DEFAULT_PACKAGE_CONTROLLER;
+		String defaultPackageController = getPreference(PreferenceConstants.CONST_GENERATE_CONTROLLER_PACKAGE_NAME);
+		String packageName = subModule.getBundle().getName() + PACKAGE_SEPARATOR + defaultPackageController;
 		packageName = packageName.toLowerCase();
-		String className = subModule.getName() + CONTROLLER_SUFFIX;
+		String className = Util.cleanNodeId(subModule.getName()) + CONTROLLER_SUFFIX;
 
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put(VAR_CLASS_NAME, className);
 		properties.put(VAR_PACKAGE_NAME, packageName);
-		String fullClassName = generateClass(packageName, className, subModule, TEMPLATE_SUB_MODULE_CONTROLLER, properties);
+		String fullClassName = generateClass(packageName, className, subModule, TEMPLATE_SUB_MODULE_CONTROLLER,
+				properties);
 		return fullClassName;
 	}
 
 	public RCPView generateView(SubModuleNode subModule) {
-		String packageName = subModule.getBundle().getName() + PACKAGE_SEPARATOR + DEFAULT_PACKAGE_VIEWS;
+		String defaultPackageView = getPreference(PreferenceConstants.CONST_GENERATE_VIEW_PACKAGE_NAME);
+		String packageName = subModule.getBundle().getName() + PACKAGE_SEPARATOR + defaultPackageView;
 		packageName = packageName.toLowerCase();
 
-		String className = subModule.getName() + VIEW_SUFFIX;
+		String className = Util.cleanNodeId(subModule.getName()) + VIEW_SUFFIX;
 
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put(VAR_CLASS_NAME, className);
@@ -122,11 +134,11 @@ public class CodeGenerator implements ICodeGenerator {
 			File bundle = FileLocator.getBundleFile(Activator.getDefault().getBundle());
 			String bundleAbsolutePath = bundle.getAbsolutePath();
 			if (bundleAbsolutePath.endsWith(".jar")) { //$NON-NLS-1$
-				bundleAbsolutePath=bundleAbsolutePath.replace('\\', '/');
+				bundleAbsolutePath = bundleAbsolutePath.replace('\\', '/');
 				if (bundleAbsolutePath.startsWith("/")) {
-					bundleAbsolutePath=bundleAbsolutePath.substring(1);
+					bundleAbsolutePath = bundleAbsolutePath.substring(1);
 				}
-				bundleAbsolutePath = "jar:file:/" + bundleAbsolutePath + "!/"+DIR_TEMPLATES+"/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				bundleAbsolutePath = "jar:file:/" + bundleAbsolutePath + "!/" + DIR_TEMPLATES + "/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				return bundleAbsolutePath;
 			}
 			return bundleAbsolutePath + "/" + DIR_TEMPLATES; //$NON-NLS-1$
@@ -152,11 +164,15 @@ public class CodeGenerator implements ICodeGenerator {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("exception in generateClass: basePath =" + baseAbsolutePath,e); //$NON-NLS-1$
+			throw new RuntimeException("exception in generateClass: basePath =" + baseAbsolutePath, e); //$NON-NLS-1$
 		}
 
-		IFolder packageFolder = subModule.getBundle().getProject().getFolder(
-				subModule.getBundle().getSourceFolder() + File.separator + packageName.replace(PACKAGE_SEPARATOR, File.separator));
+		IFolder packageFolder = subModule
+				.getBundle()
+				.getProject()
+				.getFolder(
+						subModule.getBundle().getSourceFolder() + File.separator
+								+ packageName.replace(PACKAGE_SEPARATOR, File.separator));
 		createFolder(packageFolder);
 		IFile classFile = packageFolder.getFile(className + EXTENSION_JAVA);
 		createFile(classFile, writer.toString());
@@ -184,8 +200,8 @@ public class CodeGenerator implements ICodeGenerator {
 		}
 
 		IProject project = subModule.getBundle().getProject();
-		String fileName = subModule.getBundle().getSourceFolder() + File.separator + className.replace(PACKAGE_SEPARATOR, File.separator)
-				+ EXTENSION_JAVA;
+		String fileName = subModule.getBundle().getSourceFolder() + File.separator
+				+ className.replace(PACKAGE_SEPARATOR, File.separator) + EXTENSION_JAVA;
 
 		IFile file = project.getFile(fileName);
 

@@ -22,6 +22,13 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.dialogs.PatternFilter;
+
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
@@ -31,19 +38,11 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleGroupNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubApplicationNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.dialogs.FilteredTree;
-import org.eclipse.ui.dialogs.PatternFilter;
-
 
 /**
- * This class renders the {@link AssemblyModel} as a Tree.<p>
- *
+ * This class renders the {@link AssemblyModel} as a Tree.
+ * <p>
+ * 
  */
 public class AssemblyTreeViewer extends FilteredTree {
 
@@ -51,7 +50,7 @@ public class AssemblyTreeViewer extends FilteredTree {
 
 	public AssemblyTreeViewer(Composite parent, int style) {
 		super(parent, SWT.SINGLE, new PatternFilter(), true);
-		
+
 		dirtyListener = new ArrayList<IDirtyListener>();
 		treeViewer.setContentProvider(new TreeContentProvider());
 		treeViewer.setLabelProvider(new TreeLabelProvider());
@@ -68,14 +67,13 @@ public class AssemblyTreeViewer extends FilteredTree {
 				}
 			}
 		});
-		
 	}
-	
-	public TreeViewer getTreeViewer(){
+
+	public TreeViewer getTreeViewer() {
 		return treeViewer;
 	}
-	
-	public Tree getTree(){
+
+	public Tree getTree() {
 		return treeViewer.getTree();
 	}
 
@@ -89,17 +87,21 @@ public class AssemblyTreeViewer extends FilteredTree {
 
 	private void fireDirtyChanged(boolean isDirty) {
 		for (IDirtyListener l : dirtyListener) {
-			l.dirtyStateChanged(isDirty);
+			l.dirtyStateChanged(null, isDirty);
 		}
 	}
 
-	public void setModel(AssemblyModel model) {
+	public void setModel(AssemblyModel model, boolean refresh) {
+		Object[] exp = treeViewer.getExpandedElements();
 		treeViewer.setInput(model);
-		treeViewer.refresh();
+		if (refresh) {
+			treeViewer.refresh();
+		}
+		treeViewer.setExpandedElements(exp);
 	}
 
 	/**
-	 *  Rebuilds the complete Tree from the previously set AssemblyModel.
+	 * Rebuilds the complete Tree from the previously set AssemblyModel.
 	 */
 	public void rebuild() {
 		Object[] exp = treeViewer.getExpandedElements();
@@ -134,7 +136,7 @@ public class AssemblyTreeViewer extends FilteredTree {
 
 	/**
 	 * Shows the associated {@link Image} of a specific Node.
-	 *
+	 * 
 	 */
 	private static class TreeLabelProvider extends LabelProvider {
 		private Map<Class, Image> images;

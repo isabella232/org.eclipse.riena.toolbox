@@ -25,12 +25,30 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 	private String controller;
 	private boolean shared;
 	private String icon;
-	private boolean selectable;
+	private boolean selectable = true;
 	private boolean requiresPreparation;
+	private boolean visible = true;
+	private boolean expanded;
 
 	public SubModuleNode(AbstractAssemblyNode parent) {
 		super(parent);
 		subModules = new ArrayList<SubModuleNode>();
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public boolean isExpanded() {
+		return expanded;
+	}
+
+	public void setExpanded(boolean expanded) {
+		this.expanded = expanded;
 	}
 
 	public boolean isRequiresPreparation() {

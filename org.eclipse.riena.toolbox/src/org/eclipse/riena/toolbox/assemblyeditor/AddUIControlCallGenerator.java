@@ -14,6 +14,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
+import org.eclipse.riena.toolbox.Activator;
+import org.eclipse.riena.toolbox.Util;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
+
 /**
  * Generates missing addUIControl-Calls in RCP-Views for SWT-Controls. By
  * default for all Classes in the package 'org.eclipse.swt.widgets' like Text,
@@ -26,10 +30,15 @@ public class AddUIControlCallGenerator extends RidgetGenerator {
 	/**
 	 * List of SWT-Controls that will be ignored
 	 */
-	private final static String[] CONTROL_BLACKLIST = { "org.eclipse.swt.widgets.Label" }; //$NON-NLS-1$
+	private String[] controlBlacklist = new String[] {};
 
 	public AddUIControlCallGenerator(IProject project) {
 		super(project);
+		String blackListString = Activator.getDefault().getPreferenceStore()
+				.getString(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST);
+		if (Util.isGiven(blackListString)) {
+			controlBlacklist = blackListString.split(";");
+		}
 	}
 
 	/**
@@ -53,12 +62,12 @@ public class AddUIControlCallGenerator extends RidgetGenerator {
 		if (null == methodBasicCreatePartControl) {
 			return false;
 		}
-		
+
 		CollectMethodDeclerationsVisitor collector = new CollectMethodDeclerationsVisitor();
 		astNode.accept(collector);
-		
-		
-		SWTControlInstantiationVisitor controlCollector = new SWTControlInstantiationVisitor(CONTROL_BLACKLIST, collector.getMethods());
+
+		SWTControlInstantiationVisitor controlCollector = new SWTControlInstantiationVisitor(controlBlacklist,
+				collector.getMethods());
 		methodBasicCreatePartControl.accept(controlCollector);
 
 		return saveDocument(astNode);

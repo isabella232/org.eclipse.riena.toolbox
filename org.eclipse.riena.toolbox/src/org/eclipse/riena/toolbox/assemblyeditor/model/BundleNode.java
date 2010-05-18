@@ -23,23 +23,29 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * This node represents a Project in the workspace with a JavaNature.
- *
+ * 
  */
 public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 	private List<AssemblyNode> assemblies;
 	private IFile pluginXml;
 	private String sourceFolder; // FIXME compute correct sourceFolder with JDT
 	private IProject project;
+
+	/**
+	 * Indicates that this bundle has changed, since it got created
+	 */
+	private boolean dirty;
+
 	/**
 	 * The RCP-Views that are declared in this bundles plugin.xml
 	 */
 	private Set<RCPView> registeredRcpViews;
-	
+
 	/**
 	 * The RCP-Perspectives that are declared in this bundles plugin.xml
 	 */
 	private Set<RCPPerspective> registeredRcpPerspectives;
-	
+
 	public final static String SRC_FOLDER = "src"; //$NON-NLS-1$
 
 	public BundleNode(AbstractAssemblyNode parent) {
@@ -50,10 +56,25 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		sourceFolder = SRC_FOLDER;
 	}
 
+	/**
+	 * @return the dirty
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * @param dirty
+	 *            the dirty to set
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
 	public Set<RCPView> getRegisteredRcpViews() {
 		return registeredRcpViews;
 	}
-	
+
 	public Set<RCPPerspective> getRegisteredRcpPerspectives() {
 		return registeredRcpPerspectives;
 	}
@@ -62,9 +83,9 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		this.registeredRcpPerspectives = registeredRcpPerspectives;
 	}
 
-	public RCPView findRcpView(String viewId){
-		for (RCPView view: registeredRcpViews){
-			if (viewId.equals(view.getId())){
+	public RCPView findRcpView(String viewId) {
+		for (RCPView view : registeredRcpViews) {
+			if (viewId.equals(view.getId())) {
 				return view;
 			}
 		}
@@ -75,9 +96,10 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		this.registeredRcpViews = registeredRcpViews;
 	}
 
-	public void refreshProject() throws CoreException {
-		// FIXME never refresh the complete project, because that will trigger 2 update events on the plugin.xml on save
-		project.refreshLocal(IResource.DEPTH_INFINITE, null);
+	public void refreshPluginXml() throws CoreException {
+		if (null != pluginXml) {
+			pluginXml.refreshLocal(IResource.DEPTH_INFINITE, null);
+		}
 	}
 
 	public IProject getProject() {

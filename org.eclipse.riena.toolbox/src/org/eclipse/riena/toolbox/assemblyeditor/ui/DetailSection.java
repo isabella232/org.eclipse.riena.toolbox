@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.widgets.Composite;
+
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
@@ -30,10 +34,6 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.composites.ModuleComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.composites.ModuleGroupComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.composites.SubApplicationComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.composites.SubModuleComposite;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.widgets.Composite;
-
 
 /**
  * The DetailSection shows a Form-Editor for every Node. It holds a Composite
@@ -56,9 +56,9 @@ public class DetailSection extends Composite {
 		return dirtyListener.remove(e);
 	}
 
-	private void fireDirtyChanged(boolean isDirty) {
+	private void fireDirtyChanged(AbstractAssemblyNode abstractAssemblyNode, boolean isDirty) {
 		for (IDirtyListener l : dirtyListener) {
-			l.dirtyStateChanged(isDirty);
+			l.dirtyStateChanged(abstractAssemblyNode, isDirty);
 		}
 	}
 
@@ -97,10 +97,10 @@ public class DetailSection extends Composite {
 		compositeMap.put(ModuleNode.class, new ModuleComposite(this));
 		compositeMap.put(SubModuleNode.class, new SubModuleComposite(this));
 
-		for (AbstractDetailComposite comp : compositeMap.values()) {
+		for (final AbstractDetailComposite comp : compositeMap.values()) {
 			comp.addDirtyListener(new IDirtyListener() {
-				public void dirtyStateChanged(boolean isDirty) {
-					fireDirtyChanged(isDirty);
+				public void dirtyStateChanged(AbstractAssemblyNode node, boolean isDirty) {
+					fireDirtyChanged(comp.getNode(), isDirty);
 				}
 			});
 		}
