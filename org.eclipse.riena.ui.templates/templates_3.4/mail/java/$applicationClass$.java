@@ -1,7 +1,5 @@
 package $packageName$;
 
-import org.eclipse.core.runtime.Platform;
-
 import org.eclipse.riena.navigation.IApplicationNode;
 import org.eclipse.riena.navigation.IModuleGroupNode;
 import org.eclipse.riena.navigation.IModuleNode;
@@ -12,7 +10,6 @@ import org.eclipse.riena.navigation.model.ModuleGroupNode;
 import org.eclipse.riena.navigation.model.SubApplicationNode;
 import org.eclipse.riena.navigation.ui.swt.application.SwtApplication;
 import org.eclipse.riena.ui.workarea.WorkareaManager;
-import org.osgi.framework.Bundle;
 
 /**
  * This class controls all aspects of the application's execution

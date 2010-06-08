@@ -1,11 +1,8 @@
 package $packageName$;
 
-import org.eclipse.core.runtime.Platform;
-
 import org.eclipse.riena.navigation.IApplicationNode;
 import org.eclipse.riena.navigation.model.ApplicationNode;
 import org.eclipse.riena.navigation.ui.swt.application.SwtApplication;
-import org.osgi.framework.Bundle;
 
 /**
  * Riena Hello World Sample.

@@ -166,14 +166,12 @@ public class HelloRienaTemplate extends RienaTemplateSection {
 		IPluginElement module = model.getPluginFactory().createElement(modulegroup);
 		module.setName("module");
 		module.setAttribute("name", "Hello World");
-		module.setAttribute("unclosable", "false");
 		module.setAttribute("nodeId", "module.1");
 		modulegroup.add(module);
 
 		IPluginElement submodule = model.getPluginFactory().createElement(module);
 		submodule.setName("subModule");
 		submodule.setAttribute("controller", getStringOption(KEY_PACKAGE_NAME) + ".HelloWorldSubModuleController");
-		submodule.setAttribute("shared", "false");
 		submodule.setAttribute("nodeId", "submodule.1");
 		submodule.setAttribute("name", "Hello World View");
 		submodule.setAttribute("viewId", id + ".HelloWorldSubModuleView");

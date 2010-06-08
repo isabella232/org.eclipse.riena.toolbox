@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Text;
 
 import org.eclipse.riena.navigation.ISubModuleNode;
 import org.eclipse.riena.navigation.model.SubModuleNode;
-import org.eclipse.riena.navigation.ui.swt.presentation.SwtViewProviderAccessor;
+import org.eclipse.riena.navigation.ui.swt.presentation.SwtViewProvider;
 import org.eclipse.riena.navigation.ui.swt.views.SubModuleView;
 import ${package}.controllers.CustomerSearchSubModuleController;
 import ${package.common}.Customer;
@@ -124,7 +124,7 @@ public class CustomerSearchSubModuleView extends SubModuleView implements ViewCo
 	}
 
 	private ISubModuleNode getNode() {
-		return SwtViewProviderAccessor.getViewProvider().getNavigationNode(this.getViewSite().getId(), this.getViewSite().getSecondaryId(), ISubModuleNode.class);
+		return SwtViewProvider.getInstance().getNavigationNode(this.getViewSite().getId(), this.getViewSite().getSecondaryId(), ISubModuleNode.class);
 	}
 
 	protected void openCustomer() {

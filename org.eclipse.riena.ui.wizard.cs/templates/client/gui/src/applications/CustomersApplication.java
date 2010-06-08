@@ -11,10 +11,8 @@ import org.eclipse.riena.navigation.model.ModuleNode;
 import org.eclipse.riena.navigation.model.SubApplicationNode;
 import org.eclipse.riena.navigation.model.SubModuleNode;
 import org.eclipse.riena.navigation.ui.swt.application.SwtApplication;
-import ${package}.CustomersClientActivator;
 import ${package}.views.CustomerSearchSubModuleView;
 import org.eclipse.riena.ui.workarea.WorkareaManager;
-import org.osgi.framework.Bundle;
 
 public class CustomersApplication extends SwtApplication {
 	private IApplicationNode application;

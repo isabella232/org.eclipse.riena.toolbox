@@ -1,9 +1,7 @@
 package ${package};
 
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
-import org.eclipse.riena.communication.core.factory.RemoteServiceFactory;
 import org.eclipse.riena.communication.core.factory.Register;
-
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
