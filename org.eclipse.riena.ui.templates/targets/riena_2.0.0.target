@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.6"?>
+
+<target name="Riena Target 2.0.0">
+<locations>
+<location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit">
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.6.0.v20100519-7G7R-7lz-qs-z-vnhGTVo6f8jIiy"/>
+<repository location="http://download.eclipse.org/releases/helios"/>
+</location>
+<location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit">
+<unit id="org.eclipse.rcp.sdk.id" version="3.6.0.I20100527-1700"/>
+<repository location="http://download.eclipse.org/releases/helios"/>
+</location>
+<location includeAllPlatforms="false" includeMode="slicer" type="InstallableUnit">
+<unit id="org.eclipse.riena.build.feature.sdk.feature.group" version="2.0.0.v20100601_2_0_0_RC3"/>
+<repository location="http://download.eclipse.org/releases/helios"/>
+</location>
+</locations>
+</target>
