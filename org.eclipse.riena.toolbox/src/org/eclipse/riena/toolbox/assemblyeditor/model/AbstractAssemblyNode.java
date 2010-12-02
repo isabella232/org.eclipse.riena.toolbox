@@ -24,7 +24,7 @@ public abstract class AbstractAssemblyNode<T> {
 	protected BundleNode bundle;
 	protected AbstractAssemblyNode parent;
 
-	public AbstractAssemblyNode(AbstractAssemblyNode parent) {
+	public AbstractAssemblyNode(final AbstractAssemblyNode parent) {
 		this.parent = parent;
 	}
 
@@ -44,7 +44,7 @@ public abstract class AbstractAssemblyNode<T> {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -55,7 +55,7 @@ public abstract class AbstractAssemblyNode<T> {
 	public abstract boolean add(T child);
 
 	public boolean hasChildren() {
-		List<T> children = getChildren();
+		final List<T> children = getChildren();
 		if (null == children) {
 			return false;
 		}
@@ -67,7 +67,7 @@ public abstract class AbstractAssemblyNode<T> {
 		return bundle;
 	}
 
-	public void setBundle(BundleNode bundle) {
+	public void setBundle(final BundleNode bundle) {
 		this.bundle = bundle;
 	}
 
@@ -77,7 +77,7 @@ public abstract class AbstractAssemblyNode<T> {
 		}
 
 		for (int i = 0; i < parent.getChildren().size(); i++) {
-			Object sibling = parent.getChildren().get(i);
+			final Object sibling = parent.getChildren().get(i);
 
 			if (sibling.equals(this)) {
 				return i;
@@ -87,7 +87,7 @@ public abstract class AbstractAssemblyNode<T> {
 	}
 
 	public boolean hasNextSibling() {
-		int currentIndex = getCurrentIndex();
+		final int currentIndex = getCurrentIndex();
 
 		if (currentIndex == -1) {
 			return false;
@@ -97,7 +97,7 @@ public abstract class AbstractAssemblyNode<T> {
 	}
 
 	public boolean hasPreviousSibling() {
-		int currentIndex = getCurrentIndex();
+		final int currentIndex = getCurrentIndex();
 
 		if (currentIndex == -1) {
 			return false;
@@ -107,7 +107,7 @@ public abstract class AbstractAssemblyNode<T> {
 	}
 
 	public T getPreviousSibling() {
-		int currentIndex = getCurrentIndex();
+		final int currentIndex = getCurrentIndex();
 
 		if (currentIndex < 1) {
 			return null;
@@ -121,9 +121,9 @@ public abstract class AbstractAssemblyNode<T> {
 			return false;
 		}
 
-		List<T> siblings = parent.getChildren();
-		int selfIndex = getCurrentIndex();
-		T self = siblings.remove(selfIndex);
+		final List<T> siblings = parent.getChildren();
+		final int selfIndex = getCurrentIndex();
+		final T self = siblings.remove(selfIndex);
 		siblings.add(selfIndex + 1, self);
 		return true;
 	}
@@ -133,9 +133,9 @@ public abstract class AbstractAssemblyNode<T> {
 			return false;
 		}
 
-		List<T> siblings = parent.getChildren();
+		final List<T> siblings = parent.getChildren();
 		int selfIndex = getCurrentIndex();
-		T self = siblings.remove(selfIndex);
+		final T self = siblings.remove(selfIndex);
 		siblings.add(--selfIndex, self);
 		return false;
 	}

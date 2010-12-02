@@ -15,15 +15,14 @@ import java.util.List;
 
 /**
  * This class represents a Module in the Riena-Navigation.
- *
+ * 
  */
 public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
-	private List<SubModuleNode> subModules;
+	private final List<SubModuleNode> subModules;
 	private String icon;
 	private boolean closeable;
-	
 
-	public ModuleNode(AbstractAssemblyNode parent) {
+	public ModuleNode(final AbstractAssemblyNode parent) {
 		super(parent);
 		this.subModules = new ArrayList<SubModuleNode>();
 	}
@@ -32,7 +31,7 @@ public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return icon;
 	}
 
-	public void setIcon(String icon) {
+	public void setIcon(final String icon) {
 		this.icon = icon;
 	}
 
@@ -40,7 +39,7 @@ public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return closeable;
 	}
 
-	public void setCloseable(boolean uncloseable) {
+	public void setCloseable(final boolean uncloseable) {
 		this.closeable = uncloseable;
 	}
 
@@ -50,7 +49,7 @@ public class ModuleNode extends AbstractTypedNode<SubModuleNode> {
 	}
 
 	@Override
-	public boolean add(SubModuleNode e) {
+	public boolean add(final SubModuleNode e) {
 		return subModules.add(e);
 	}
 

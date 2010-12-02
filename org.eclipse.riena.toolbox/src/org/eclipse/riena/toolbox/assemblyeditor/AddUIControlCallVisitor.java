@@ -21,20 +21,19 @@ import org.eclipse.jdt.core.dom.SimpleName;
  * Collects all addUIControl-Calls
  * 
  */
-public class AddUIControlCallVisitor extends ASTVisitor{
-	
-	private Set<String> variables = new HashSet<String>();
-	
+public class AddUIControlCallVisitor extends ASTVisitor {
+
+	private final Set<String> variables = new HashSet<String>();
 
 	@Override
-	public boolean visit(MethodInvocation node) {
-		if ("addUIControl".equals(node.getName().getFullyQualifiedName())){
-			if (!node.arguments().isEmpty()){
-				Object obj = node.arguments().get(0);
-				
-				if (obj instanceof SimpleName){
-					SimpleName sn  = (SimpleName) obj;
-					String varName = sn.getFullyQualifiedName();
+	public boolean visit(final MethodInvocation node) {
+		if ("addUIControl".equals(node.getName().getFullyQualifiedName())) {
+			if (!node.arguments().isEmpty()) {
+				final Object obj = node.arguments().get(0);
+
+				if (obj instanceof SimpleName) {
+					final SimpleName sn = (SimpleName) obj;
+					final String varName = sn.getFullyQualifiedName();
 					variables.add(varName);
 				}
 			}

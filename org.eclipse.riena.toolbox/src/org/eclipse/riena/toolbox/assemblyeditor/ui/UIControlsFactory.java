@@ -16,38 +16,36 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-
 public class UIControlsFactory {
-	public static Label createLabel(Composite parent, String text){
-		Label lbl = new Label(parent, SWT.None);
+	public static Label createLabel(final Composite parent, final String text) {
+		final Label lbl = new Label(parent, SWT.None);
 		lbl.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		lbl.setText(text);
 		return lbl;
 	}
-	
-	public static Text createText(Composite parent){
-		Text txt = new Text(parent, SWT.BORDER);
-		return txt;
-	}
-	
-	
-	public static VerifyTypeIdText createCheckTypeIdText(Composite parent){
-		VerifyTypeIdText txt = new VerifyTypeIdText(parent);
+
+	public static Text createText(final Composite parent) {
+		final Text txt = new Text(parent, SWT.BORDER);
 		return txt;
 	}
 
-	public static Button createCheckbox(Composite parent) {
-		Button butt = new Button(parent, SWT.CHECK);
+	public static VerifyTypeIdText createCheckTypeIdText(final Composite parent) {
+		final VerifyTypeIdText txt = new VerifyTypeIdText(parent);
+		return txt;
+	}
+
+	public static Button createCheckbox(final Composite parent) {
+		final Button butt = new Button(parent, SWT.CHECK);
 		return butt;
 	}
-	
-	public static Button createCombo(Composite parent) {
-		Button butt = new Button(parent, SWT.CHECK);
+
+	public static Button createCombo(final Composite parent) {
+		final Button butt = new Button(parent, SWT.CHECK);
 		return butt;
 	}
-	
-	public static OpenClassLink createOpenClassLink(Composite parent, String text){
-		OpenClassLink lnk = new OpenClassLink(parent, text);
+
+	public static OpenClassLink createOpenClassLink(final Composite parent, final String text) {
+		final OpenClassLink lnk = new OpenClassLink(parent, text);
 		lnk.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		return lnk;
 	}

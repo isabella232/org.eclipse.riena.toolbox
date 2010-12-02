@@ -13,11 +13,12 @@ package org.eclipse.riena.toolbox.assemblyeditor;
 import org.eclipse.core.resources.IProject;
 
 /**
- * Listener that will be notified, when Changes in the workbench occur 
- * like a plugin.xml in of the bundles changes or a project is added/removed.
- *
+ * Listener that will be notified, when Changes in the workbench occur like a
+ * plugin.xml in of the bundles changes or a project is added/removed.
+ * 
  */
 public interface ResourceChangeListener {
 	public void pluginXmlChanged(IProject project);
+
 	public void projectAdded(IProject project);
 }

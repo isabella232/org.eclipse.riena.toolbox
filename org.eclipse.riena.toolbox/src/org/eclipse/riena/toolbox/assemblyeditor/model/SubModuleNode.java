@@ -20,7 +20,7 @@ import org.eclipse.riena.toolbox.Util;
  * 
  */
 public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
-	private List<SubModuleNode> subModules;
+	private final List<SubModuleNode> subModules;
 	private RCPView rcpView;
 	private String controller;
 	private boolean shared;
@@ -30,7 +30,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 	private boolean visible = true;
 	private boolean expanded;
 
-	public SubModuleNode(AbstractAssemblyNode parent) {
+	public SubModuleNode(final AbstractAssemblyNode parent) {
 		super(parent);
 		subModules = new ArrayList<SubModuleNode>();
 	}
@@ -39,7 +39,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return visible;
 	}
 
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 		this.visible = visible;
 	}
 
@@ -47,7 +47,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return expanded;
 	}
 
-	public void setExpanded(boolean expanded) {
+	public void setExpanded(final boolean expanded) {
 		this.expanded = expanded;
 	}
 
@@ -55,7 +55,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return requiresPreparation;
 	}
 
-	public void setRequiresPreparation(boolean requiresPreparation) {
+	public void setRequiresPreparation(final boolean requiresPreparation) {
 		this.requiresPreparation = requiresPreparation;
 	}
 
@@ -70,7 +70,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return rcpView;
 	}
 
-	public void setRcpView(RCPView view) {
+	public void setRcpView(final RCPView view) {
 		this.rcpView = view;
 	}
 
@@ -78,7 +78,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return controller;
 	}
 
-	public void setController(String controller) {
+	public void setController(final String controller) {
 		this.controller = controller;
 	}
 
@@ -86,7 +86,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return shared;
 	}
 
-	public void setShared(boolean shared) {
+	public void setShared(final boolean shared) {
 		this.shared = shared;
 	}
 
@@ -94,7 +94,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return icon;
 	}
 
-	public void setIcon(String icon) {
+	public void setIcon(final String icon) {
 		this.icon = icon;
 	}
 
@@ -102,7 +102,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		return selectable;
 	}
 
-	public void setSelectable(boolean selectable) {
+	public void setSelectable(final boolean selectable) {
 		this.selectable = selectable;
 	}
 
@@ -112,7 +112,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 	}
 
 	@Override
-	public boolean add(SubModuleNode e) {
+	public boolean add(final SubModuleNode e) {
 		return subModules.add(e);
 	}
 

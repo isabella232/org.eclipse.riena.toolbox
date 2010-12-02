@@ -19,6 +19,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -49,60 +50,79 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	}
 
 	// FIXME redundant saveDocument-Method
-	public void saveDocument(BundleNode bundleNode) {
+	public void saveDocument(final BundleNode bundleNode) {
 		try {
-			File pluginXml = new File(bundleNode.getPluginXml().getLocationURI());
+			final File pluginXml = new File(bundleNode.getPluginXml().getLocationURI());
 
 			doc = builder.parse(pluginXml);
 			removeOldAssemblies();
 
 			// render the given BundleNode, unless it has no childelements
 			if (bundleNode.getChildren() != null && !bundleNode.getChildren().isEmpty()) {
-				Element elmExt = doc.createElement(ELEM_EXTENSION);
+				final Element elmExt = doc.createElement(ELEM_EXTENSION);
 				elmExt.setAttribute(ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ASSEMBLIES);
 
-				NodeList nlPlugin = doc.getElementsByTagName(ELEM_PLUGIN);
+				final NodeList nlPlugin = doc.getElementsByTagName(ELEM_PLUGIN);
 				nlPlugin.item(0).appendChild(elmExt);
 				renderModel(elmExt, bundleNode);
 			}
 
-			Transformer xformer = createTransformer();
+			cleanWhiteSpace();
+
+			final Transformer xformer = createTransformer();
 			xformer.transform(new DOMSource(doc), new StreamResult(pluginXml));
 			bundleNode.refreshPluginXml();
-		} catch (SAXException e) {
+		} catch (final SAXException e) {
 			throw new RuntimeException(e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException(e);
-		} catch (TransformerException e) {
+		} catch (final TransformerException e) {
 			throw new RuntimeException(e);
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private void renderRcpView(Element elmView, RCPView view) {
+	/**
+	 * Removes all blank lines between elements
+	 */
+	private void cleanWhiteSpace() {
+		try {
+			final XPathFactory xpathFactory = XPathFactory.newInstance();
+			final XPathExpression xpathExp = xpathFactory.newXPath().compile("//text()[normalize-space(.) = '']"); //$NON-NLS-1$
+			final NodeList emptyTextNodes = (NodeList) xpathExp.evaluate(doc, XPathConstants.NODESET);
+			for (int i = 0; i < emptyTextNodes.getLength(); i++) {
+				final Node emptyTextNode = emptyTextNodes.item(i);
+				emptyTextNode.getParentNode().removeChild(emptyTextNode);
+			}
+		} catch (final XPathExpressionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void renderRcpView(final Element elmView, final RCPView view) {
 		elmView.setAttribute(ATTR_VIEW_NAME, view.getName());
 		elmView.setAttribute(ATTR_VIEW_ID, view.getId());
 		elmView.setAttribute(ATTR_VIEW_CLASS, view.getViewClass());
 		elmView.setAttribute(ATTR_VIEW_ALLOW_MULTIPLE, view.isAllowMultiple() + ""); //$NON-NLS-1$
 	}
 
-	private void renderRcpPerspective(Element elmView, RCPPerspective persp) {
-		elmView.setAttribute("class", persp.getPerspectiveClass());
-		elmView.setAttribute("id", persp.getId());
-		elmView.setAttribute("name", persp.getName());
+	private void renderRcpPerspective(final Element elmView, final RCPPerspective persp) {
+		elmView.setAttribute(ATTR_PERSPECTIVE_CLASS, persp.getPerspectiveClass());
+		elmView.setAttribute(ATTR_PERSPECTIVE_ID, persp.getId());
+		elmView.setAttribute(ATTR_PERSPECTIVE_NAME, persp.getName());
 	}
 
-	public boolean registerPerspective(BundleNode bundle, RCPPerspective perspective) {
-		Document currentDoc = getDocument(bundle);
+	public boolean registerPerspective(final BundleNode bundle, final RCPPerspective perspective) {
+		final Document currentDoc = getDocument(bundle);
 
 		if (currentDoc == null) {
 			return false;
 		}
 
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		final XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath
+			final NodeList nlViewExtensions = (NodeList) xpath
 					.evaluate(
 							String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES), currentDoc, XPathConstants.NODESET); //$NON-NLS-1$
 
@@ -113,14 +133,14 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 				elmPerspectiveExt = currentDoc.createElement(ELEM_EXTENSION);
 				elmPerspectiveExt.setAttribute(ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES);
 
-				NodeList nlRoot = currentDoc.getElementsByTagName(ELEM_PLUGIN);
+				final NodeList nlRoot = currentDoc.getElementsByTagName(ELEM_PLUGIN);
 				nlRoot.item(0).appendChild(elmPerspectiveExt);
 			} else {
 				elmPerspectiveExt = (Element) nlViewExtensions.item(0);
 			}
 
 			if (!perspectiveAlreadyExists(currentDoc, perspective.getId())) {
-				Element elmPerspective = currentDoc.createElement(ELEM_PERSPECTIVE);
+				final Element elmPerspective = currentDoc.createElement(ELEM_PERSPECTIVE);
 				renderRcpPerspective(elmPerspective, perspective);
 				elmPerspectiveExt.appendChild(elmPerspective);
 				saveDocument(currentDoc, bundleNode);
@@ -128,21 +148,21 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			}
 			return false;
 
-		} catch (XPathExpressionException e) {
+		} catch (final XPathExpressionException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public boolean registerView(BundleNode bundle, RCPView view) {
-		Document currentDoc = getDocument(bundle);
+	public boolean registerView(final BundleNode bundle, final RCPView view) {
+		final Document currentDoc = getDocument(bundle);
 
 		if (currentDoc == null) {
 			return false;
 		}
 
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		final XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlViewExtensions = (NodeList) xpath
+			final NodeList nlViewExtensions = (NodeList) xpath
 					.evaluate(
 							String.format("//%s[@%s='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS), currentDoc, XPathConstants.NODESET); //$NON-NLS-1$
 
@@ -153,14 +173,14 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 				elmViewExt = currentDoc.createElement(ELEM_EXTENSION);
 				elmViewExt.setAttribute(ELEM_POINT, VALUE_EXT_POINT_VIEWS);
 
-				NodeList nlRoot = currentDoc.getElementsByTagName(ELEM_PLUGIN);
+				final NodeList nlRoot = currentDoc.getElementsByTagName(ELEM_PLUGIN);
 				nlRoot.item(0).appendChild(elmViewExt);
 			} else {
 				elmViewExt = (Element) nlViewExtensions.item(0);
 			}
 
 			if (!viewAlreadyExists(currentDoc, view.getId())) {
-				Element elmView = currentDoc.createElement(ELEM_VIEW);
+				final Element elmView = currentDoc.createElement(ELEM_VIEW);
 				renderRcpView(elmView, view);
 				elmViewExt.appendChild(elmView);
 				saveDocument(currentDoc, bundleNode);
@@ -168,36 +188,37 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			}
 			return false;
 
-		} catch (XPathExpressionException e) {
+		} catch (final XPathExpressionException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private boolean viewAlreadyExists(Document currentDoc, String viewId) throws XPathExpressionException {
-		XPath xpath = XPathFactory.newInstance().newXPath();
+	private boolean viewAlreadyExists(final Document currentDoc, final String viewId) throws XPathExpressionException {
+		final XPath xpath = XPathFactory.newInstance().newXPath();
 		// look for an element view with an ID = viewId anywhere under an
 		// extensionpoint org.eclipse.ui.views
-		String xpathQuery = String.format(
+		final String xpathQuery = String.format(
 				"//%s[@%s='%s']/view[@id='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_VIEWS, viewId); //$NON-NLS-1$
-		NodeList nlViewExtensions = (NodeList) xpath.evaluate(xpathQuery, currentDoc, XPathConstants.NODESET);
+		final NodeList nlViewExtensions = (NodeList) xpath.evaluate(xpathQuery, currentDoc, XPathConstants.NODESET);
 		return nlViewExtensions.getLength() > 0;
 	}
 
-	private boolean perspectiveAlreadyExists(Document currentDoc, String perspectiveId) throws XPathExpressionException {
-		XPath xpath = XPathFactory.newInstance().newXPath();
+	private boolean perspectiveAlreadyExists(final Document currentDoc, final String perspectiveId)
+			throws XPathExpressionException {
+		final XPath xpath = XPathFactory.newInstance().newXPath();
 		// look for an element perspective with an ID = perspectiveId anywhere
 		// under an extensionpoint org.eclipse.ui.perspectives
-		String xpathQuery = String
+		final String xpathQuery = String
 				.format("//%s[@%s='%s']/view[@id='%s']", ELEM_EXTENSION, ELEM_POINT, VALUE_EXT_POINT_PERSPECTIVES, perspectiveId); //$NON-NLS-1$
-		NodeList nlViewExtensions = (NodeList) xpath.evaluate(xpathQuery, currentDoc, XPathConstants.NODESET);
+		final NodeList nlViewExtensions = (NodeList) xpath.evaluate(xpathQuery, currentDoc, XPathConstants.NODESET);
 		return nlViewExtensions.getLength() > 0;
 	}
 
-	private void renderModel(Element elmExtension, BundleNode bundleNode) {
-		for (AssemblyNode ass : bundleNode.getChildren()) {
-			Element elmAss = renderAssembly(elmExtension, ass);
+	private void renderModel(final Element elmExtension, final BundleNode bundleNode) {
+		for (final AssemblyNode ass : bundleNode.getChildren()) {
+			final Element elmAss = renderAssembly(elmExtension, ass);
 
-			for (AbstractAssemblyNode child : ass.getChildren()) {
+			for (final AbstractAssemblyNode child : ass.getChildren()) {
 				if (child instanceof SubApplicationNode) {
 					renderSubApplication(elmAss, (SubApplicationNode) child);
 				} else if (child instanceof ModuleGroupNode) {
@@ -211,8 +232,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		}
 	}
 
-	private Element renderAssembly(Element elmExtension, AssemblyNode ass) {
-		Element elm = doc.createElement(ELEM_ASSEMBLY);
+	private Element renderAssembly(final Element elmExtension, final AssemblyNode ass) {
+		final Element elm = doc.createElement(ELEM_ASSEMBLY);
 		elm.setAttribute(ATTR_ASSEMBLY_ID, ass.getId());
 
 		if (Util.isGiven(ass.getAssembler())) {
@@ -236,8 +257,8 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 	}
 
-	private void renderSubApplication(Element parent, SubApplicationNode ass) {
-		Element elm = doc.createElement(ELEM_SUBAPP);
+	private void renderSubApplication(final Element parent, final SubApplicationNode ass) {
+		final Element elm = doc.createElement(ELEM_SUBAPP);
 
 		if (Util.isGiven(ass.getName())) {
 			elm.setAttribute(ATTR_SUBAPP_NAME, ass.getName());
@@ -255,15 +276,15 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			elm.setAttribute(ATTR_SUBAPP_PERSPECTIVE_ID, ass.getPerspective());
 		}
 
-		for (ModuleGroupNode mod : ass.getChildren()) {
+		for (final ModuleGroupNode mod : ass.getChildren()) {
 			renderModuleGroup(elm, mod);
 		}
 
 		parent.appendChild(elm);
 	}
 
-	private void renderModuleGroup(Element parent, ModuleGroupNode ass) {
-		Element elm = doc.createElement(ELEM_MODULE_GROUP);
+	private void renderModuleGroup(final Element parent, final ModuleGroupNode ass) {
+		final Element elm = doc.createElement(ELEM_MODULE_GROUP);
 
 		if (Util.isGiven(ass.getName())) {
 			elm.setAttribute(ATTR_MODGROUP_NAME, ass.getName());
@@ -273,15 +294,15 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			elm.setAttribute(ATTR_MODGROUP_NODE_ID, ass.getNodeId());
 		}
 
-		for (ModuleNode mod : ass.getChildren()) {
+		for (final ModuleNode mod : ass.getChildren()) {
 			renderModule(elm, mod);
 		}
 
 		parent.appendChild(elm);
 	}
 
-	private void renderModule(Element parent, ModuleNode ass) {
-		Element elm = doc.createElement(ELEM_MODULE);
+	private void renderModule(final Element parent, final ModuleNode ass) {
+		final Element elm = doc.createElement(ELEM_MODULE);
 
 		if (Util.isGiven(ass.getName())) {
 			elm.setAttribute(ATTR_MODULE_NAME, ass.getName());
@@ -297,15 +318,15 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 
 		elm.setAttribute(ATTR_MODULE_CLOSABLE, ass.isCloseable() + ""); //$NON-NLS-1$
 
-		for (SubModuleNode mod : ass.getChildren()) {
+		for (final SubModuleNode mod : ass.getChildren()) {
 			renderSubModule(elm, mod);
 		}
 
 		parent.appendChild(elm);
 	}
 
-	private void renderSubModule(Element parent, SubModuleNode subMod) {
-		Element elm = doc.createElement(ELEM_SUBMODULE);
+	private void renderSubModule(final Element parent, final SubModuleNode subMod) {
+		final Element elm = doc.createElement(ELEM_SUBMODULE);
 
 		if (Util.isGiven(subMod.getNodeId())) {
 			elm.setAttribute(ATTR_SUBMOD_NODE_ID, subMod.getNodeId());
@@ -336,7 +357,7 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		elm.setAttribute(ATTR_SUBMOD_EXPANDED, subMod.isExpanded() + ""); //$NON-NLS-1$
 		elm.setAttribute(ATTR_SUBMOD_VISIBLE, subMod.isVisible() + ""); //$NON-NLS-1$
 
-		for (SubModuleNode mod : subMod.getChildren()) {
+		for (final SubModuleNode mod : subMod.getChildren()) {
 			renderSubModule(elm, mod);
 		}
 
@@ -344,17 +365,17 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 	}
 
 	private void removeOldAssemblies() {
-		XPath xpath = XPathFactory.newInstance().newXPath();
+		final XPath xpath = XPathFactory.newInstance().newXPath();
 		try {
-			NodeList nlExt = (NodeList) xpath
+			final NodeList nlExt = (NodeList) xpath
 					.evaluate(
 							String.format(
 									"//%s[@%s='%s']", ELEM_EXTENSION, ATTR_EXTENSION_POINT, VALUE_EXT_POINT_ASSEMBLIES), doc, XPathConstants.NODESET); //$NON-NLS-1$
 			for (int i = 0; i < nlExt.getLength(); i++) {
-				Node noAss = nlExt.item(i);
+				final Node noAss = nlExt.item(i);
 				noAss.getParentNode().removeChild(noAss);
 			}
-		} catch (XPathExpressionException e) {
+		} catch (final XPathExpressionException e) {
 			e.printStackTrace();
 		}
 	}

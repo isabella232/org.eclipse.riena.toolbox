@@ -21,14 +21,19 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 
 /**
  * Factory for the different nodes that sets the default values.
- *
+ * 
  */
 public interface INodeFactory {
 	AssemblyNode createAssembly(BundleNode model);
+
 	SubApplicationNode createSubApplication(AbstractAssemblyNode parent, BundleNode model);
+
 	ModuleGroupNode createModuleGroup(AbstractAssemblyNode parent, BundleNode model);
+
 	ModuleNode createModule(AbstractAssemblyNode parent, BundleNode model);
+
 	SubModuleNode createSubModule(AbstractAssemblyNode parent, BundleNode model);
+
 	RCPPerspective createRcpPerspective(SubApplicationNode parent);
-	
+
 }

@@ -15,11 +15,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
-import org.eclipse.riena.toolbox.Activator;
-import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
-import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
-import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchPage;
@@ -28,12 +23,17 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+import org.eclipse.riena.toolbox.Activator;
+import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
+import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView;
 
 public class StartupEditorListener implements IStartup {
 
 	public void earlyStartup() {
 		IWorkbenchPage activePage = null;
-		IPartListener listener = new ActiveEditorPartListener();
+		final IPartListener listener = new ActiveEditorPartListener();
 
 		IWorkbenchWindow[] windows = null;
 		IWorkbenchPart activePart = null;
@@ -55,41 +55,43 @@ public class StartupEditorListener implements IStartup {
 	}
 
 	private static class ActiveEditorPartListener implements IPartListener {
-		public void partBroughtToTop(IWorkbenchPart part) {
+		public void partBroughtToTop(final IWorkbenchPart part) {
 		}
 
-		public void partClosed(IWorkbenchPart part) {
+		public void partClosed(final IWorkbenchPart part) {
 		}
 
-		public void partDeactivated(IWorkbenchPart part) {
+		public void partDeactivated(final IWorkbenchPart part) {
 		}
 
-		public void partActivated(IWorkbenchPart part) {
+		public void partActivated(final IWorkbenchPart part) {
 			selectCorrespondingNodeInAssemblyTree(part);
 		}
 
-		public void partOpened(IWorkbenchPart part) {
+		public void partOpened(final IWorkbenchPart part) {
 			selectCorrespondingNodeInAssemblyTree(part);
 		}
 
-		private void selectCorrespondingNodeInAssemblyTree(IWorkbenchPart part) {
+		private void selectCorrespondingNodeInAssemblyTree(final IWorkbenchPart part) {
 			if (part instanceof CompilationUnitEditor) {
-				CompilationUnitEditor edi = (CompilationUnitEditor) part;
-				FileEditorInput inp = (FileEditorInput) edi.getEditorInput();
-				IFile file = inp.getFile();
+				final CompilationUnitEditor edi = (CompilationUnitEditor) part;
+				final FileEditorInput inp = (FileEditorInput) edi.getEditorInput();
+				final IFile file = inp.getFile();
 
 				// FIXME get src folder from projectsettings
-				Pattern pattern = Pattern.compile(BundleNode.SRC_FOLDER + "(.*?)\\.java"); //$NON-NLS-1$
-				Matcher matcher = pattern.matcher(file.getProjectRelativePath().toOSString());
+				final Pattern pattern = Pattern.compile(BundleNode.SRC_FOLDER + "(.*?)\\.java"); //$NON-NLS-1$
+				final Matcher matcher = pattern.matcher(file.getProjectRelativePath().toOSString());
 				if (matcher.matches()) {
-					String cleanClassName = matcher.group(1).substring(1).replace("\\", "."); //$NON-NLS-1$ //$NON-NLS-2$
-					AssemblyModel model = Activator.getDefault().getAssemblyModel();
-					SubModuleNode subMod = Activator.getDefault().getModelService().findSubModuleByClassName(model, file.getProject(), cleanClassName);
+					final String cleanClassName = matcher.group(1).substring(1).replace("\\", "."); //$NON-NLS-1$ //$NON-NLS-2$
+					final AssemblyModel model = Activator.getDefault().getAssemblyModel();
+					final SubModuleNode subMod = Activator.getDefault().getModelService()
+							.findSubModuleByClassName(model, file.getProject(), cleanClassName);
 
 					if (null != subMod) {
 						if (null != PlatformUI.getWorkbench().getActiveWorkbenchWindow()) {
-							AssemblyView assView = (AssemblyView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(AssemblyView.ID);
-							if (null != assView){
+							final AssemblyView assView = (AssemblyView) PlatformUI.getWorkbench()
+									.getActiveWorkbenchWindow().getActivePage().findView(AssemblyView.ID);
+							if (null != assView) {
 								assView.selectNode(subMod);
 							}
 						}

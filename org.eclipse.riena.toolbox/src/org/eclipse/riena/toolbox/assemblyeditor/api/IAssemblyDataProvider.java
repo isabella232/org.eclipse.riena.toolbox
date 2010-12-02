@@ -14,14 +14,15 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
 
 public interface IAssemblyDataProvider {
 	public void saveData(AssemblyModel model);
-	
+
 	/**
-	 * Iterates over all Projects in the workspace and parses the plugin.xml if existent.
+	 * Iterates over all Projects in the workspace and parses the plugin.xml if
+	 * existent.
 	 * 
 	 * @return the AssemblyModel
 	 */
 	public AssemblyModel createData();
-	
+
 	public IPluginXmlRenderer getXmlRenderer();
 
 	public void setXmlRenderer(IPluginXmlRenderer xmlRenderer);

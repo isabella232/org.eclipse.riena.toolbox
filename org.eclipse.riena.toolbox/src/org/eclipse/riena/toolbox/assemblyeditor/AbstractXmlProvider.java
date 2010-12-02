@@ -88,6 +88,11 @@ public class AbstractXmlProvider {
 	protected static final String ATTR_VIEW_NAME = "name"; //$NON-NLS-1$
 	protected static final String ATTR_VIEW_ID = "id"; //$NON-NLS-1$
 
+	// ##### RCP-Perspective
+	protected static final String ATTR_PERSPECTIVE_NAME = "name"; //$NON-NLS-1$
+	protected static final String ATTR_PERSPECTIVE_ID = "id"; //$NON-NLS-1$
+	protected static final String ATTR_PERSPECTIVE_CLASS = "class"; //$NON-NLS-1$
+
 	protected static final String ELEM_PLUGIN = "plugin"; //$NON-NLS-1$
 	protected static final String ELEM_EXTENSION = "extension"; //$NON-NLS-1$
 	protected static final String ELEM_VIEW = "view"; //$NON-NLS-1$
@@ -103,32 +108,32 @@ public class AbstractXmlProvider {
 	protected BundleNode bundleNode;
 
 	public AbstractXmlProvider() {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(false);
 		dbf.setNamespaceAware(false);
 		dbf.setIgnoringElementContentWhitespace(true);
 
 		try {
 			builder = dbf.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
+		} catch (final ParserConfigurationException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected File convertToFile(IFile pluginXml) {
+	protected File convertToFile(final IFile pluginXml) {
 		return new File(bundleNode.getPluginXml().getLocationURI());
 	}
 
 	protected Transformer createTransformer() throws TransformerException {
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
 		try {
 			transformerFactory.setAttribute("indent-number", new Integer(4)); //$NON-NLS-1$
-		} catch (IllegalArgumentException exception) {
+		} catch (final IllegalArgumentException exception) {
 			// Ignore
 		}
 
-		Transformer transformer = transformerFactory.newTransformer();
+		final Transformer transformer = transformerFactory.newTransformer();
 
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
@@ -142,48 +147,48 @@ public class AbstractXmlProvider {
 		return transformer;
 	}
 
-	protected void saveDocument(Document doc, BundleNode bundleNode) {
+	protected void saveDocument(final Document doc, final BundleNode bundleNode) {
 		try {
-			Transformer xformer = createTransformer();
+			final Transformer xformer = createTransformer();
 			xformer.transform(new DOMSource(doc), new StreamResult(convertToFile(bundleNode.getPluginXml())));
-		} catch (TransformerException e) {
+		} catch (final TransformerException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected Document getDocument(BundleNode bundleNode) {
+	protected Document getDocument(final BundleNode bundleNode) {
 		this.bundleNode = bundleNode;
 		try {
 			return builder.parse(new FileInputStream(convertToFile(bundleNode.getPluginXml())));
-		} catch (SAXException e) {
+		} catch (final SAXException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	protected static boolean parseBoolean(Element elm, String attributeName, boolean defaultValue) {
-		String attr = elm.getAttribute(attributeName);
+	protected static boolean parseBoolean(final Element elm, final String attributeName, final boolean defaultValue) {
+		final String attr = elm.getAttribute(attributeName);
 		if (null != attr && attr.length() > 0) {
 			return "true".equals(attr); //$NON-NLS-1$
 		}
 		return defaultValue;
 	}
 
-	protected static Integer parseInteger(Element elm, String attributeName) {
-		String attr = elm.getAttribute(attributeName);
+	protected static Integer parseInteger(final Element elm, final String attributeName) {
+		final String attr = elm.getAttribute(attributeName);
 		if (Util.isGiven(attr)) {
 			return new Integer(Integer.parseInt(attr));
 		}
 		return null;
 	}
 
-	protected Element getFirstChild(Element rootElement, String childElementName) {
-		NodeList elementList = rootElement.getChildNodes();
+	protected Element getFirstChild(final Element rootElement, final String childElementName) {
+		final NodeList elementList = rootElement.getChildNodes();
 
 		for (int i = 0; i < elementList.getLength(); i++) {
-			Node node = elementList.item(i);
+			final Node node = elementList.item(i);
 
 			if (node instanceof Element) {
 				if (node.getNodeName().equals(childElementName)) {
@@ -198,17 +203,17 @@ public class AbstractXmlProvider {
 		private final Element rootElement;
 		private final List<String> childElementNames;
 
-		public NodeIterator(Element element, String... childElements) {
+		public NodeIterator(final Element element, final String... childElements) {
 			this.rootElement = element;
 			this.childElementNames = Arrays.asList(childElements);
 		}
 
 		public void iterate() {
-			NodeList elementList = rootElement.getChildNodes();
+			final NodeList elementList = rootElement.getChildNodes();
 			for (int i = 0; i < elementList.getLength(); i++) {
-				Node childNode = elementList.item(i);
+				final Node childNode = elementList.item(i);
 				if (childNode instanceof Element && childElementNames.contains(childNode.getNodeName())) {
-					Element elm = (Element) childNode;
+					final Element elm = (Element) childNode;
 					handle(elm);
 				}
 			}

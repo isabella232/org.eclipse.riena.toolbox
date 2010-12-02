@@ -14,17 +14,17 @@ public class RCPPerspective {
 	private String id;
 	private String perspectiveClass;
 	private String name;
-	
+
 	/**
 	 * Default Classname for all Riena-Perspectives.
 	 */
 	public final static String PERSPECTIVE_CLASS_NAME = "org.eclipse.riena.navigation.ui.swt.views.SubApplicationView"; //$NON-NLS-1$
-	
+
 	public RCPPerspective() {
 		super();
 	}
 
-	public RCPPerspective(String id) {
+	public RCPPerspective(final String id) {
 		super();
 		this.id = id;
 	}
@@ -33,7 +33,7 @@ public class RCPPerspective {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -41,7 +41,7 @@ public class RCPPerspective {
 		return perspectiveClass;
 	}
 
-	public void setPerspectiveClass(String perspectiveClass) {
+	public void setPerspectiveClass(final String perspectiveClass) {
 		this.perspectiveClass = perspectiveClass;
 	}
 
@@ -49,7 +49,7 @@ public class RCPPerspective {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -62,14 +62,14 @@ public class RCPPerspective {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RCPPerspective other = (RCPPerspective) obj;
+		final RCPPerspective other = (RCPPerspective) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

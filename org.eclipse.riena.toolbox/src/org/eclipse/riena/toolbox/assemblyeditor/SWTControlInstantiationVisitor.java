@@ -27,130 +27,128 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 
-
 public class SWTControlInstantiationVisitor extends ASTVisitor {
-	
-	private Set<String> controlBlackList;
-	private List<MethodDeclaration> methods;
-	private VariabelCache variabelCache;
-	
-	public SWTControlInstantiationVisitor(String[] controlBlacklist, List<MethodDeclaration> methods) {
+
+	private final Set<String> controlBlackList;
+	private final List<MethodDeclaration> methods;
+	private final VariabelCache variabelCache;
+
+	public SWTControlInstantiationVisitor(final String[] controlBlacklist, final List<MethodDeclaration> methods) {
 		this.methods = methods;
 		this.controlBlackList = new HashSet<String>(Arrays.asList(controlBlacklist));
 		this.variabelCache = new VariabelCache();
 	}
-	
-	private MethodDeclaration getMethodDeclaration(MethodInvocation invocation){
-		for (MethodDeclaration decl: methods){
-			if (decl.getName().getFullyQualifiedName().equals(invocation.getName().getFullyQualifiedName())){
+
+	private MethodDeclaration getMethodDeclaration(final MethodInvocation invocation) {
+		for (final MethodDeclaration decl : methods) {
+			if (decl.getName().getFullyQualifiedName().equals(invocation.getName().getFullyQualifiedName())) {
 				return decl;
 			}
 		}
 		return null;
 	}
-	
+
 	@Override
-	public boolean visit(MethodInvocation node) {
-		MethodDeclaration decla = getMethodDeclaration(node);
-		
+	public boolean visit(final MethodInvocation node) {
+		final MethodDeclaration decla = getMethodDeclaration(node);
+
 		// if the methodDeclaration was found, it is a private method and has to processed
-		if (null != decla){
+		if (null != decla) {
 			decla.getBody().accept(this);
 		}
 		return super.visit(node);
 	}
-	
-	private MethodDeclaration findDeclaringMethod(ASTNode current){
-		if (null == current){
+
+	private MethodDeclaration findDeclaringMethod(final ASTNode current) {
+		if (null == current) {
 			return null;
 		}
-		
-		if (current instanceof MethodDeclaration){
+
+		if (current instanceof MethodDeclaration) {
 			return (MethodDeclaration) current;
 		}
-		
-		return  findDeclaringMethod(current.getParent());
+
+		return findDeclaringMethod(current.getParent());
 	}
 
 	@Override
-	public boolean visit(ClassInstanceCreation node) {
-		ITypeBinding binding = node.resolveTypeBinding();
-		
-		String fullClassName = binding.getQualifiedName();
-		if (null != fullClassName &&
-			fullClassName.startsWith("org.eclipse.swt.widgets")){
-			
-			if (controlBlackList.contains(fullClassName)){
+	public boolean visit(final ClassInstanceCreation node) {
+		final ITypeBinding binding = node.resolveTypeBinding();
+
+		final String fullClassName = binding.getQualifiedName();
+		if (null != fullClassName && fullClassName.startsWith("org.eclipse.swt.widgets")) {
+
+			if (controlBlackList.contains(fullClassName)) {
 				return false;
 			}
-			
-			ASTNode parent = node.getParent();
-			
-			if (parent instanceof VariableDeclaration){
-				VariableDeclaration decl = (VariableDeclaration) parent;
-				
-				String varName = decl.getName().getFullyQualifiedName();
 
-				
-				MethodDeclaration enclosingMethod = findDeclaringMethod(node);
-				if (null == enclosingMethod){
+			final ASTNode parent = node.getParent();
+
+			if (parent instanceof VariableDeclaration) {
+				final VariableDeclaration decl = (VariableDeclaration) parent;
+
+				final String varName = decl.getName().getFullyQualifiedName();
+
+				final MethodDeclaration enclosingMethod = findDeclaringMethod(node);
+				if (null == enclosingMethod) {
 					System.err.println("could not detect enclosing method for " + node);
 					return false;
 				}
-				
-				if (!variabelCache.isRegistered(enclosingMethod, varName)){
+
+				if (!variabelCache.isRegistered(enclosingMethod, varName)) {
 					generateAddUIControlCall(enclosingMethod, varName);
 				}
 			}
 		}
 		return super.visit(node);
 	}
-	
-	private void generateAddUIControlCall(MethodDeclaration enclosingMethod, String variableName){
-		AST ast = enclosingMethod.getAST();
-		
-		MethodInvocation methodAddUIControl = ast.newMethodInvocation();
-		
+
+	private void generateAddUIControlCall(final MethodDeclaration enclosingMethod, final String variableName) {
+		final AST ast = enclosingMethod.getAST();
+
+		final MethodInvocation methodAddUIControl = ast.newMethodInvocation();
+
 		methodAddUIControl.setName(ast.newSimpleName("addUIControl"));
 		methodAddUIControl.arguments().add(ast.newSimpleName(variableName));
-		StringLiteral ridgetId = ast.newStringLiteral();
+		final StringLiteral ridgetId = ast.newStringLiteral();
 		ridgetId.setLiteralValue(variableName);
 		methodAddUIControl.arguments().add(ridgetId);
-		
+
 		enclosingMethod.getBody().statements().add(ast.newExpressionStatement(methodAddUIControl));
 	}
-	
+
 	/**
-	 * Caches for each MethodDeclaration all calls to addUIControl. 
-	 *
+	 * Caches for each MethodDeclaration all calls to addUIControl.
+	 * 
 	 */
-	private static class VariabelCache{
-		private Map<MethodDeclaration, Set<String>> cache;
-		
+	private static class VariabelCache {
+		private final Map<MethodDeclaration, Set<String>> cache;
+
 		public VariabelCache() {
 			cache = new HashMap<MethodDeclaration, Set<String>>();
 		}
-		
+
 		/**
-		 * Returns true if the given {@link MethodDeclaration} contains a call to addUIControl for the given variableName.
+		 * Returns true if the given {@link MethodDeclaration} contains a call
+		 * to addUIControl for the given variableName.
 		 * 
 		 * @param enclosingMethod
 		 * @param variableName
 		 * @return
 		 */
-		public boolean isRegistered(MethodDeclaration enclosingMethod, String variableName){
+		public boolean isRegistered(final MethodDeclaration enclosingMethod, final String variableName) {
 			Set<String> variables = cache.get(enclosingMethod);
-			
-			if (null == variables){
-			
-				AddUIControlCallVisitor addUIControlVisitor = new AddUIControlCallVisitor();
+
+			if (null == variables) {
+
+				final AddUIControlCallVisitor addUIControlVisitor = new AddUIControlCallVisitor();
 				enclosingMethod.accept(addUIControlVisitor);
 				variables = addUIControlVisitor.getVariables();
 				cache.put(enclosingMethod, variables);
 			}
-			
+
 			return variables.contains(variableName);
 		}
-		
+
 	}
 }

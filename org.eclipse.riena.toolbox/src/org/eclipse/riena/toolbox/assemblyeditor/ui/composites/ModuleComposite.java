@@ -28,7 +28,7 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode> {
 	private Button btnUncloseable;
 	private Text txtName;
 
-	public ModuleComposite(Composite parent) {
+	public ModuleComposite(final Composite parent) {
 		super(parent, "module_li.png", "module_re.png");
 	}
 
@@ -43,7 +43,7 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode> {
 		txtName.setText(getTextSave(node.getName()));
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				if (null == node.getPrefix()) {
 					return;
 				}
@@ -52,7 +52,7 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode> {
 				if (node.hasChildren()) {
 					return;
 				}
-				String simpleName = Util.cleanNodeId(txtName.getText().trim());
+				final String simpleName = Util.cleanNodeId(txtName.getText().trim(), false);
 				txtNodeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
 			}
 		});
@@ -72,7 +72,7 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode> {
 	}
 
 	@Override
-	protected void createWorkarea(Composite parent) {
+	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
 		txtNodeId = createLabeledVerifyText(parent, "NodeId");

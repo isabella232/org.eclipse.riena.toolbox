@@ -13,7 +13,6 @@ package org.eclipse.riena.toolbox.assemblyeditor.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.velocity.util.StringUtils;
 import org.eclipse.riena.toolbox.Util;
 
 /**
@@ -25,12 +24,12 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 	private String assembler;
 	private String parentNodeId;
 	private Integer startOrder;
-	
+
 	private String prefix;
 	private String suffix;
-	private List<AbstractTypedNode> children;
+	private final List<AbstractTypedNode> children;
 
-	public AssemblyNode(AbstractAssemblyNode parent) {
+	public AssemblyNode(final AbstractAssemblyNode parent) {
 		super(parent);
 		children = new ArrayList<AbstractTypedNode>();
 	}
@@ -39,7 +38,7 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		return prefix;
 	}
 
-	public void setPrefix(String prefix) {
+	public void setPrefix(final String prefix) {
 		this.prefix = prefix;
 	}
 
@@ -47,7 +46,7 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		return suffix;
 	}
 
-	public void setSuffix(String suffix) {
+	public void setSuffix(final String suffix) {
 		this.suffix = suffix;
 	}
 
@@ -55,7 +54,7 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		return assembler;
 	}
 
-	public void setAssembler(String assembler) {
+	public void setAssembler(final String assembler) {
 		this.assembler = assembler;
 	}
 
@@ -63,7 +62,7 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -71,7 +70,7 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		return parentNodeId;
 	}
 
-	public void setNodeTypeId(String parentTypeId) {
+	public void setNodeTypeId(final String parentTypeId) {
 		this.parentNodeId = parentTypeId;
 	}
 
@@ -79,12 +78,12 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		return startOrder;
 	}
 
-	public void setAutostartSequence(Integer autostartSequence) {
+	public void setAutostartSequence(final Integer autostartSequence) {
 		this.startOrder = autostartSequence;
 	}
 
 	@Override
-	public boolean add(AbstractTypedNode resultNode) {
+	public boolean add(final AbstractTypedNode resultNode) {
 		children.add(resultNode);
 		return true;
 	}
@@ -99,7 +98,7 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 		if (Util.isGiven(name)) {
 			return name;
 		}
-		return "(id="+id+")"; //$NON-NLS-1$ //$NON-NLS-2$
+		return "(id=" + id + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -117,14 +116,14 @@ public class AssemblyNode extends AbstractAssemblyNode<AbstractTypedNode> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AssemblyNode other = (AssemblyNode) obj;
+		final AssemblyNode other = (AssemblyNode) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -21,9 +21,9 @@ package org.eclipse.riena.toolbox.assemblyeditor;
 public class SwtControl {
 	private String swtControlClassName;
 	private String ridgetId;
-	private Class<?> ridgetClass;
+	private final Class<?> ridgetClass;
 
-	public SwtControl(String swtControlClassName, String ridgetId, Class<?> ridgetClass) {
+	public SwtControl(final String swtControlClassName, final String ridgetId, final Class<?> ridgetClass) {
 		super();
 		this.swtControlClassName = swtControlClassName;
 		this.ridgetId = ridgetId;
@@ -34,7 +34,7 @@ public class SwtControl {
 		return swtControlClassName;
 	}
 
-	public void setSwtControlClassName(String swtControlClassName) {
+	public void setSwtControlClassName(final String swtControlClassName) {
 		this.swtControlClassName = swtControlClassName;
 	}
 
@@ -42,7 +42,7 @@ public class SwtControl {
 		return ridgetId;
 	}
 
-	public void setRidgetId(String ridgetId) {
+	public void setRidgetId(final String ridgetId) {
 		this.ridgetId = ridgetId;
 	}
 

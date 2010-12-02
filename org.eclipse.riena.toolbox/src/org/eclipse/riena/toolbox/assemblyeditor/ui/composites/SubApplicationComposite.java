@@ -32,7 +32,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 	private IconSelectorText txtIcon;
 	private IdSelectorText txtPerspective;
 
-	public SubApplicationComposite(Composite parent) {
+	public SubApplicationComposite(final Composite parent) {
 		super(parent, "subapplication_li.png", "subapplication_re.png");
 	}
 
@@ -42,11 +42,11 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 		txtName.setText(getTextSave(node.getName()));
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				if (null == node.getPrefix()) {
 					return;
 				}
-				String simpleName = txtName.getText().trim();
+				final String simpleName = txtName.getText().trim();
 				txtNodeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
 			}
 		});
@@ -79,7 +79,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 	}
 
 	@Override
-	protected void createWorkarea(Composite parent) {
+	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
 		txtNodeId = createLabeledVerifyText(parent, "NodeId");
@@ -87,8 +87,8 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 		buildViewSection(parent);
 	}
 
-	private void buildViewSection(Composite parent) {
-		Label lblPersp = UIControlsFactory.createLabel(parent, "PerspectiveId");
+	private void buildViewSection(final Composite parent) {
+		final Label lblPersp = UIControlsFactory.createLabel(parent, "PerspectiveId");
 		GridDataFactory.swtDefaults().applyTo(lblPersp);
 		txtPerspective = new IdSelectorText(parent, workareaBackground, "Perspective Selection",
 				"Select a Perspective (* = any string, ? = any char):");

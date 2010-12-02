@@ -24,7 +24,8 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 /**
  * Textfield with a Button, that opens a IconSelectorDialog. All Images in the
- * current Bundle (JavaProject) that have the Extension (.gif, .jpg, .png) are selectable by the user. 
+ * current Bundle (JavaProject) that have the Extension (.gif, .jpg, .png) are
+ * selectable by the user.
  * 
  */
 public class IconSelectorText extends TextButtonComposite {
@@ -35,35 +36,34 @@ public class IconSelectorText extends TextButtonComposite {
 		return project;
 	}
 
-	public void setProject(IProject project) {
+	public void setProject(final IProject project) {
 		this.project = project;
 	}
 
-	public IconSelectorText(final Composite parent, Color background) {
+	public IconSelectorText(final Composite parent, final Color background) {
 		super(parent, background);
 
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				if (null == project) {
 					return;
 				}
 
-				ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(parent.getShell(), 
-													new WorkbenchLabelProvider(),
-													new BaseWorkbenchContentProvider());
-				
+				final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(parent.getShell(),
+						new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
+
 				dialog.setTitle("Tree Selection");
 				dialog.setMessage("Select the elements from the tree:");
 				dialog.setInput(project);
 				dialog.addFilter(new ImageFilter());
 				dialog.open();
 
-				Object[] result = dialog.getResult();
+				final Object[] result = dialog.getResult();
 
 				if (null != result) {
-					for (Object obj : result) {
-						File file = (File) obj;
+					for (final Object obj : result) {
+						final File file = (File) obj;
 						getText().setText(file.getName());
 					}
 				}
@@ -71,17 +71,16 @@ public class IconSelectorText extends TextButtonComposite {
 
 		});
 	}
-	
+
 	private static class ImageFilter extends ViewerFilter {
 		@Override
-		public boolean select(Viewer viewer, Object parentElement, Object element) {
-			if (element instanceof File){
-				File file = (File) element;
-				return (file.getName().endsWith(".gif") ||
-						file.getName().endsWith(".jpg") ||
-						file.getName().endsWith(".png"));
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+			if (element instanceof File) {
+				final File file = (File) element;
+				return (file.getName().endsWith(".gif") || file.getName().endsWith(".jpg") || file.getName().endsWith(
+						".png"));
 			}
-			return true; 
+			return true;
 		}
 	}
 

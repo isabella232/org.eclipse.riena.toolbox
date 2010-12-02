@@ -15,24 +15,24 @@ import java.util.List;
 
 /**
  * This class represents a SubApplication in Riena-Navigation.
- *
+ * 
  */
 public class SubApplicationNode extends AbstractTypedNode<ModuleGroupNode> {
 
-	private List<ModuleGroupNode> moduleGroups;
+	private final List<ModuleGroupNode> moduleGroups;
 	private String perspective;
 	private String icon;
 
-	public SubApplicationNode(AbstractAssemblyNode parent) {
+	public SubApplicationNode(final AbstractAssemblyNode parent) {
 		super(parent);
 		this.moduleGroups = new ArrayList<ModuleGroupNode>();
 	}
-	
+
 	public String getIcon() {
 		return icon;
 	}
 
-	public void setIcon(String icon) {
+	public void setIcon(final String icon) {
 		this.icon = icon;
 	}
 
@@ -40,7 +40,7 @@ public class SubApplicationNode extends AbstractTypedNode<ModuleGroupNode> {
 		return perspective;
 	}
 
-	public void setPerspective(String view) {
+	public void setPerspective(final String view) {
 		this.perspective = view;
 	}
 
@@ -50,18 +50,18 @@ public class SubApplicationNode extends AbstractTypedNode<ModuleGroupNode> {
 	}
 
 	@Override
-	public boolean add(ModuleGroupNode arg0) {
+	public boolean add(final ModuleGroupNode arg0) {
 		return moduleGroups.add(arg0);
 	}
-	
+
 	@Override
-	protected String getTreeLabelValue(){
+	protected String getTreeLabelValue() {
 		return name;
 	}
 
 	@Override
 	public String toString() {
 		return "SubApplicationNode [moduleGroups=" + moduleGroups + ", perspective=" + perspective + ", icon=" + icon + ", nodeId=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				+ nodeId + ", name=" + name + "]";  //$NON-NLS-1$//$NON-NLS-2$
+				+ nodeId + ", name=" + name + "]"; //$NON-NLS-1$//$NON-NLS-2$
 	}
 }

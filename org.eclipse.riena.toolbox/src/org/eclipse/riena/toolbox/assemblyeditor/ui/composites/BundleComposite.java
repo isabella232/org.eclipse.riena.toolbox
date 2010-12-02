@@ -11,20 +11,20 @@
 package org.eclipse.riena.toolbox.assemblyeditor.ui.composites;
 
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 
-public class BundleComposite extends AbstractDetailComposite<BundleNode>{
+public class BundleComposite extends AbstractDetailComposite<BundleNode> {
 	private Text txtName;
 
-	public BundleComposite(Composite parent) {
+	public BundleComposite(final Composite parent) {
 		super(parent, "", "");
 	}
 
 	@Override
-	public void bind(BundleNode node) {
+	public void bind(final BundleNode node) {
 		this.node = node;
 		txtName.setText(getTextSave(node.getName()));
 	}
@@ -35,7 +35,7 @@ public class BundleComposite extends AbstractDetailComposite<BundleNode>{
 	}
 
 	@Override
-	protected void createWorkarea(Composite parent) {
+	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
 		txtName.setEnabled(false);

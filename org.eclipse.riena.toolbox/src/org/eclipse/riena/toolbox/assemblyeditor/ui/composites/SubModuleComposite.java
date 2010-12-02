@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.Util;
@@ -56,8 +57,8 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	private Button btnVisible;
 	private Button btnExpanded;
 
-	public SubModuleComposite(Composite parent) {
-		super(parent, "submodule_li.png", "submodule_re.png");
+	public SubModuleComposite(final Composite parent) {
+		super(parent, "submodule_li.png", "submodule_re.png"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -122,12 +123,12 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	}
 
 	@Override
-	protected void createWorkarea(Composite parent) {
+	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
 		txtName = createLabeledText(parent, "Name");
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyReleased(final KeyEvent e) {
 				if (null == node.getPrefix()) {
 					return;
 				}
@@ -137,7 +138,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 					return;
 				}
 
-				String simpleName = Util.cleanNodeId(txtName.getText().trim());
+				final String simpleName = Util.cleanNodeId(txtName.getText().trim(), false);
 				txtNodeId.getText().setText(node.getPrefix() + simpleName + node.getSuffix());
 			}
 		});
@@ -154,7 +155,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		btnExpanded = createLabeledCheckbox(parent, "Expanded");
 	}
 
-	private void buildViewSection(Composite parent) {
+	private void buildViewSection(final Composite parent) {
 		lnkView = new OpenClassLink(parent, "ViewId");
 		lnkView.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lnkView);
@@ -166,7 +167,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtView);
 	}
 
-	private void buildControllerSection(Composite parent) {
+	private void buildControllerSection(final Composite parent) {
 		lnkController = UIControlsFactory.createOpenClassLink(parent, "Controller");
 		txtController = new BrowseControllerComposite(parent, workareaBackground);
 
@@ -179,32 +180,32 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		private IProject project;
 		private String controllerName;
 
-		public BrowseControllerComposite(Composite parent, Color background) {
+		public BrowseControllerComposite(final Composite parent, final Color background) {
 			super(parent, background);
 
 			getBrowseButton().addSelectionListener(new SelectionAdapter() {
 
 				@Override
-				public void widgetSelected(SelectionEvent e) {
-					Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-					IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
+				public void widgetSelected(final SelectionEvent e) {
+					final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					final IJavaSearchScope searchScope = SearchEngine.createWorkspaceScope();
 
-					FilteredTypesSelectionDialog dia = new FilteredTypesSelectionDialog(shell, false,
+					final FilteredTypesSelectionDialog dia = new FilteredTypesSelectionDialog(shell, false,
 							(IRunnableContext) null, searchScope, IJavaSearchConstants.CLASS_AND_ENUM);
 
 					if (Util.isGiven(controllerName)) {
-						dia.setInitialPattern(controllerName, FilteredTypesSelectionDialog.FULL_SELECTION);
+						dia.setInitialPattern(controllerName, FilteredItemsSelectionDialog.FULL_SELECTION);
 					} else {
 						dia.setInitialPattern(project.getName() + ".controller.",
-								FilteredTypesSelectionDialog.FULL_SELECTION);
+								FilteredItemsSelectionDialog.FULL_SELECTION);
 					}
 
 					dia.open();
-					Object[] result = dia.getResult();
+					final Object[] result = dia.getResult();
 
 					if (null != result) {
-						for (Object obj : result) {
-							SourceType source = (SourceType) obj;
+						for (final Object obj : result) {
+							final SourceType source = (SourceType) obj;
 							getText().setText(source.getFullyQualifiedName());
 						}
 					}
@@ -216,7 +217,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			return controllerName;
 		}
 
-		public void setControllerName(String controllerName) {
+		public void setControllerName(final String controllerName) {
 			this.controllerName = controllerName;
 		}
 
@@ -224,7 +225,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			return project;
 		}
 
-		public void setProject(IProject project) {
+		public void setProject(final IProject project) {
 			this.project = project;
 		}
 	}

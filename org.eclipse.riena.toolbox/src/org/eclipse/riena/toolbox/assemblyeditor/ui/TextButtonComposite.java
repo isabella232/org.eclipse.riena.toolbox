@@ -18,12 +18,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-
 public class TextButtonComposite extends Composite {
-	private Text text;
-	private Button browseButton;
+	private final Text text;
+	private final Button browseButton;
 
-	public TextButtonComposite(Composite parent, Color background) {
+	public TextButtonComposite(final Composite parent, final Color background) {
 		super(parent, SWT.None);
 
 		setBackground(background);
@@ -35,8 +34,7 @@ public class TextButtonComposite extends Composite {
 		browseButton = new Button(this, SWT.PUSH);
 		browseButton.setText("Browse ...");
 
-		GridDataFactory.swtDefaults().hint(100, SWT.DEFAULT).applyTo(
-				browseButton);
+		GridDataFactory.swtDefaults().hint(100, SWT.DEFAULT).applyTo(browseButton);
 	}
 
 	public Text getText() {

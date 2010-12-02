@@ -15,33 +15,34 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 /**
- * Visitor to check, if a Call to getRidget("ridgetID") or getRidget(RidgetType.class, "ridgetID") already exists.
- *
+ * Visitor to check, if a Call to getRidget("ridgetID") or
+ * getRidget(RidgetType.class, "ridgetID") already exists.
+ * 
  */
-public class RidgetCallVisitor extends ASTVisitor{
+public class RidgetCallVisitor extends ASTVisitor {
 	private boolean callExists;
-	private final String ridgetId; 
-	public RidgetCallVisitor(String ridgetId) {
+	private final String ridgetId;
+
+	public RidgetCallVisitor(final String ridgetId) {
 		this.ridgetId = ridgetId;
 	}
-	
+
 	@Override
-	public boolean visit(MethodInvocation node) {
-		if (RidgetGenerator.METHOD_GET_RIDGET.equals(node.getName().getFullyQualifiedName())){
-			if (!node.arguments().isEmpty()){
+	public boolean visit(final MethodInvocation node) {
+		if (RidgetGenerator.METHOD_GET_RIDGET.equals(node.getName().getFullyQualifiedName())) {
+			if (!node.arguments().isEmpty()) {
 				// check which getRidget-method is called (1 or 2 arguments)
 				// we just care for the last argument the ridgetId 
 				Object obj = null;
-				if (node.arguments().size() == 2){
+				if (node.arguments().size() == 2) {
 					obj = node.arguments().get(1);
-				}
-				else{
+				} else {
 					obj = node.arguments().get(0);
 				}
-				
-				if (obj instanceof StringLiteral){
-					StringLiteral arg = (StringLiteral) obj;
-					if (ridgetId.equals(arg.getLiteralValue())){
+
+				if (obj instanceof StringLiteral) {
+					final StringLiteral arg = (StringLiteral) obj;
+					if (ridgetId.equals(arg.getLiteralValue())) {
 						callExists = true;
 						return true;
 					}

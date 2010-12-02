@@ -12,22 +12,22 @@ package org.eclipse.riena.toolbox.assemblyeditor.model;
 
 /**
  * This class represents a View in the Eclipse RCP.
- *
+ * 
  */
 public class RCPView {
 	private String id;
 	private String name;
 	private String viewClass;
-	private boolean allowMultiple = true;
-	private boolean restorable = false;
+	private final boolean allowMultiple = true;
+	private final boolean restorable = false;
 
 	public RCPView() {
 	}
-	
-	public RCPView(String id) {
+
+	public RCPView(final String id) {
 		this.id = id;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -35,8 +35,8 @@ public class RCPView {
 	public String getName() {
 		return name;
 	}
-	
-	public void setName(String name) {
+
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -52,18 +52,18 @@ public class RCPView {
 		return restorable;
 	}
 
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
-	public void setViewClass(String clazz) {
+	public void setViewClass(final String clazz) {
 		this.viewClass = clazz;
 	}
 
 	@Override
 	public String toString() {
 		return "RCPView [allowMultiple=" + allowMultiple + ", clazz=" + viewClass //$NON-NLS-1$ //$NON-NLS-2$
-				+ ", id=" + id + ", name=" + name + ", restorable="  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+				+ ", id=" + id + ", name=" + name + ", restorable=" //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 				+ restorable + "]"; //$NON-NLS-1$
 	}
 
@@ -76,14 +76,14 @@ public class RCPView {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RCPView other = (RCPView) obj;
+		final RCPView other = (RCPView) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

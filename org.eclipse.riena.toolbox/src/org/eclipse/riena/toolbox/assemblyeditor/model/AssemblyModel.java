@@ -22,65 +22,64 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
 
 /**
- * This class is a container for the {@link BundleNode}s in the workspace. 
+ * This class is a container for the {@link BundleNode}s in the workspace.
  */
 public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
-	private List<BundleNode> bundles;
-	private Set<RCPView> rcpViews;
-	private Set<RCPPerspective> rcpPerspectives;
-	
+	private final List<BundleNode> bundles;
+	private final Set<RCPView> rcpViews;
+	private final Set<RCPPerspective> rcpPerspectives;
+
 	public AssemblyModel() {
 		super(null);
 		bundles = new ArrayList<BundleNode>();
 		rcpViews = new HashSet<RCPView>();
 		rcpPerspectives = new HashSet<RCPPerspective>();
 	}
-	
-	public void addAllRcpViews(Set<RCPView> viewIds){
+
+	public void addAllRcpViews(final Set<RCPView> viewIds) {
 		this.rcpViews.addAll(viewIds);
 	}
-	
-	public void addAllRcpPerspectives(Set<RCPPerspective> perspectives){
+
+	public void addAllRcpPerspectives(final Set<RCPPerspective> perspectives) {
 		this.rcpPerspectives.addAll(perspectives);
 	}
 
 	public List<String> getRcpViewIds() {
-		List<String> viewIds = new ArrayList<String>();
-		
-		for (RCPView view: getRcpViews()){
+		final List<String> viewIds = new ArrayList<String>();
+
+		for (final RCPView view : getRcpViews()) {
 			viewIds.add(view.getId());
 		}
 		return viewIds;
 	}
-	
-	
+
 	public List<String> getRcpPerspectiveIds() {
-		List<String> perspectiveIds = new ArrayList<String>();
-		
-		for (RCPPerspective persp: getRcpPerspectives()){
+		final List<String> perspectiveIds = new ArrayList<String>();
+
+		for (final RCPPerspective persp : getRcpPerspectives()) {
 			perspectiveIds.add(persp.getId());
 		}
 		return perspectiveIds;
 	}
-	
-	public BundleNode getBundle(IProject project){
+
+	public BundleNode getBundle(final IProject project) {
 		Assert.isNotNull(project);
-		
-		for (BundleNode bn: bundles){
-			if (project.equals(bn.getProject())){
+
+		for (final BundleNode bn : bundles) {
+			if (project.equals(bn.getProject())) {
 				return bn;
 			}
 		}
 		return null;
 	}
-	
+
 	public List<RCPView> getRcpViews() {
-		List<RCPView> out = new ArrayList<RCPView>();
+		final List<RCPView> out = new ArrayList<RCPView>();
 		out.addAll(rcpViews);
-		
+
 		Collections.sort(out, new Comparator<RCPView>() {
-			public int compare(RCPView o1, RCPView o2) {
-				if (null == o1 || null == o2){
+			public int compare(final RCPView o1, final RCPView o2) {
+				if (null == o1 || null == o2) {
 					return 0;
 				}
 				return o1.getId().compareTo(o2.getId());
@@ -88,15 +87,14 @@ public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
 		});
 		return out;
 	}
-	
-	
+
 	public List<RCPPerspective> getRcpPerspectives() {
-		List<RCPPerspective> out = new ArrayList<RCPPerspective>();
+		final List<RCPPerspective> out = new ArrayList<RCPPerspective>();
 		out.addAll(rcpPerspectives);
-		
+
 		Collections.sort(out, new Comparator<RCPPerspective>() {
-			public int compare(RCPPerspective o1, RCPPerspective o2) {
-				if (null == o1 || null == o2){
+			public int compare(final RCPPerspective o1, final RCPPerspective o2) {
+				if (null == o1 || null == o2) {
 					return 0;
 				}
 				return o1.getId().compareTo(o2.getId());
@@ -106,7 +104,7 @@ public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
 	}
 
 	@Override
-	public boolean add(BundleNode e) {
+	public boolean add(final BundleNode e) {
 		return bundles.add(e);
 	}
 
@@ -117,10 +115,10 @@ public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
 
 	@Override
 	public String toString() {
-		return "AssemblyModel [bundles=" + bundles + "]";  //$NON-NLS-1$//$NON-NLS-2$
+		return "AssemblyModel [bundles=" + bundles + "]"; //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public boolean addAll(Collection<? extends BundleNode> c) {
+	public boolean addAll(final Collection<? extends BundleNode> c) {
 		return bundles.addAll(c);
 	}
 
@@ -129,14 +127,13 @@ public class AssemblyModel extends AbstractAssemblyNode<BundleNode> {
 		return null;
 	}
 
-
 	@Override
 	public BundleNode getBundle() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void setBundle(BundleNode bundle) {
+	public void setBundle(final BundleNode bundle) {
 		throw new UnsupportedOperationException();
 	}
 }

@@ -32,9 +32,9 @@ public class AddUIControlCallGenerator extends RidgetGenerator {
 	 */
 	private String[] controlBlacklist = new String[] {};
 
-	public AddUIControlCallGenerator(IProject project) {
+	public AddUIControlCallGenerator(final IProject project) {
 		super(project);
-		String blackListString = Activator.getDefault().getPreferenceStore()
+		final String blackListString = Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST);
 		if (Util.isGiven(blackListString)) {
 			controlBlacklist = blackListString.split(";");
@@ -50,23 +50,23 @@ public class AddUIControlCallGenerator extends RidgetGenerator {
 	 * 
 	 * @param fullyQualifiedClassName
 	 */
-	public boolean generateAddUIControlCalls(String fullyQualifiedClassName) {
-		CompilationUnit astNode = findCompilationUnit(fullyQualifiedClassName);
+	public boolean generateAddUIControlCalls(final String fullyQualifiedClassName) {
+		final CompilationUnit astNode = findCompilationUnit(fullyQualifiedClassName);
 		if (null == astNode) {
 			return false;
 		}
 
 		astNode.recordModifications();
 
-		MethodDeclaration methodBasicCreatePartControl = findMethod(astNode, METHOD_BASIC_CREATE_PART_CONTROL);
+		final MethodDeclaration methodBasicCreatePartControl = findMethod(astNode, METHOD_BASIC_CREATE_PART_CONTROL);
 		if (null == methodBasicCreatePartControl) {
 			return false;
 		}
 
-		CollectMethodDeclerationsVisitor collector = new CollectMethodDeclerationsVisitor();
+		final CollectMethodDeclerationsVisitor collector = new CollectMethodDeclerationsVisitor();
 		astNode.accept(collector);
 
-		SWTControlInstantiationVisitor controlCollector = new SWTControlInstantiationVisitor(controlBlacklist,
+		final SWTControlInstantiationVisitor controlCollector = new SWTControlInstantiationVisitor(controlBlacklist,
 				collector.getMethods());
 		methodBasicCreatePartControl.accept(controlCollector);
 

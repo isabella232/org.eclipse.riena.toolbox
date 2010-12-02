@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.CoreException;
  * 
  */
 public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
-	private List<AssemblyNode> assemblies;
+	private final List<AssemblyNode> assemblies;
 	private IFile pluginXml;
 	private String sourceFolder; // FIXME compute correct sourceFolder with JDT
 	private IProject project;
@@ -48,7 +48,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 
 	public final static String SRC_FOLDER = "src"; //$NON-NLS-1$
 
-	public BundleNode(AbstractAssemblyNode parent) {
+	public BundleNode(final AbstractAssemblyNode parent) {
 		super(parent);
 		assemblies = new ArrayList<AssemblyNode>();
 		registeredRcpViews = new HashSet<RCPView>();
@@ -67,7 +67,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 	 * @param dirty
 	 *            the dirty to set
 	 */
-	public void setDirty(boolean dirty) {
+	public void setDirty(final boolean dirty) {
 		this.dirty = dirty;
 	}
 
@@ -79,12 +79,12 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		return registeredRcpPerspectives;
 	}
 
-	public void setRegisteredRcpPerspectives(Set<RCPPerspective> registeredRcpPerspectives) {
+	public void setRegisteredRcpPerspectives(final Set<RCPPerspective> registeredRcpPerspectives) {
 		this.registeredRcpPerspectives = registeredRcpPerspectives;
 	}
 
-	public RCPView findRcpView(String viewId) {
-		for (RCPView view : registeredRcpViews) {
+	public RCPView findRcpView(final String viewId) {
+		for (final RCPView view : registeredRcpViews) {
 			if (viewId.equals(view.getId())) {
 				return view;
 			}
@@ -92,7 +92,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		return null;
 	}
 
-	public void setRegisteredRcpViews(Set<RCPView> registeredRcpViews) {
+	public void setRegisteredRcpViews(final Set<RCPView> registeredRcpViews) {
 		this.registeredRcpViews = registeredRcpViews;
 	}
 
@@ -106,7 +106,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		return project;
 	}
 
-	public void setProject(IProject project) {
+	public void setProject(final IProject project) {
 		this.project = project;
 	}
 
@@ -114,7 +114,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		return pluginXml;
 	}
 
-	public void setPluginXml(IFile pluginXml) {
+	public void setPluginXml(final IFile pluginXml) {
 		this.pluginXml = pluginXml;
 	}
 
@@ -122,7 +122,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 		return sourceFolder;
 	}
 
-	public void setSourceFolder(String sourceFolder) {
+	public void setSourceFolder(final String sourceFolder) {
 		this.sourceFolder = sourceFolder;
 	}
 
@@ -132,7 +132,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 	}
 
 	@Override
-	public boolean add(AssemblyNode assNode) {
+	public boolean add(final AssemblyNode assNode) {
 		return assemblies.add(assNode);
 	}
 
@@ -142,7 +142,7 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 				+ pluginXml + "]"; //$NON-NLS-1$
 	}
 
-	public boolean addAll(Collection<? extends AssemblyNode> c) {
+	public boolean addAll(final Collection<? extends AssemblyNode> c) {
 		return assemblies.addAll(c);
 	}
 
@@ -165,14 +165,14 @@ public class BundleNode extends AbstractAssemblyNode<AssemblyNode> {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BundleNode other = (BundleNode) obj;
+		final BundleNode other = (BundleNode) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

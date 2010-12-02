@@ -45,15 +45,15 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 	private IPluginXmlRenderer xmlRenderer;
 
 	private List<ResourceChangeListener> changeListener;
-	private Set<Long> receivedTimeStamps = new HashSet<Long>();
+	private final Set<Long> receivedTimeStamps = new HashSet<Long>();
 
 	public AssemblyDataProvider() {
 		changeListener = new ArrayList<ResourceChangeListener>();
 
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new IResourceChangeListener() {
-			public void resourceChanged(IResourceChangeEvent event) {
+			public void resourceChanged(final IResourceChangeEvent event) {
 				try {
-					PluginXmlVisitor pluginXmlVisitor = new PluginXmlVisitor(receivedTimeStamps);
+					final PluginXmlVisitor pluginXmlVisitor = new PluginXmlVisitor(receivedTimeStamps);
 					event.getDelta().accept(pluginXmlVisitor);
 
 					final IProject changedProject = pluginXmlVisitor.getChangedProject();
@@ -63,7 +63,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 						return;
 					}
 
-					for (ResourceChangeListener listener : changeListener) {
+					for (final ResourceChangeListener listener : changeListener) {
 						if (null != changedProject) {
 							listener.pluginXmlChanged(changedProject);
 						}
@@ -73,18 +73,18 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 						}
 					}
 
-				} catch (CoreException e) {
+				} catch (final CoreException e) {
 					e.printStackTrace();
 				}
 			}
 		}, IResourceChangeEvent.POST_CHANGE);
 	}
 
-	public boolean addResourceChangeListener(ResourceChangeListener e) {
+	public boolean addResourceChangeListener(final ResourceChangeListener e) {
 		return changeListener.add(e);
 	}
 
-	public boolean removeResourceChangeListener(ResourceChangeListener o) {
+	public boolean removeResourceChangeListener(final ResourceChangeListener o) {
 		return changeListener.remove(o);
 	}
 
@@ -92,21 +92,21 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 
 		private IProject changedProject;
 		private IProject addedProject;
-		private Set<Long> receivedTimeStamps;
+		private final Set<Long> receivedTimeStamps;
 
 		/**
 		 * @param receivedTimeStamps
 		 */
-		public PluginXmlVisitor(Set<Long> receivedTimeStamps) {
+		public PluginXmlVisitor(final Set<Long> receivedTimeStamps) {
 			super();
 			this.receivedTimeStamps = receivedTimeStamps;
 		}
 
-		public boolean visit(IResourceDelta delta) throws CoreException {
-			IResource res = delta.getResource();
+		public boolean visit(final IResourceDelta delta) throws CoreException {
+			final IResource res = delta.getResource();
 
 			if (res.getType() == IResource.FILE) {
-				Long currentTimestamp = res.getLocalTimeStamp();
+				final Long currentTimestamp = res.getLocalTimeStamp();
 				if (!receivedTimeStamps.contains(currentTimestamp)) {
 					receivedTimeStamps.add(currentTimestamp);
 					if (PLUGIN_XML.equals(res.getName())) {
@@ -118,7 +118,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 				}
 
 			} else if (res.getType() == IResource.PROJECT) {
-				IProject project = (IProject) res;
+				final IProject project = (IProject) res;
 				if (delta.getKind() == IResourceDelta.ADDED) {
 					addedProject = (IProject) res;
 					return false;
@@ -140,7 +140,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 		return xmlRenderer;
 	}
 
-	public void setXmlRenderer(IPluginXmlRenderer xmlRenderer) {
+	public void setXmlRenderer(final IPluginXmlRenderer xmlRenderer) {
 		this.xmlRenderer = xmlRenderer;
 	}
 
@@ -148,7 +148,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 		return xmlParser;
 	}
 
-	public void setXmlParser(IPluginXmlParser xmlParser) {
+	public void setXmlParser(final IPluginXmlParser xmlParser) {
 		this.xmlParser = xmlParser;
 	}
 
@@ -158,12 +158,12 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 	 * @param model
 	 * @return
 	 */
-	private List<BundleNode> findBundles(AssemblyModel model) {
-		List<BundleNode> bundles = new ArrayList<BundleNode>();
-		for (IProject proj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			IFile pluginXml = proj.getFile(PLUGIN_XML);
+	private List<BundleNode> findBundles(final AssemblyModel model) {
+		final List<BundleNode> bundles = new ArrayList<BundleNode>();
+		for (final IProject proj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			final IFile pluginXml = proj.getFile(PLUGIN_XML);
 			if (isJavaProject(proj)) {
-				BundleNode bundle = new BundleNode(model);
+				final BundleNode bundle = new BundleNode(model);
 				bundle.setName(proj.getName());
 				bundle.setProject(proj);
 				if (null != pluginXml && pluginXml.exists()) {
@@ -177,7 +177,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 		return bundles;
 	}
 
-	private boolean isJavaProject(IProject project) {
+	private boolean isJavaProject(final IProject project) {
 		try {
 			// ignore closed projects, otherwise an exception is thrown
 			if (!project.isAccessible()) {
@@ -186,17 +186,17 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 
 			//org.eclipse.jdt.core.javanature
 			return null != project.getNature("org.eclipse.pde.PluginNature"); //$NON-NLS-1$
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
-	public void saveData(AssemblyModel model) {
+	public void saveData(final AssemblyModel model) {
 		Assert.isNotNull(model);
 		Assert.isNotNull(xmlRenderer);
 
-		for (BundleNode bundle : model.getChildren()) {
+		for (final BundleNode bundle : model.getChildren()) {
 
 			if (!bundle.isDirty()) {
 				continue;
@@ -206,14 +206,14 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 			if (null == bundle.getPluginXml() || !bundle.getPluginXml().exists()) {
 				if (bundle.getChildren() != null && bundle.getChildren().size() != 0) {
 					// plugin.xml does not exist, assemblies exist
-					IFile pluginXml = bundle.getProject().getFile(PLUGIN_XML);
+					final IFile pluginXml = bundle.getProject().getFile(PLUGIN_XML);
 					try {
 						String dummy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"; //$NON-NLS-1$
 						dummy += "<?eclipse version=\"3.4\"?>"; //$NON-NLS-1$
 						dummy += "<plugin></plugin>\n"; //$NON-NLS-1$
 						pluginXml.create(new ByteArrayInputStream(dummy.getBytes()), true, null);
 						bundle.setPluginXml(pluginXml);
-					} catch (CoreException e) {
+					} catch (final CoreException e) {
 						e.printStackTrace();
 					}
 					xmlRenderer.saveDocument(bundle);
@@ -237,21 +237,21 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 	}
 
 	public AssemblyModel createData() {
-		AssemblyModel model = new AssemblyModel();
-		List<BundleNode> bundles = findBundles(model);
-		for (BundleNode bundle : bundles) {
-			IFile pluginXml = bundle.getPluginXml();
+		final AssemblyModel model = new AssemblyModel();
+		final List<BundleNode> bundles = findBundles(model);
+		for (final BundleNode bundle : bundles) {
+			final IFile pluginXml = bundle.getPluginXml();
 			if (null == pluginXml) {
 				continue;
 			}
 
-			Set<RCPView> rcpViews = xmlParser.getRcpViews(bundle);
+			final Set<RCPView> rcpViews = xmlParser.getRcpViews(bundle);
 			bundle.setRegisteredRcpViews(rcpViews);
 
-			Set<RCPPerspective> rcpPerspectivs = xmlParser.getRcpPerspectives(bundle);
+			final Set<RCPPerspective> rcpPerspectivs = xmlParser.getRcpPerspectives(bundle);
 			bundle.setRegisteredRcpPerspectives(rcpPerspectivs);
 
-			List<AssemblyNode> asses = xmlParser.parseDocument(bundle);
+			final List<AssemblyNode> asses = xmlParser.parseDocument(bundle);
 			model.addAllRcpViews(rcpViews);
 			model.addAllRcpPerspectives(rcpPerspectivs);
 			bundle.addAll(asses);

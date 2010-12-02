@@ -28,8 +28,8 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 	public static final String CONST_GENERATE_VIEW_PACKAGE_NAME = "Generate View packagename"; //$NON-NLS-1$
 	public static final String CONST_GENERATE_CONTROLLER_PACKAGE_NAME = "Generate Controller packagename"; //$NON-NLS-1$
 
-	private Group createGroup(String text) {
-		Group groupUIControls = new Group(getFieldEditorParent(), SWT.None);
+	private Group createGroup(final String text) {
+		final Group groupUIControls = new Group(getFieldEditorParent(), SWT.None);
 		groupUIControls.setText(text);
 		GridLayoutFactory.swtDefaults().numColumns(3).applyTo(groupUIControls);
 		GridDataFactory.fillDefaults().span(3, 1).align(SWT.FILL, SWT.FILL).applyTo(groupUIControls);
@@ -39,11 +39,11 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 	@Override
 	public void createFieldEditors() {
 
-		Group groupUIControls = createGroup("Custom UIControlsFactory");
+		final Group groupUIControls = createGroup("Custom UIControlsFactory");
 		addField(new StringFieldEditor(PreferenceConstants.CONST_CUSTOM_UI_CONTROLS_FACTORY, "&Classname",
 				groupUIControls));
 
-		Group groupGenerateClasses = createGroup("Generate configureRidgets");
+		final Group groupGenerateClasses = createGroup("Generate configureRidgets");
 		addField(new StringFieldEditor(PreferenceConstants.CONST_GENERATE_CONTROLLER_PACKAGE_NAME,
 				"Controller Packagename", groupGenerateClasses));
 
@@ -52,7 +52,7 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 
 		addField(new Blacklist(getFieldEditorParent()));
 
-		GridLayout gdl = (GridLayout) getFieldEditorParent().getLayout();
+		final GridLayout gdl = (GridLayout) getFieldEditorParent().getLayout();
 		gdl.marginBottom = 0;
 		gdl.marginTop = 0;
 		gdl.marginHeight = 0;
@@ -62,22 +62,22 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 		gdl.horizontalSpacing = 10;
 	}
 
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 	}
 
 	private class Blacklist extends ListEditor {
 		/**
 		 * @param groupBlacklist
 		 */
-		public Blacklist(Composite groupBlacklist) {
+		public Blacklist(final Composite groupBlacklist) {
 			super(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST, "configureRidgets Blacklist", groupBlacklist);
 		}
 
 		@Override
-		protected String createList(String[] items) {
-			StringBuilder bob = new StringBuilder();
+		protected String createList(final String[] items) {
+			final StringBuilder bob = new StringBuilder();
 			for (int i = 0; i < items.length; i++) {
-				String item = items[i];
+				final String item = items[i];
 				bob.append(item);
 				if (i < items.length - 1) {
 					bob.append(";");
@@ -88,7 +88,7 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 
 		@Override
 		protected String getNewInputObject() {
-			InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "",
+			final InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "",
 					"Enter a fullyqualified Classname", "", null);
 			if (dlg.open() == Window.OK) {
 				return dlg.getValue();
@@ -97,7 +97,7 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 		}
 
 		@Override
-		protected String[] parseString(String stringList) {
+		protected String[] parseString(final String stringList) {
 			return stringList.split(";");
 		}
 	}

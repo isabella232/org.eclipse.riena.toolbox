@@ -13,7 +13,6 @@ package org.eclipse.riena.toolbox.assemblyeditor.ui;
 import java.util.List;
 
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.riena.toolbox.Util;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -22,57 +21,58 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-
+import org.eclipse.riena.toolbox.Util;
 
 /**
- * A Textfield with a Button thath shows a Dialog to pick a Id from a given List of Strings like View-Ids.
- *
+ * A Textfield with a Button thath shows a Dialog to pick a Id from a given List
+ * of Strings like View-Ids.
+ * 
  */
-public class IdSelectorText extends TextButtonComposite{
+public class IdSelectorText extends TextButtonComposite {
 
 	private List<String> ids;
-	
+
 	/**
 	 * Sets the predefined value in the filter-textfield
 	 */
 	private String currentId;
-	
+
 	public IdSelectorText(final Composite parent, final Color background, final String title, final String message) {
 		super(parent, background);
-		
+
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				org.eclipse.core.runtime.Assert.isNotNull(ids); 
-				
-				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-				ElementListSelectionDialog dia = new ElementListSelectionDialog(shell, new LabelProvider());
-				
-				if (Util.isGiven(currentId)){
+			public void widgetSelected(final SelectionEvent e) {
+				org.eclipse.core.runtime.Assert.isNotNull(ids);
+
+				final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+				final ElementListSelectionDialog dia = new ElementListSelectionDialog(shell, new LabelProvider());
+
+				if (Util.isGiven(currentId)) {
 					dia.setFilter(currentId);
 				}
-				
+
 				dia.setTitle(title);
 				dia.setMessage(message);
 				dia.setElements(ids.toArray(new Object[ids.size()]));
 				dia.open();
-				Object[] result = dia.getResult();
-				
+				final Object[] result = dia.getResult();
+
 				if (null != result) {
-					for (Object obj : result) {
+					for (final Object obj : result) {
 						getText().setText(obj.toString());
 					}
 				}
 			}
-			
+
 		});
 	}
-	
-	public void setCurrentId(String currentId) {
+
+	public void setCurrentId(final String currentId) {
 		this.currentId = currentId;
 	}
 
-	public void setIds(List<String> viewIds) {
+	public void setIds(final List<String> viewIds) {
 		this.ids = viewIds;
 	}
 }

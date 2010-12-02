@@ -15,12 +15,12 @@ import java.util.List;
 
 /**
  * This class represents a ModuleGroup in the Riena-Navigation.
- *
+ * 
  */
 public class ModuleGroupNode extends AbstractTypedNode<ModuleNode> {
-	private List<ModuleNode> modules;
-	
-	public ModuleGroupNode(AbstractAssemblyNode parent) {
+	private final List<ModuleNode> modules;
+
+	public ModuleGroupNode(final AbstractAssemblyNode parent) {
 		super(parent);
 		modules = new ArrayList<ModuleNode>();
 	}
@@ -30,9 +30,8 @@ public class ModuleGroupNode extends AbstractTypedNode<ModuleNode> {
 		return modules;
 	}
 
-	
 	@Override
-	public boolean add(ModuleNode e) {
+	public boolean add(final ModuleNode e) {
 		return modules.add(e);
 	}
 

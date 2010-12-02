@@ -11,7 +11,7 @@ import org.eclipse.riena.toolbox.Activator;
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.CONST_CUSTOM_UI_CONTROLS_FACTORY, "");
 		store.setDefault(PreferenceConstants.CONST_GENERATE_CONTROLLER_PACKAGE_NAME, "controller");
 		store.setDefault(PreferenceConstants.CONST_GENERATE_VIEW_PACKAGE_NAME, "views");

@@ -8,16 +8,22 @@
  * Contributors:
  *    compeople AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.riena.toolbox.assemblyeditor.api;
+package org.eclipse.riena.toolbox.assemblyeditor.ui;
 
-import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
-import org.eclipse.riena.toolbox.assemblyeditor.model.RCPPerspective;
-import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
+import org.eclipse.swt.dnd.ByteArrayTransfer;
 
-public interface IPluginXmlRenderer {
-	void saveDocument(BundleNode bundle);
+/**
+ *
+ */
+public class ToolboxTransfer extends ByteArrayTransfer {
 
-	boolean registerView(BundleNode bundle, RCPView view);
+	@Override
+	protected int[] getTypeIds() {
+		return new int[] {};
+	}
 
-	boolean registerPerspective(BundleNode bundle, RCPPerspective perspective);
+	@Override
+	protected String[] getTypeNames() {
+		return new String[] { "FOO" };
+	}
 }

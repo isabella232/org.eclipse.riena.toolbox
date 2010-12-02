@@ -21,34 +21,33 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-
-public class ViewSelectorText extends TextButtonComposite{
+public class ViewSelectorText extends TextButtonComposite {
 
 	private List<String> viewIds;
-	
-	public ViewSelectorText(final Composite parent, Color background) {
+
+	public ViewSelectorText(final Composite parent, final Color background) {
 		super(parent, background);
-		
+
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				org.eclipse.core.runtime.Assert.isNotNull(viewIds); 
-				
-				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-				ElementListSelectionDialog dia = new ElementListSelectionDialog(shell, new LabelProvider());
+			public void widgetSelected(final SelectionEvent e) {
+				org.eclipse.core.runtime.Assert.isNotNull(viewIds);
+
+				final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+				final ElementListSelectionDialog dia = new ElementListSelectionDialog(shell, new LabelProvider());
 				dia.setTitle("View Selection");
 				dia.setMessage("Select a View (* = any string, ? = any char):");
 				dia.setElements(viewIds.toArray(new Object[viewIds.size()]));
 				dia.open();
-				Object[] result = dia.getResult();
-				
+				final Object[] result = dia.getResult();
+
 				if (null != result) {
-					for (Object obj : result) {
+					for (final Object obj : result) {
 						getText().setText(obj.toString());
 					}
 				}
 			}
-			
+
 		});
 	}
 
@@ -56,9 +55,8 @@ public class ViewSelectorText extends TextButtonComposite{
 		return viewIds;
 	}
 
-	public void setViewIds(List<String> viewIds) {
+	public void setViewIds(final List<String> viewIds) {
 		this.viewIds = viewIds;
 	}
-	
-	
+
 }

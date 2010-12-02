@@ -16,12 +16,12 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-public class CollectMethodDeclerationsVisitor extends ASTVisitor{
-	
-	private List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
-	
+public class CollectMethodDeclerationsVisitor extends ASTVisitor {
+
+	private final List<MethodDeclaration> methods = new ArrayList<MethodDeclaration>();
+
 	@Override
-	public boolean visit(MethodDeclaration node) {
+	public boolean visit(final MethodDeclaration node) {
 		methods.add(node);
 		return true;
 	}

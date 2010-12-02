@@ -37,9 +37,9 @@ public class UIControlVisitor extends ASTVisitor {
 
 	private static final String CLASS_UI_CONTROLS_FACTORY = "UIControlsFactory"; //$NON-NLS-1$
 	private static final String METHOD_ADD_UI_CONTROL = "addUIControl"; //$NON-NLS-1$
-	private List<SwtControl> controls = new ArrayList<SwtControl>();
+	private final List<SwtControl> controls = new ArrayList<SwtControl>();
 	private final List<MethodDeclaration> methods;
-	private List<String> uiControlFactoryNames = new ArrayList<String>();
+	private final List<String> uiControlFactoryNames = new ArrayList<String>();
 
 	/**
 	 * List of controls that have to be ignored, when searching for SWT-Controls
@@ -47,25 +47,25 @@ public class UIControlVisitor extends ASTVisitor {
 	 */
 	private List<String> controlBlacklist = new ArrayList<String>();
 
-	public UIControlVisitor(List<MethodDeclaration> methods) {
+	public UIControlVisitor(final List<MethodDeclaration> methods) {
 		this.methods = methods;
 		this.uiControlFactoryNames.add(CLASS_UI_CONTROLS_FACTORY);
 
-		String customUIControlsFactory = Activator.getDefault().getPreferenceStore()
+		final String customUIControlsFactory = Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.CONST_CUSTOM_UI_CONTROLS_FACTORY);
 		if (Util.isGiven(customUIControlsFactory)) {
 			uiControlFactoryNames.add(customUIControlsFactory);
 		}
 
-		String blackListString = Activator.getDefault().getPreferenceStore()
+		final String blackListString = Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST);
 		if (Util.isGiven(blackListString)) {
 			controlBlacklist = Arrays.asList(blackListString.split(";"));
 		}
 	}
 
-	private MethodDeclaration getMethodDeclaration(MethodInvocation invocation) {
-		for (MethodDeclaration decl : methods) {
+	private MethodDeclaration getMethodDeclaration(final MethodInvocation invocation) {
+		for (final MethodDeclaration decl : methods) {
 			if (decl.getName().getFullyQualifiedName().equals(invocation.getName().getFullyQualifiedName())) {
 				return decl;
 			}
@@ -73,56 +73,56 @@ public class UIControlVisitor extends ASTVisitor {
 		return null;
 	}
 
-	private Class<?> getRidgetInterface(String swtControlClassName) {
-		SwtControlRidgetMapper mapper = SwtControlRidgetMapper.getInstance();
+	private Class<?> getRidgetInterface(final String swtControlClassName) {
+		final SwtControlRidgetMapper mapper = SwtControlRidgetMapper.getInstance();
 
 		try {
-			Class<?> clazz = Activator.getDefault().getBundle().loadClass(swtControlClassName);
-			Class<? extends IRidget> ridget = mapper.getRidgetClass(clazz);
-			Class<?> ridgetInterface = mapper.getPrimaryRidgetInterface(ridget);
+			final Class<?> clazz = Activator.getDefault().getBundle().loadClass(swtControlClassName);
+			final Class<? extends IRidget> ridget = mapper.getRidgetClass(clazz);
+			final Class<?> ridgetInterface = mapper.getPrimaryRidgetInterface(ridget);
 			if (null != ridgetInterface) {
 				return ridgetInterface;
 			}
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (BindingException e) {
+		} catch (final BindingException e) {
 			return null;
 		}
 		return IRidget.class;
 	}
 
 	@Override
-	public boolean visit(MethodInvocation methodCall) {
+	public boolean visit(final MethodInvocation methodCall) {
 
-		MethodDeclaration decla = getMethodDeclaration(methodCall);
+		final MethodDeclaration decla = getMethodDeclaration(methodCall);
 
 		if (null != decla) {
 			decla.getBody().accept(this);
 		}
 
-		IMethodBinding methodBinding = methodCall.resolveMethodBinding();
-		String className = methodBinding.getDeclaringClass().getName();
-		String superClassName = methodBinding.getDeclaringClass().getSuperclass().getName();
-		Expression exp = methodCall.getExpression();
+		final IMethodBinding methodBinding = methodCall.resolveMethodBinding();
+		final String className = methodBinding.getDeclaringClass().getName();
+		final String superClassName = methodBinding.getDeclaringClass().getSuperclass().getName();
+		final Expression exp = methodCall.getExpression();
 		if (uiControlFactoryNames.contains(className) || uiControlFactoryNames.contains(superClassName)) {
-			List<?> args = methodCall.arguments();
+			final List<?> args = methodCall.arguments();
 
 			if (args.isEmpty()) {
 				System.err.println("call to UIControlsFactory without arguments: " + methodCall);
 				return true;
 			}
 
-			Object lastArgument = args.get(args.size() - 1);
+			final Object lastArgument = args.get(args.size() - 1);
 
-			IMethodBinding typeBind = methodCall.resolveMethodBinding();
+			final IMethodBinding typeBind = methodCall.resolveMethodBinding();
 			// TODO annotate bindingId in UIControlsFactory to detect the correct parameter
 
 			if (lastArgument instanceof SimpleName) {
-				SimpleName sm = (SimpleName) lastArgument;
-				String value = getConstantStringFromSimpleName(sm);
+				final SimpleName sm = (SimpleName) lastArgument;
+				final String value = getConstantStringFromSimpleName(sm);
 				if (null != value) {
-					String swtControlClassName = typeBind.getReturnType().getQualifiedName();
-					Class<?> ridgetClass = getRidgetInterface(swtControlClassName);
+					final String swtControlClassName = typeBind.getReturnType().getQualifiedName();
+					final Class<?> ridgetClass = getRidgetInterface(swtControlClassName);
 					if (null != ridgetClass) {
 						controls.add(new SwtControl(swtControlClassName, value, ridgetClass));
 					}
@@ -131,11 +131,11 @@ public class UIControlVisitor extends ASTVisitor {
 				}
 			} else if (lastArgument instanceof org.eclipse.jdt.core.dom.QualifiedName) {
 				// TODO use the constant in the Controller, instead of extracting the value
-				org.eclipse.jdt.core.dom.QualifiedName sm = (org.eclipse.jdt.core.dom.QualifiedName) lastArgument;
-				String value = getConstantStringFromSimpleName(sm.getName());
+				final org.eclipse.jdt.core.dom.QualifiedName sm = (org.eclipse.jdt.core.dom.QualifiedName) lastArgument;
+				final String value = getConstantStringFromSimpleName(sm.getName());
 				if (null != value) {
-					String swtControlClassName = typeBind.getReturnType().getQualifiedName();
-					Class<?> ridgetClass = getRidgetInterface(swtControlClassName);
+					final String swtControlClassName = typeBind.getReturnType().getQualifiedName();
+					final Class<?> ridgetClass = getRidgetInterface(swtControlClassName);
 					if (null != ridgetClass) {
 						controls.add(new SwtControl(swtControlClassName, value, ridgetClass));
 					}
@@ -143,10 +143,10 @@ public class UIControlVisitor extends ASTVisitor {
 					System.err.println("Parameter is not a constant " + sm);
 				}
 			} else if (lastArgument instanceof StringLiteral) {
-				StringLiteral sm = (StringLiteral) lastArgument;
+				final StringLiteral sm = (StringLiteral) lastArgument;
 
-				String swtControlClassName = typeBind.getReturnType().getQualifiedName();
-				Class<?> ridgetClass = getRidgetInterface(swtControlClassName);
+				final String swtControlClassName = typeBind.getReturnType().getQualifiedName();
+				final Class<?> ridgetClass = getRidgetInterface(swtControlClassName);
 				if (null != ridgetClass) {
 					controls.add(new SwtControl(swtControlClassName, sm.getLiteralValue(), ridgetClass));
 				}
@@ -154,22 +154,22 @@ public class UIControlVisitor extends ASTVisitor {
 				System.err.println("unknown arg type " + lastArgument);
 			}
 		} else if (METHOD_ADD_UI_CONTROL.equals(methodCall.getName().getIdentifier())) {
-			List<?> args = methodCall.arguments();
+			final List<?> args = methodCall.arguments();
 
 			if (args.size() < 2) {
 				System.err.println("call to addUIControl without arguments: " + methodCall);
 				return true;
 			}
 
-			SimpleName swtControl = (SimpleName) args.get(0);
+			final SimpleName swtControl = (SimpleName) args.get(0);
 
-			IBinding swtControlBinding = swtControl.resolveBinding();
+			final IBinding swtControlBinding = swtControl.resolveBinding();
 
 			if (swtControlBinding instanceof IVariableBinding) {
-				IVariableBinding decl = ((IVariableBinding) swtControlBinding).getVariableDeclaration();
-				ITypeBinding type = decl.getType();
-				StringLiteral ridgetId = (StringLiteral) args.get(1);
-				String swtControlClassName = type.getQualifiedName();
+				final IVariableBinding decl = ((IVariableBinding) swtControlBinding).getVariableDeclaration();
+				final ITypeBinding type = decl.getType();
+				final StringLiteral ridgetId = (StringLiteral) args.get(1);
+				final String swtControlClassName = type.getQualifiedName();
 				controls.add(new SwtControl(swtControlClassName, ridgetId.getLiteralValue(),
 						getRidgetInterface(swtControlClassName)));
 			}
@@ -184,19 +184,19 @@ public class UIControlVisitor extends ASTVisitor {
 		return true;
 	}
 
-	private String getConstantStringFromSimpleName(SimpleName simpleName) {
-		IBinding swtControlBinding = simpleName.resolveBinding();
+	private String getConstantStringFromSimpleName(final SimpleName simpleName) {
+		final IBinding swtControlBinding = simpleName.resolveBinding();
 		if (swtControlBinding instanceof IVariableBinding) {
-			IVariableBinding decl = ((IVariableBinding) swtControlBinding).getVariableDeclaration();
-			Object contValue = decl.getConstantValue();
+			final IVariableBinding decl = ((IVariableBinding) swtControlBinding).getVariableDeclaration();
+			final Object contValue = decl.getConstantValue();
 			return null != contValue ? contValue.toString() : null;
 		}
 		return null;
 	}
 
 	public List<SwtControl> getControls() {
-		List<SwtControl> out = new ArrayList<SwtControl>();
-		for (SwtControl control : controls) {
+		final List<SwtControl> out = new ArrayList<SwtControl>();
+		for (final SwtControl control : controls) {
 			if (!controlBlacklist.contains(control.getSwtControlClassName())) {
 				out.add(control);
 			} else {

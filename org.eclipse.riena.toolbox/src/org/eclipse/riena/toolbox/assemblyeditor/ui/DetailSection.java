@@ -42,22 +42,22 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.composites.SubModuleComposite
  * 
  */
 public class DetailSection extends Composite {
-	private StackLayout stackLayout;
-	private Map<Class<?>, AbstractDetailComposite> compositeMap;
-	private Composite emptyComposite;
+	private final StackLayout stackLayout;
+	private final Map<Class<?>, AbstractDetailComposite> compositeMap;
+	private final Composite emptyComposite;
 
-	private List<IDirtyListener> dirtyListener;
+	private final List<IDirtyListener> dirtyListener;
 
-	public boolean addDirtyListener(IDirtyListener e) {
+	public boolean addDirtyListener(final IDirtyListener e) {
 		return dirtyListener.add(e);
 	}
 
-	public boolean removeDirtyListener(IDirtyListener e) {
+	public boolean removeDirtyListener(final IDirtyListener e) {
 		return dirtyListener.remove(e);
 	}
 
-	private void fireDirtyChanged(AbstractAssemblyNode abstractAssemblyNode, boolean isDirty) {
-		for (IDirtyListener l : dirtyListener) {
+	private void fireDirtyChanged(final AbstractAssemblyNode abstractAssemblyNode, final boolean isDirty) {
+		for (final IDirtyListener l : dirtyListener) {
 			l.dirtyStateChanged(abstractAssemblyNode, isDirty);
 		}
 	}
@@ -70,7 +70,7 @@ public class DetailSection extends Composite {
 		return false;
 	}
 
-	public DetailSection(Composite parent) {
+	public DetailSection(final Composite parent) {
 		super(parent, SWT.None);
 
 		dirtyListener = new ArrayList<IDirtyListener>();
@@ -81,11 +81,11 @@ public class DetailSection extends Composite {
 			}
 
 			@Override
-			public void bind(AbstractAssemblyNode node) {
+			public void bind(final AbstractAssemblyNode node) {
 			}
 
 			@Override
-			protected void createWorkarea(Composite parent) {
+			protected void createWorkarea(final Composite parent) {
 			}
 		};
 
@@ -99,7 +99,7 @@ public class DetailSection extends Composite {
 
 		for (final AbstractDetailComposite comp : compositeMap.values()) {
 			comp.addDirtyListener(new IDirtyListener() {
-				public void dirtyStateChanged(AbstractAssemblyNode node, boolean isDirty) {
+				public void dirtyStateChanged(final AbstractAssemblyNode node, final boolean isDirty) {
 					fireDirtyChanged(comp.getNode(), isDirty);
 				}
 			});
@@ -118,7 +118,7 @@ public class DetailSection extends Composite {
 	 */
 	public AbstractDetailComposite unbindCurrentComposite() {
 		if (null != stackLayout.topControl) {
-			AbstractDetailComposite comp = (AbstractDetailComposite) stackLayout.topControl;
+			final AbstractDetailComposite comp = (AbstractDetailComposite) stackLayout.topControl;
 			comp.unbind();
 			return comp;
 		}
@@ -130,7 +130,7 @@ public class DetailSection extends Composite {
 	 * 
 	 * @param node
 	 */
-	public void update(AbstractAssemblyNode node) {
+	public void update(final AbstractAssemblyNode node) {
 		Assert.isNotNull(node);
 
 		if (null != stackLayout.topControl) {
@@ -138,7 +138,7 @@ public class DetailSection extends Composite {
 		}
 	}
 
-	public void showDetails(AbstractAssemblyNode node) {
+	public void showDetails(final AbstractAssemblyNode node) {
 
 		if (null != stackLayout.topControl) {
 			((AbstractDetailComposite) stackLayout.topControl).unbind();
@@ -150,7 +150,7 @@ public class DetailSection extends Composite {
 			return;
 		}
 
-		AbstractDetailComposite detailComposite = compositeMap.get(node.getClass());
+		final AbstractDetailComposite detailComposite = compositeMap.get(node.getClass());
 
 		if (null != detailComposite) {
 			detailComposite.bind(node);

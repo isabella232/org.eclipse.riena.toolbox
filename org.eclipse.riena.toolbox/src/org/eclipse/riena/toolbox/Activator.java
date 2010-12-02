@@ -10,7 +10,11 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox;
 
+import org.osgi.framework.BundleContext;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import org.eclipse.riena.toolbox.assemblyeditor.AssemblyDataProvider;
 import org.eclipse.riena.toolbox.assemblyeditor.CodeGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.ModelService;
@@ -18,9 +22,6 @@ import org.eclipse.riena.toolbox.assemblyeditor.NodeFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.PluginXmlParser;
 import org.eclipse.riena.toolbox.assemblyeditor.PluginXmlRenderer;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
-
 
 /**
  * The activator class controls the plug-in life cycle
@@ -42,7 +43,7 @@ public class Activator extends AbstractUIPlugin {
 	private NodeFactory nodeFactory;
 
 	private CodeGenerator codeGenerator;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -51,12 +52,16 @@ public class Activator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
 	 */
-	public void start(BundleContext context) throws Exception {
+	@Override
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
+
 		dataProvider = new AssemblyDataProvider();
 		dataProvider.setXmlParser(new PluginXmlParser());
 		dataProvider.setXmlRenderer(new PluginXmlRenderer());
@@ -74,7 +79,7 @@ public class Activator extends AbstractUIPlugin {
 		return assemblyModel;
 	}
 
-	public void setAssemblyModel(AssemblyModel assemblyModel) {
+	public void setAssemblyModel(final AssemblyModel assemblyModel) {
 		this.assemblyModel = assemblyModel;
 	}
 
@@ -92,16 +97,20 @@ public class Activator extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
 	 */
-	public void stop(BundleContext context) throws Exception {
+	@Override
+	public void stop(final BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
 	}
 
 	/**
 	 * Returns the shared instance
-	 *
+	 * 
 	 * @return the shared instance
 	 */
 	public static Activator getDefault() {
@@ -109,13 +118,14 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given
-	 * plug-in relative path
-	 *
-	 * @param path the path
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path
+	 * 
+	 * @param path
+	 *            the path
 	 * @return the image descriptor
 	 */
-	public static ImageDescriptor getImageDescriptor(String path) {
+	public static ImageDescriptor getImageDescriptor(final String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 }

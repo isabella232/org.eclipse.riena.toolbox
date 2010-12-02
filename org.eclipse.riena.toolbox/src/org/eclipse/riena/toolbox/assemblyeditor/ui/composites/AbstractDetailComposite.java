@@ -41,12 +41,12 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.ViewSelectorText;
 public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> extends Composite {
 	protected T node;
 	protected Color workareaBackground;
-	private Color headerBackground;
-	private DirtyChecker dirtyChecker;
-	private List<IDirtyListener> dirtyListener;
-	private Composite cmpWorkarea;
+	private final Color headerBackground;
+	private final DirtyChecker dirtyChecker;
+	private final List<IDirtyListener> dirtyListener;
+	private final Composite cmpWorkarea;
 
-	public AbstractDetailComposite(Composite parent, String headerImageLeft, String headerImageRight) {
+	public AbstractDetailComposite(final Composite parent, final String headerImageLeft, final String headerImageRight) {
 		super(parent, SWT.None);
 
 		dirtyListener = new ArrayList<IDirtyListener>();
@@ -57,7 +57,7 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 
 		GridLayoutFactory.fillDefaults().numColumns(1).applyTo(this);
 
-		Composite cmpHeader = new Composite(this, SWT.None);
+		final Composite cmpHeader = new Composite(this, SWT.None);
 		GridDataFactory.fillDefaults().hint(SWT.DEFAULT, 95).grab(true, false).applyTo(cmpHeader);
 		createHeader(cmpHeader, headerImageLeft, headerImageRight);
 
@@ -76,9 +76,9 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 	}
 
 	public boolean isValid() {
-		for (Control cont : cmpWorkarea.getChildren()) {
+		for (final Control cont : cmpWorkarea.getChildren()) {
 			if (cont instanceof VerifyTypeIdText) {
-				VerifyTypeIdText verifier = (VerifyTypeIdText) cont;
+				final VerifyTypeIdText verifier = (VerifyTypeIdText) cont;
 				if (!verifier.isValid()) {
 					return false;
 				}
@@ -87,38 +87,38 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		return true;
 	}
 
-	public boolean addDirtyListener(IDirtyListener e) {
+	public boolean addDirtyListener(final IDirtyListener e) {
 		return dirtyListener.add(e);
 	}
 
-	public boolean removeDirtyListener(IDirtyListener e) {
+	public boolean removeDirtyListener(final IDirtyListener e) {
 		return dirtyListener.remove(e);
 	}
 
-	private void fireDirtyChanged(boolean isDirty) {
-		for (IDirtyListener l : dirtyListener) {
+	private void fireDirtyChanged(final boolean isDirty) {
+		for (final IDirtyListener l : dirtyListener) {
 			l.dirtyStateChanged(null, isDirty);
 		}
 	}
 
 	private class DirtyChecker implements SelectionListener, KeyListener {
-		public void keyPressed(KeyEvent e) {
+		public void keyPressed(final KeyEvent e) {
 			fireDirtyChanged(true);
 		}
 
-		public void keyReleased(KeyEvent e) {
+		public void keyReleased(final KeyEvent e) {
 		}
 
-		public void widgetDefaultSelected(SelectionEvent e) {
+		public void widgetDefaultSelected(final SelectionEvent e) {
 		}
 
-		public void widgetSelected(SelectionEvent e) {
+		public void widgetSelected(final SelectionEvent e) {
 			fireDirtyChanged(true);
 		}
 	}
 
-	private void addModifyListener(Composite parent) {
-		for (Control child : parent.getChildren()) {
+	private void addModifyListener(final Composite parent) {
+		for (final Control child : parent.getChildren()) {
 			if (child instanceof Text) {
 				((Text) child).addKeyListener(dirtyChecker);
 			} else if (child instanceof Button) {
@@ -129,11 +129,11 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		}
 	}
 
-	private void createHeader(Composite parent, String headerImageLeft, String headerImageRight) {
+	private void createHeader(final Composite parent, final String headerImageLeft, final String headerImageRight) {
 		parent.setBackground(headerBackground);
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(parent);
 
-		Label lblImageLeft = UIControlsFactory.createLabel(parent, ""); //$NON-NLS-1$
+		final Label lblImageLeft = UIControlsFactory.createLabel(parent, ""); //$NON-NLS-1$
 
 		ImageDescriptor desc = null;
 		if (headerImageLeft != null && headerImageLeft.length() > 0) {
@@ -145,7 +145,7 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 
 		GridDataFactory.swtDefaults().indent(5, 5).grab(false, false).align(SWT.LEFT, SWT.CENTER).applyTo(lblImageLeft);
 
-		Label lblImageRight = UIControlsFactory.createLabel(parent, ""); //$NON-NLS-1$
+		final Label lblImageRight = UIControlsFactory.createLabel(parent, ""); //$NON-NLS-1$
 
 		ImageDescriptor desc2 = null;
 		if (headerImageRight != null && headerImageRight.length() > 0) {
@@ -159,7 +159,7 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 	}
 
 	private class Separator extends Canvas {
-		public Separator(Composite parent) {
+		public Separator(final Composite parent) {
 			super(parent, SWT.None);
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 			GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.END).hint(2000, 1).grab(true, false)
@@ -180,75 +180,75 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 
 	public abstract void unbind();
 
-	protected VerifyTypeIdText createLabeledVerifyText(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected VerifyTypeIdText createLabeledVerifyText(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
-		VerifyTypeIdText text = UIControlsFactory.createCheckTypeIdText(parent);
+		final VerifyTypeIdText text = UIControlsFactory.createCheckTypeIdText(parent);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		return text;
 	}
 
-	protected Text createLabeledText(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected Text createLabeledText(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
-		Text text = UIControlsFactory.createText(parent);
+		final Text text = UIControlsFactory.createText(parent);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		return text;
 	}
 
-	protected TextButtonComposite createLabeledBrowseableText(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected TextButtonComposite createLabeledBrowseableText(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
 
-		TextButtonComposite cmpControl = new TextButtonComposite(parent, workareaBackground);
+		final TextButtonComposite cmpControl = new TextButtonComposite(parent, workareaBackground);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpControl);
 		return cmpControl;
 	}
 
-	protected TextButtonComposite createLinkedBrowseableText(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected TextButtonComposite createLinkedBrowseableText(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
 
-		TextButtonComposite cmpControl = new TextButtonComposite(parent, workareaBackground);
+		final TextButtonComposite cmpControl = new TextButtonComposite(parent, workareaBackground);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpControl);
 		return cmpControl;
 	}
 
-	protected IconSelectorText createLabeledIconSelector(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected IconSelectorText createLabeledIconSelector(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
 
-		IconSelectorText cmpControl = new IconSelectorText(parent, workareaBackground);
+		final IconSelectorText cmpControl = new IconSelectorText(parent, workareaBackground);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpControl);
 		return cmpControl;
 	}
 
-	protected ViewSelectorText createLabeledViewSelector(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected ViewSelectorText createLabeledViewSelector(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
 
-		ViewSelectorText cmpControl = new ViewSelectorText(parent, workareaBackground);
+		final ViewSelectorText cmpControl = new ViewSelectorText(parent, workareaBackground);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpControl);
 		return cmpControl;
 	}
 
-	protected Button createLabeledCheckbox(Composite parent, String labelText) {
-		Label lbl = UIControlsFactory.createLabel(parent, labelText);
+	protected Button createLabeledCheckbox(final Composite parent, final String labelText) {
+		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
-		Button butt = UIControlsFactory.createCheckbox(parent);
+		final Button butt = UIControlsFactory.createCheckbox(parent);
 		butt.setBackground(workareaBackground);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(butt);
 		return butt;
 	}
 
-	protected String getTextSave(Object in) {
+	protected String getTextSave(final Object in) {
 		if (null == in) {
 			return ""; //$NON-NLS-1$
 		}
