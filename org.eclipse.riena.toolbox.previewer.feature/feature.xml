@@ -24,13 +24,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.riena.toolbox.previewer.lnf"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.riena.ui.swt"
          download-size="0"
          install-size="0"
@@ -101,7 +94,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.riena.ui.swt.rcp"
+         id="org.eclipse.riena.toolbox.previewer.customizer"
          download-size="0"
          install-size="0"
          version="0.0.0"
