@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="previewCustomizer" name="previewCustomizer" schema="schema/previewCustomizer.exsd"/>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+         <command
+               commandId="org.eclipse.riena.toolbox.previewe.rcpview.command"
+               label="Preview"
+               style="push">
+            <visibleWhen>
+               <with
+                     variable="activeMenuSelection">
+                     <count
+                           value="1">
+                     </count>
+                     
+                   <iterate ifEmpty="false" operator="and">
+                    <and>
+                        <test forcePluginActivation="true" property="org.eclipse.riena.toolbox.previewer.isPreviewable"/>
+                        <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+                    </and>
+                </iterate> 
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.riena.toolbox.previewer.handler.PreviewPackageExplorerSelectionHandler"
+            id="org.eclipse.riena.toolbox.previewe.rcpview.command"
+            name="Preview">
+      </command>
+      <command
+            defaultHandler="org.eclipse.riena.toolbox.previewer.handler.PreviewActiveEditorHandler"
+            id="org.eclipse.riena.toolbox.previewer.previewActiveEditor.command"
+            name="Preview Active Editor">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.eclipse.riena.toolbox.previewer.ui.Preview"
+            id="org.eclipse.riena.toolbox.previewer.ui.Preview"
+            name="org.eclipse.riena.toolbox.previewer.ui.Preview"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.riena.toolbox.previewer.previewActiveEditor.command"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+P">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.eclipse.riena.toolbox.previewer.handler.CompilationUnitPropertyTester"
+            id="org.eclipse.riena.toolbox.previewer.compilationunit.propertyTester"
+            namespace="org.eclipse.riena.toolbox.previewer"
+            properties="isPreviewable"
+            type="org.eclipse.jdt.core.ICompilationUnit">
+      </propertyTester>
+   </extension>
+   <!--<extension
+         point="org.eclipse.ui.editors.templates">
+      <contextType
+            class="org.eclipse.jface.text.templates.TemplateContextType"
+            id="org.eclipse.riena.contexttype"
+            name="Riena"
+            registryId="org.eclipse.jdt.ui.CompilationUnitEditor"/>
+      <template
+            autoinsert="true"
+            contextTypeId="java"
+            id="org.eclipse.riena.toolbox.previewer.template2"
+            name="logger">
+         <pattern>
+            Logger.getLogger();
+         </pattern>
+      </template>
+</extension>-->
+</plugin>
