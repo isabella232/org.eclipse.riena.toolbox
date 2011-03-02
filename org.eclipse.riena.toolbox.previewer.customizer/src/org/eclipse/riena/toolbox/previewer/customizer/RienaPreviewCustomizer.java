@@ -1,21 +1,13 @@
 package org.eclipse.riena.toolbox.previewer.customizer;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.State;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.riena.toolbox.previewer.IPreviewCustomizer;
 import org.eclipse.riena.toolbox.previewer.customizer.preferences.PreferenceConstants;
-import org.eclipse.riena.toolbox.previewer.customizer.preferences.PreviewCustomizerPreferencePage;
+import org.eclipse.riena.ui.swt.lnf.LnFUpdater;
 import org.eclipse.riena.ui.swt.lnf.LnfManager;
 import org.eclipse.riena.ui.swt.lnf.rienadefault.RienaDefaultLnf;
 import org.eclipse.riena.ui.swt.utils.SWTControlFinder;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.handlers.RegistryToggleState;
-import org.eclipse.ui.internal.commands.CommandService;
 
 public class RienaPreviewCustomizer implements IPreviewCustomizer {
 
@@ -64,17 +56,28 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 
 	public void afterCreation(Composite parent) {
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_RIDGET_IDS)){
-			System.out.println("RienaPreviewCustomizer.afterCreation() show RidgetIds is disabled");
 			return;
 		}
 		
+		
+		LnFUpdater up =  LnFUpdater.getInstance();
+		up.updateUIControls(parent, true);
 		
 		SWTControlFinder finder = new SWTControlFinder(parent) {
 			@Override
 			public void handleBoundControl(Control control, String bindingProperty) {
 				control.setToolTipText(String.format("RidgetId: '%s'", bindingProperty));
+				control.redraw();
+			}
+			
+			@Override
+			public void handleControl(Control control) {
+				control.redraw();
 			}
 		};
 		finder.run();
+		
+		
+		
 	}
 }

@@ -193,7 +193,7 @@ public class Preview extends ViewPart {
 
 				}
 			} catch (final CoreException e) {
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 

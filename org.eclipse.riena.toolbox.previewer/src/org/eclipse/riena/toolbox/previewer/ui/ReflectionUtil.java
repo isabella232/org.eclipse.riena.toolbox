@@ -12,26 +12,24 @@ import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public final class ReflectionUtil {
 
-	
 	/**
 	 * @param viewPart
 	 * @param parent
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	public static boolean invokeMethod(String methodName, Object viewPart,
-			Composite parent) {
-		for (Method method : viewPart.getClass().getMethods()) {
+	public static boolean invokeMethod(final String methodName, final Object viewPart, final Composite parent) {
+		for (final Method method : viewPart.getClass().getMethods()) {
 			if (methodName.equals(method.getName())) {
 				method.setAccessible(true);
 				try {
 					method.invoke(viewPart, parent);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+				} catch (final IllegalArgumentException e) {
+					throw new RuntimeException(e);
+				} catch (final IllegalAccessException e) {
+					throw new RuntimeException(e);
+				} catch (final InvocationTargetException e) {
+					throw new RuntimeException(e);
 				}
 				return true;
 			}
@@ -39,14 +37,12 @@ public final class ReflectionUtil {
 		return false;
 	}
 
-	public static Object newInstance(Class<?> type, Composite parent) {
-		for (Constructor<?> constructor : type.getConstructors()) {
-			if (Arrays.equals(new Class[] { Composite.class, Integer.TYPE },
-					constructor.getParameterTypes())) {
+	public static Object newInstance(final Class<?> type, final Composite parent) {
+		for (final Constructor<?> constructor : type.getConstructors()) {
+			if (Arrays.equals(new Class[] { Composite.class, Integer.TYPE }, constructor.getParameterTypes())) {
 				constructor.setAccessible(true);
 				return callConstructor(constructor, parent, SWT.None);
-			} else if (Arrays.equals(new Class[] { Composite.class },
-					constructor.getParameterTypes())) {
+			} else if (Arrays.equals(new Class[] { Composite.class }, constructor.getParameterTypes())) {
 				constructor.setAccessible(true);
 				return callConstructor(constructor, parent);
 			}
@@ -57,19 +53,19 @@ public final class ReflectionUtil {
 	/**
 	 * @param parent
 	 * @param constructor
-	 * @return 
+	 * @return
 	 */
-	public static Object callConstructor(Constructor<?> constructor, Object... params) {
+	public static Object callConstructor(final Constructor<?> constructor, final Object... params) {
 		try {
 			constructor.setAccessible(true);
 			return constructor.newInstance(params);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			throw new RuntimeException(e);
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -77,27 +73,22 @@ public final class ReflectionUtil {
 	/**
 	 * @param viewPart
 	 */
-	public static Object loadClass(ViewPartInfo viewPart) {
+	public static Object loadClass(final ViewPartInfo viewPart) {
 		try {
 			return viewPart.getType().newInstance();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (final IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (final SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (final InstantiationException e) {
+			throw new RuntimeException(e);
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
-	
+
 	private ReflectionUtil() {
-		// TODO Auto-generated constructor stub
+		// private constructor
 	}
 
 }
