@@ -13,6 +13,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.LNF_CLASS_NAME, "org.eclipse.riena.ui.swt.lnf.rienadefault.RienaDefaultLnf");
+		store.setDefault(PreferenceConstants.SHOW_RIDGET_IDS, true);
 	}
 
 }

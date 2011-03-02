@@ -19,6 +19,7 @@ public class PreviewCustomizerPreferencePage
 
 	public void createFieldEditors() {
 		addField(new StringFieldEditor(PreferenceConstants.LNF_CLASS_NAME, "Look and Feel Classname", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_RIDGET_IDS, "Show Ridget Ids as Tooltip", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
