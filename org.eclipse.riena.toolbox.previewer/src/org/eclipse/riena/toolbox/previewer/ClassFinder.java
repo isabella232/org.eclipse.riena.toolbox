@@ -16,12 +16,13 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.riena.toolbox.internal.previewer.Activator;
-import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+
+import org.eclipse.riena.toolbox.internal.previewer.Activator;
+import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public class ClassFinder {
 

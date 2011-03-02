@@ -5,9 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
+import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public final class ReflectionUtil {
 

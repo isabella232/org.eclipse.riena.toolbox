@@ -2,8 +2,9 @@ package org.eclipse.riena.toolbox.internal.previewer;
 
 import java.beans.Beans;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
  * The activator class controls the plug-in life cycle

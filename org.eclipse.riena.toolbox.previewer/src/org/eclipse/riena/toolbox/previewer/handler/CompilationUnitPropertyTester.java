@@ -2,10 +2,11 @@ package org.eclipse.riena.toolbox.previewer.handler;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.riena.toolbox.previewer.ClassFinder;
-import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+
+import org.eclipse.riena.toolbox.previewer.ClassFinder;
+import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 /**
  * Checks if a given {@link ICompilationUnit} is a instance of {@link Composite} or {@link ViewPart}. 

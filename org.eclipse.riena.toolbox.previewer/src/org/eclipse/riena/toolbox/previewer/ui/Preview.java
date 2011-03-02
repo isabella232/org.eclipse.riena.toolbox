@@ -8,10 +8,6 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.ContributionItem;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.riena.toolbox.previewer.ClassFinder;
-import org.eclipse.riena.toolbox.previewer.IPreviewCustomizer;
-import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,10 +21,12 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.IWindowListener;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+
+import org.eclipse.riena.toolbox.previewer.ClassFinder;
+import org.eclipse.riena.toolbox.previewer.IPreviewCustomizer;
+import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public class Preview extends ViewPart{
 	public final static String ID = "org.eclipse.riena.toolbox.previewer.ui.Preview"; //$NON-NLS-1$
