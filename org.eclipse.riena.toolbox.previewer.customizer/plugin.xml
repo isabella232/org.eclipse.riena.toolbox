@@ -7,5 +7,20 @@
             class="org.eclipse.riena.toolbox.previewer.customizer.RienaPreviewCustomizer">
       </previewCustomizer>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.riena.toolbox.preferences.ToolboxConfigurationPreference"
+            class="org.eclipse.riena.toolbox.previewer.customizer.preferences.PreviewCustomizerPreferencePage"
+            id="org.eclipse.riena.toolbox.previewer.customizer.preferences.PreviewCustomizerPreferencePage"
+            name="Riena Previewer">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.riena.toolbox.previewer.customizer.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

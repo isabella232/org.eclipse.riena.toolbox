@@ -1,6 +1,7 @@
 package org.eclipse.riena.toolbox.previewer.customizer;
 
 import org.eclipse.riena.toolbox.previewer.IPreviewCustomizer;
+import org.eclipse.riena.toolbox.previewer.customizer.preferences.PreferenceConstants;
 import org.eclipse.riena.ui.swt.lnf.LnfManager;
 import org.eclipse.riena.ui.swt.lnf.rienadefault.RienaDefaultLnf;
 import org.eclipse.swt.widgets.Composite;
@@ -11,7 +12,15 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 	 * @param info
 	 */
 	private void updateLnf(ClassLoader classLoader) {
-		String lnf = "org.eclipse.riena.ui.swt.lnf.rienadefault.RienaDefaultLnf";
+		
+		final String customLnfClass = Activator.getDefault().getPreferenceStore()
+		.getString(PreferenceConstants.LNF_CLASS_NAME);
+
+		String lnf = Activator.getDefault().getPreferenceStore().getDefaultString(PreferenceConstants.LNF_CLASS_NAME);
+		if (null != customLnfClass){
+			lnf = customLnfClass;
+		}
+		
 		setLnf(classLoader, lnf);
 	}
 
