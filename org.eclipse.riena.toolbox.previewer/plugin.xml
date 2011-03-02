@@ -45,9 +45,11 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.eclipse.riena.toolbox.category"
             class="org.eclipse.riena.toolbox.previewer.ui.Preview"
+            icon="icons/sample.gif"
             id="org.eclipse.riena.toolbox.previewer.ui.Preview"
-            name="org.eclipse.riena.toolbox.previewer.ui.Preview"
+            name="Riena Previewer"
             restorable="true">
       </view>
    </extension>
