@@ -29,7 +29,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.riena.toolbox";
+	public static final String PLUGIN_ID = "org.eclipse.riena.toolbox"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

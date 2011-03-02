@@ -33,13 +33,13 @@ public class ModelService implements IModelService {
 		return typeIds;
 	}
 
-	public Set<String> getAllTypeIds(final AssemblyModel model, final AbstractTypedNode ignoreNode) {
+	public Set<String> getAllTypeIds(final AssemblyModel model, final AbstractTypedNode<?> ignoreNode) {
 		final Set<String> typeIds = new HashSet<String>();
 		typeIds.add(CONST_APPLICATION);
 
 		for (final BundleNode bundle : model.getChildren()) {
 			for (final AssemblyNode ass : bundle.getChildren()) {
-				for (final AbstractTypedNode typeNode : ass.getChildren()) {
+				for (final AbstractTypedNode<?> typeNode : ass.getChildren()) {
 
 					if (!typeNode.equals(ignoreNode) && Util.isGiven(typeNode.getNodeId())) {
 						typeIds.add(typeNode.getNodeId());
@@ -52,9 +52,10 @@ public class ModelService implements IModelService {
 		return typeIds;
 	}
 
-	private void findTypeIds(final Set<String> ids, final AbstractTypedNode parent, final AbstractTypedNode ignoreNode) {
+	private void findTypeIds(final Set<String> ids, final AbstractTypedNode<?> parent,
+			final AbstractTypedNode<?> ignoreNode) {
 		for (final Object typeNode : parent.getChildren()) {
-			final AbstractTypedNode abs = (AbstractTypedNode) typeNode;
+			final AbstractTypedNode<?> abs = (AbstractTypedNode<?>) typeNode;
 
 			if (!typeNode.equals(ignoreNode)) {
 				if (null != abs && Util.isGiven(abs.getNodeId())) {
@@ -79,16 +80,16 @@ public class ModelService implements IModelService {
 		final ClassNameVisitor nodeVisitor = new ClassNameVisitor(className);
 
 		for (final AssemblyNode ass : bundle.getChildren()) {
-			for (final AbstractTypedNode child : ass.getChildren()) {
+			for (final AbstractTypedNode<?> child : ass.getChildren()) {
 				visitNode(child, nodeVisitor);
 			}
 		}
 		return nodeVisitor.getFoundNode();
 	}
 
-	private void visitNode(final AbstractTypedNode parent, final AssemblyNodeVisitor visitor) {
+	private void visitNode(final AbstractTypedNode<?> parent, final AssemblyNodeVisitor visitor) {
 		for (final Object typeNode : parent.getChildren()) {
-			final AbstractTypedNode abs = (AbstractTypedNode) typeNode;
+			final AbstractTypedNode<?> abs = (AbstractTypedNode<?>) typeNode;
 			if (visitor.visit(abs)) {
 				visitNode(abs, visitor);
 			} else {
@@ -105,7 +106,7 @@ public class ModelService implements IModelService {
 			this.className = className;
 		}
 
-		public boolean visit(final AbstractTypedNode node) {
+		public boolean visit(final AbstractTypedNode<?> node) {
 			if (node instanceof SubModuleNode) {
 				final SubModuleNode subMod = (SubModuleNode) node;
 				if (className.equals(subMod.getController())) {
@@ -127,7 +128,7 @@ public class ModelService implements IModelService {
 	}
 
 	private interface AssemblyNodeVisitor {
-		public boolean visit(AbstractTypedNode node);
+		public boolean visit(AbstractTypedNode<?> node);
 	}
 
 }

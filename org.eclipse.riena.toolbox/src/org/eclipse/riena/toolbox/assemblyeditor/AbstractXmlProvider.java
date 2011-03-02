@@ -135,15 +135,15 @@ public class AbstractXmlProvider {
 
 		final Transformer transformer = transformerFactory.newTransformer();
 
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
+		transformer.setOutputProperty(OutputKeys.METHOD, "xml"); //$NON-NLS-1$
 
 		// Unless a width is set, there will be only line breaks but no indentation.
 		// The IBM JDK and the Sun JDK don't agree on the property name,
 		// so we set them both.
 		//
-		transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "4");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+		transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "4"); //$NON-NLS-1$ //$NON-NLS-2$
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); //$NON-NLS-1$ //$NON-NLS-2$
 		return transformer;
 	}
 

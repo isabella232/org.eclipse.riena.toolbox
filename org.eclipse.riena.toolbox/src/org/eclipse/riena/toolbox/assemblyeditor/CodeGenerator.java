@@ -136,7 +136,7 @@ public class CodeGenerator implements ICodeGenerator {
 			String bundleAbsolutePath = bundle.getAbsolutePath();
 			if (bundleAbsolutePath.endsWith(".jar")) { //$NON-NLS-1$
 				bundleAbsolutePath = bundleAbsolutePath.replace('\\', '/');
-				if (bundleAbsolutePath.startsWith("/")) {
+				if (bundleAbsolutePath.startsWith("/")) { //$NON-NLS-1$
 					bundleAbsolutePath = bundleAbsolutePath.substring(1);
 				}
 				bundleAbsolutePath = "jar:file:/" + bundleAbsolutePath + "!/" + DIR_TEMPLATES + "/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

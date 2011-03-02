@@ -40,6 +40,11 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 
 public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlParser {
 
+	/**
+	 * 
+	 */
+	private static final String NODE_SEPARATOR = "."; //$NON-NLS-1$
+
 	public List<AssemblyNode> parseDocument(final BundleNode bundleNode) {
 		return parseDocument(bundleNode, getDocument(bundleNode));
 
@@ -124,9 +129,9 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 
 	private RCPPerspective parsePerspective(final Element elm) {
 		final RCPPerspective view = new RCPPerspective();
-		view.setId(elm.getAttribute("id"));
-		view.setPerspectiveClass(elm.getAttribute("class"));
-		view.setName(elm.getAttribute("name"));
+		view.setId(elm.getAttribute(ATTR_VIEW_ID));
+		view.setPerspectiveClass(elm.getAttribute(ATTR_VIEW_CLASS));
+		view.setName(elm.getAttribute(ATTR_VIEW_NAME));
 		return view;
 	}
 
@@ -179,17 +184,17 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		}
 
 		// dont calculate preSuffixe if there is a varname in the 'name' property
-		if (name.contains("${")) {
+		if (name.contains("${")) { //$NON-NLS-1$
 			return;
 		}
 
-		final Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)");
+		final Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)"); //$NON-NLS-1$ //$NON-NLS-2$
 		final Matcher matcher = pattern.matcher(typeId);
 		if (matcher.matches()) {
 			final String prefix = matcher.group(1);
 			final String suffix = matcher.group(2);
-			typedNode.setPrefix(prefix + ".");
-			typedNode.setSuffix("." + suffix);
+			typedNode.setPrefix(prefix + NODE_SEPARATOR);
+			typedNode.setSuffix(NODE_SEPARATOR + suffix);
 		}
 
 	}
@@ -200,7 +205,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 	 * 
 	 * @param typedNode
 	 */
-	private void computePreSuffixe(final AbstractTypedNode typedNode) {
+	private void computePreSuffixe(final AbstractTypedNode<?> typedNode) {
 		final String name = typedNode.getName();
 		final String nodeId = typedNode.getNodeId();
 
@@ -209,17 +214,17 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		}
 
 		// dont calculate preSuffixe if there is a varname in the 'name' property
-		if (name.contains("${")) {
+		if (name.contains("${")) { //$NON-NLS-1$
 			return;
 		}
 
-		final Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)");
+		final Pattern pattern = Pattern.compile("(.*?)\\." + name + "\\.(.*?)"); //$NON-NLS-1$ //$NON-NLS-2$
 		final Matcher matcher = pattern.matcher(nodeId);
 		if (matcher.matches()) {
 			final String prefix = matcher.group(1);
 			final String suffix = matcher.group(2);
-			typedNode.setPrefix(prefix + ".");
-			typedNode.setSuffix("." + suffix);
+			typedNode.setPrefix(prefix + NODE_SEPARATOR);
+			typedNode.setSuffix(NODE_SEPARATOR + suffix);
 		}
 	}
 

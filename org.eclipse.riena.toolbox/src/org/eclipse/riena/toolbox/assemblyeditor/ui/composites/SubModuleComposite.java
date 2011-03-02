@@ -42,6 +42,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.TextButtonComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 
+@SuppressWarnings("restriction")
 public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 
 	private Text txtName;
@@ -72,8 +73,8 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			txtView.getText().setText(getTextSave(node.getRcpView().getId()));
 			txtView.setCurrentId(node.getRcpView().getId());
 		} else {
-			txtView.getText().setText("");
-			txtView.setCurrentId("");
+			txtView.getText().setText(""); //$NON-NLS-1$
+			txtView.setCurrentId(""); //$NON-NLS-1$
 		}
 
 		txtController.getText().setText(getTextSave(node.getController()));
@@ -196,7 +197,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 					if (Util.isGiven(controllerName)) {
 						dia.setInitialPattern(controllerName, FilteredItemsSelectionDialog.FULL_SELECTION);
 					} else {
-						dia.setInitialPattern(project.getName() + ".controller.",
+						dia.setInitialPattern(project.getName() + ".controller.", //$NON-NLS-1$
 								FilteredItemsSelectionDialog.FULL_SELECTION);
 					}
 
@@ -213,6 +214,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			});
 		}
 
+		@SuppressWarnings("unused")
 		public String getControllerName() {
 			return controllerName;
 		}
@@ -221,6 +223,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			this.controllerName = controllerName;
 		}
 
+		@SuppressWarnings("unused")
 		public IProject getProject() {
 			return project;
 		}

@@ -33,7 +33,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 	private IdSelectorText txtPerspective;
 
 	public SubApplicationComposite(final Composite parent) {
-		super(parent, "subapplication_li.png", "subapplication_re.png");
+		super(parent, "subapplication_li.png", "subapplication_re.png"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 		if (Util.isGiven(node.getPerspective())) {
 			txtPerspective.setCurrentId(node.getPerspective());
 		} else {
-			txtPerspective.setCurrentId("");
+			txtPerspective.setCurrentId(""); //$NON-NLS-1$
 		}
 
 		txtNodeId.getText().setText(getTextSave(node.getNodeId()));

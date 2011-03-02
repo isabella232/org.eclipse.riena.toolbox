@@ -39,12 +39,12 @@ public class NodeFactory implements INodeFactory {
 		final AssemblyNode ass = new AssemblyNode(parentBundle);
 		setPreSuffixes(parentBundle, ass, SUFFIX_ASSEMBLY);
 		ass.setName(CONST_NEW_IDENTIFIER);
-		ass.setNodeTypeId("application");
+		ass.setNodeTypeId("application"); //$NON-NLS-1$
 		ass.setBundle(parentBundle);
 		return ass;
 	}
 
-	public ModuleNode createModule(final AbstractAssemblyNode parent, final BundleNode parentBundle) {
+	public ModuleNode createModule(final AbstractAssemblyNode<?> parent, final BundleNode parentBundle) {
 		final ModuleNode node = new ModuleNode(parent);
 		setPreSuffixes(parentBundle, node, SUFFIX_MODULE);
 		node.setName(CONST_NEW_IDENTIFIER);
@@ -53,7 +53,7 @@ public class NodeFactory implements INodeFactory {
 		return node;
 	}
 
-	public ModuleGroupNode createModuleGroup(final AbstractAssemblyNode parent, final BundleNode parentBundle) {
+	public ModuleGroupNode createModuleGroup(final AbstractAssemblyNode<?> parent, final BundleNode parentBundle) {
 		final ModuleGroupNode node = new ModuleGroupNode(parent);
 		setPreSuffixes(parentBundle, node, SUFFIX_MODULE_GROUP);
 		node.setName(CONST_NEW_IDENTIFIER);
@@ -61,7 +61,7 @@ public class NodeFactory implements INodeFactory {
 		return node;
 	}
 
-	public SubApplicationNode createSubApplication(final AbstractAssemblyNode parent, final BundleNode parentBundle) {
+	public SubApplicationNode createSubApplication(final AbstractAssemblyNode<?> parent, final BundleNode parentBundle) {
 		final SubApplicationNode node = new SubApplicationNode(parent);
 		setPreSuffixes(parentBundle, node, SUFFIX_SUBAPPLICATION);
 		node.setBundle(parentBundle);
@@ -69,7 +69,7 @@ public class NodeFactory implements INodeFactory {
 		return node;
 	}
 
-	public SubModuleNode createSubModule(final AbstractAssemblyNode parent, final BundleNode parentBundle) {
+	public SubModuleNode createSubModule(final AbstractAssemblyNode<?> parent, final BundleNode parentBundle) {
 		final SubModuleNode node = new SubModuleNode(parent);
 		setPreSuffixes(parentBundle, node, SUFFIX_SUBMODULE);
 		node.setName(CONST_NEW_IDENTIFIER);
@@ -90,14 +90,14 @@ public class NodeFactory implements INodeFactory {
 		return persp;
 	}
 
-	private void setPreSuffixes(final AbstractAssemblyNode parent, final AssemblyNode typedNode, final String suffix) {
+	private void setPreSuffixes(final AbstractAssemblyNode<?> parent, final AssemblyNode typedNode, final String suffix) {
 		typedNode.setPrefix(parent.getName() + SEP);
 		typedNode.setSuffix(SEP + suffix);
 		typedNode.setId(typedNode.getPrefix() + CONST_NEW_IDENTIFIER + typedNode.getSuffix());
 
 	}
 
-	private void setPreSuffixes(final AbstractAssemblyNode parent, final AbstractTypedNode typedNode,
+	private void setPreSuffixes(final AbstractAssemblyNode<?> parent, final AbstractTypedNode<?> typedNode,
 			final String suffix) {
 		typedNode.setPrefix(parent.getName() + SEP);
 		typedNode.setSuffix(SEP + suffix);

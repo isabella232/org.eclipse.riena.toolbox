@@ -29,6 +29,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView;
 
+@SuppressWarnings("restriction")
 public class StartupEditorListener implements IStartup {
 
 	public void earlyStartup() {

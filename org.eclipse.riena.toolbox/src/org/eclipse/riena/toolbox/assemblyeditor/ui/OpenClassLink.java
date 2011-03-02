@@ -28,6 +28,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.riena.toolbox.assemblyeditor.RidgetGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 
+@SuppressWarnings("restriction")
 public class OpenClassLink extends Composite {
 
 	private Link lnk;
@@ -40,7 +41,7 @@ public class OpenClassLink extends Composite {
 		setLayout(new FillLayout());
 
 		lnk = new Link(this, SWT.None);
-		lnk.setText("<a>" + text + "</a>");
+		lnk.setText("<a>" + text + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$
 		lnk.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {

@@ -80,7 +80,7 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 				final String item = items[i];
 				bob.append(item);
 				if (i < items.length - 1) {
-					bob.append(";");
+					bob.append(";"); //$NON-NLS-1$
 				}
 			}
 			return bob.toString();
@@ -88,8 +88,8 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 
 		@Override
 		protected String getNewInputObject() {
-			final InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "",
-					"Enter a fullyqualified Classname", "", null);
+			final InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "", //$NON-NLS-1$
+					"Enter a fully qualified Classname", "", null); //$NON-NLS-2$
 			if (dlg.open() == Window.OK) {
 				return dlg.getValue();
 			}
@@ -98,7 +98,7 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 
 		@Override
 		protected String[] parseString(final String stringList) {
-			return stringList.split(";");
+			return stringList.split(";"); //$NON-NLS-1$
 		}
 	}
 }

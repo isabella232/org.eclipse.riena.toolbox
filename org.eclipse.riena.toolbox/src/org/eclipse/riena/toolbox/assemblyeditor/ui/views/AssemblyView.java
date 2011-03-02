@@ -80,6 +80,7 @@ import org.eclipse.riena.ui.swt.MessageBox;
  * the editor for the currently selected node on the right side.
  * 
  */
+@SuppressWarnings("restriction")
 public class AssemblyView extends ViewPart implements ISaveablePart {
 	/**
 	 * The ID of the view as specified by the extension.
@@ -138,7 +139,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		sashForm.setWeights(new int[] { 30, 70 });
 
 		detailSection.addDirtyListener(new IDirtyListener() {
-			public void dirtyStateChanged(final AbstractAssemblyNode node, final boolean isDirty) {
+			public void dirtyStateChanged(final AbstractAssemblyNode<?> node, final boolean isDirty) {
 				node.getBundle().setDirty(true);
 				setDirty(isDirty);
 			}
@@ -163,7 +164,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	}
 
 	private void checkActionEnabledState() {
-		final AbstractAssemblyNode treeNode = getSelectedNode();
+		final AbstractAssemblyNode<?> treeNode = getSelectedNode();
 
 		if (null == treeNode) {
 			return;
@@ -204,7 +205,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 				// if the assemblyNode already has a child, only child nodes of the same type are allowed
 				if (!assNode.getChildren().isEmpty()) {
-					final AbstractTypedNode firstChild = assNode.getChildren().get(0);
+					final AbstractTypedNode<?> firstChild = assNode.getChildren().get(0);
 
 					if (firstChild instanceof SubApplicationNode) {
 						addSubAppAction.setEnabled(true);
@@ -346,7 +347,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			assemblyTree.getTreeViewer().addSelectionChangedListener(new ISelectionChangedListener() {
 				public void selectionChanged(final SelectionChangedEvent event) {
 					checkActionEnabledState();
-					final AbstractAssemblyNode node = getSelectedNode();
+					final AbstractAssemblyNode<?> node = getSelectedNode();
 					detailSection.showDetails(node);
 				}
 			});
@@ -360,7 +361,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			getSite().setSelectionProvider(assemblyTree.getTreeViewer());
 
 			assemblyTree.addDirtyListener(new IDirtyListener() {
-				public void dirtyStateChanged(final AbstractAssemblyNode node, final boolean isDirty) {
+				public void dirtyStateChanged(final AbstractAssemblyNode<?> node, final boolean isDirty) {
 					setDirty(isDirty);
 				}
 			});
@@ -405,18 +406,18 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		checkActionEnabledState();
 		assemblyTree.rebuild();
 
-		final AbstractAssemblyNode selectedNode = getSelectedNode();
+		final AbstractAssemblyNode<?> selectedNode = getSelectedNode();
 		if (null != selectedNode) {
 			detailSection.update(selectedNode);
 		}
 
 	}
 
-	public void expandNode(final AbstractAssemblyNode parentNode) {
+	public void expandNode(final AbstractAssemblyNode<?> parentNode) {
 		assemblyTree.getTreeViewer().setExpandedState(parentNode, true);
 	}
 
-	public void selectNode(final AbstractAssemblyNode node) {
+	public void selectNode(final AbstractAssemblyNode<?> node) {
 		assemblyTree.getTreeViewer().expandToLevel(node, AbstractTreeViewer.ALL_LEVELS);
 		assemblyTree.getTreeViewer().setSelection(new StructuredSelection(node));
 	}
@@ -436,12 +437,12 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		Activator.getDefault().getDataProvider().addResourceChangeListener(changeListener);
 	}
 
-	public AbstractAssemblyNode getSelectedNode() {
+	public AbstractAssemblyNode<?> getSelectedNode() {
 		final ISelection sel = assemblyTree.getTreeViewer().getSelection();
 
 		if (sel instanceof StructuredSelection) {
 			final StructuredSelection selTree = (StructuredSelection) sel;
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) selTree.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) selTree.getFirstElement();
 			return selectedNode;
 		}
 		return null;
@@ -477,17 +478,18 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		protected BundleNode findBundle() {
 			final AssemblyView assemblyView = (AssemblyView) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 					.getActivePage().findView(AssemblyView.ID);
-			final AbstractAssemblyNode treeNode = assemblyView.getSelectedNode();
+			final AbstractAssemblyNode<?> treeNode = assemblyView.getSelectedNode();
 			if (null == treeNode) {
 				return null;
 			}
 
-			final AbstractAssemblyNode current = treeNode;
+			final AbstractAssemblyNode<?> current = treeNode;
 
 			final BundleNode bundle = current.getBundle();
 			return bundle;
 		}
 
+		@SuppressWarnings("rawtypes")
 		@Override
 		public final void run() {
 			final AssemblyView assemblyView = (AssemblyView) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
@@ -526,7 +528,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		public void run() {
 			final AssemblyView assemblyView = (AssemblyView) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 					.getActivePage().findView(AssemblyView.ID);
-			final AbstractAssemblyNode selectedNode = assemblyView.getSelectedNode();
+			final AbstractAssemblyNode<?> selectedNode = assemblyView.getSelectedNode();
 
 			if (selectedNode instanceof SubModuleNode) {
 				deleteSubModuleNode(assemblyView, selectedNode);
@@ -534,7 +536,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			} else if (selectedNode instanceof SubApplicationNode) {
 				deleteSubApplicationNode(assemblyView, selectedNode);
 			} else {
-				if (MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "",
+				if (MessageDialog.openQuestion(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "", //$NON-NLS-1$
 						TITLE)) {
 					selectedNode.getBundle().setDirty(true);
 					deleteNode(assemblyView, selectedNode);
@@ -546,7 +548,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		 * @param assemblyView
 		 * @param selectedNode
 		 */
-		private void deleteSubApplicationNode(final AssemblyView assemblyView, final AbstractAssemblyNode selectedNode) {
+		private void deleteSubApplicationNode(final AssemblyView assemblyView,
+				final AbstractAssemblyNode<?> selectedNode) {
 			final SubApplicationNode subApp = (SubApplicationNode) selectedNode;
 
 			final String[] options = new String[] { OPTION_DELETE_NODE, OPTION_UNREGISTER_PERSPECTIVE };
@@ -575,7 +578,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		 * @param assemblyView
 		 * @param selectedNode
 		 */
-		private void deleteSubModuleNode(final AssemblyView assemblyView, final AbstractAssemblyNode selectedNode) {
+		private void deleteSubModuleNode(final AssemblyView assemblyView, final AbstractAssemblyNode<?> selectedNode) {
 			final SubModuleNode subMod = (SubModuleNode) selectedNode;
 
 			final String[] options = new String[] { OPTION_DELETE_NODE, OPTION_DELETE_VIEW_CLASS,
@@ -610,11 +613,11 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			}
 		}
 
-		private void deleteNode(final AssemblyView assemblyView, final AbstractAssemblyNode treeNode) {
+		private void deleteNode(final AssemblyView assemblyView, final AbstractAssemblyNode<?> treeNode) {
 			// save the selection, to reset it after the tree is rebuilt
-			AbstractAssemblyNode newSelection = treeNode.getParent();
+			AbstractAssemblyNode<?> newSelection = treeNode.getParent();
 			if (treeNode.hasPreviousSibling()) {
-				newSelection = (AbstractAssemblyNode) treeNode.getPreviousSibling();
+				newSelection = (AbstractAssemblyNode<?>) treeNode.getPreviousSibling();
 			}
 
 			treeNode.delete();
@@ -632,7 +635,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public AbstractAssemblyNode createNode(final AbstractAssemblyNode parent) {
+		public SubModuleNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
 			return nodeFactory.createSubModule(parent, findBundle());
 		}
 	}
@@ -645,7 +648,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public AbstractAssemblyNode createNode(final AbstractAssemblyNode parent) {
+		public ModuleNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
 			return nodeFactory.createModule(parent, findBundle());
 		}
 	}
@@ -658,7 +661,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public AbstractAssemblyNode createNode(final AbstractAssemblyNode parent) {
+		public AssemblyNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
 			return nodeFactory.createAssembly(findBundle());
 		}
 	}
@@ -671,7 +674,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public AbstractAssemblyNode createNode(final AbstractAssemblyNode parent) {
+		public ModuleGroupNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
 			return nodeFactory.createModuleGroup(parent, findBundle());
 		}
 	}
@@ -684,7 +687,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public AbstractAssemblyNode createNode(final AbstractAssemblyNode parent) {
+		public SubApplicationNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
 			return nodeFactory.createSubApplication(parent, findBundle());
 		}
 	}
@@ -724,7 +727,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private static class MoveNodeUpAction extends Action {
 		public MoveNodeUpAction() {
-			setImageDescriptor(Activator.getImageDescriptor("/icons/move_up.gif"));
+			setImageDescriptor(Activator.getImageDescriptor("/icons/move_up.gif")); //$NON-NLS-1$
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.movenodeup.action"); //$NON-NLS-1$
 			setToolTipText("Moves the selected node up");
 		}
@@ -740,7 +743,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) sel.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) sel.getFirstElement();
 			selectedNode.moveUp();
 			assemblyView.updateTreeAndDetailSection();
 		}
@@ -748,7 +751,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private static class MoveNodeDownAction extends Action {
 		public MoveNodeDownAction() {
-			setImageDescriptor(Activator.getImageDescriptor("/icons/move_down.gif"));
+			setImageDescriptor(Activator.getImageDescriptor("/icons/move_down.gif")); //$NON-NLS-1$
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.movenodedown.action"); //$NON-NLS-1$
 			setToolTipText("Moves the selected node down");
 		}
@@ -764,7 +767,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) sel.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) sel.getFirstElement();
 			selectedNode.moveDown();
 			assemblyView.updateTreeAndDetailSection();
 		}
@@ -788,7 +791,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) sel.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) sel.getFirstElement();
 
 			if (selectedNode instanceof SubModuleNode) {
 				final RCPView rcpView = ((SubModuleNode) selectedNode).getRcpView();
@@ -831,7 +834,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) sel.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) sel.getFirstElement();
 
 			if (selectedNode instanceof SubModuleNode) {
 				final SubModuleNode submod = (SubModuleNode) selectedNode;
@@ -857,7 +860,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) sel.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) sel.getFirstElement();
 
 			if (selectedNode instanceof SubModuleNode) {
 				final SubModuleNode submod = (SubModuleNode) selectedNode;
@@ -870,7 +873,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private static class GenerateAddUIControlCallsAction extends Action {
 		public GenerateAddUIControlCallsAction() {
-			setText("Generate missing addUIControl Calls");
+			setText("Generate missing addUIControl calls");
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.generateadduicontrolcalls.action"); //$NON-NLS-1$
 		}
 
@@ -885,14 +888,14 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 				return;
 			}
 
-			final AbstractAssemblyNode selectedNode = (AbstractAssemblyNode) sel.getFirstElement();
+			final AbstractAssemblyNode<?> selectedNode = (AbstractAssemblyNode<?>) sel.getFirstElement();
 
 			if (selectedNode instanceof SubModuleNode) {
 				final SubModuleNode submod = (SubModuleNode) selectedNode;
 				if (null != submod.getRcpView() && null != submod.getRcpView().getViewClass()) {
 					final AddUIControlCallGenerator generator = new AddUIControlCallGenerator(selectedNode.getBundle()
 							.getProject());
-					final boolean ret = generator.generateAddUIControlCalls(submod.getRcpView().getViewClass());
+					generator.generateAddUIControlCalls(submod.getRcpView().getViewClass());
 				}
 			}
 		}
@@ -901,13 +904,13 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private class RefreshAction extends Action {
 		public RefreshAction() {
 			setToolTipText("Reload all plugin.xml");
-			setImageDescriptor(Activator.getImageDescriptor("/icons/refresh.png"));
+			setImageDescriptor(Activator.getImageDescriptor("/icons/refresh.png")); //$NON-NLS-1$
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.refresh.action"); //$NON-NLS-1$
 		}
 
 		@Override
 		public void run() {
-			final AbstractAssemblyNode selectedNode = getSelectedNode();
+			final AbstractAssemblyNode<?> selectedNode = getSelectedNode();
 
 			final AssemblyModel model = Activator.getDefault().getDataProvider().createData();
 			Activator.getDefault().setAssemblyModel(model);
@@ -932,7 +935,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 		@Override
 		public void run() {
-			final AbstractAssemblyNode selectedNode = getSelectedNode();
+			final AbstractAssemblyNode<?> selectedNode = getSelectedNode();
 
 			if (selectedNode instanceof SubApplicationNode) {
 				final SubApplicationNode subapp = (SubApplicationNode) selectedNode;

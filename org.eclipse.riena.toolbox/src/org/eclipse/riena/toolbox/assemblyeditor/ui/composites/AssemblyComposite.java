@@ -34,7 +34,7 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode> {
 	private ContentProposalAdapter contentProposalTypeId;
 
 	public AssemblyComposite(final Composite parent) {
-		super(parent, "", "ass_re.png");
+		super(parent, "", "ass_re.png"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override
@@ -53,9 +53,9 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode> {
 		txtName.setText(getTextSave(node.getName()));
 
 		if (null != node.getAutostartSequence()) {
-			txtAutostartsequence.setText(getTextSave(node.getAutostartSequence() + ""));
+			txtAutostartsequence.setText(getTextSave(node.getAutostartSequence() + "")); //$NON-NLS-1$
 		} else {
-			txtAutostartsequence.setText("");
+			txtAutostartsequence.setText(""); //$NON-NLS-1$
 		}
 	}
 

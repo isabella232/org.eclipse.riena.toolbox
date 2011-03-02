@@ -37,7 +37,7 @@ public class AddUIControlCallGenerator extends RidgetGenerator {
 		final String blackListString = Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST);
 		if (Util.isGiven(blackListString)) {
-			controlBlacklist = blackListString.split(";");
+			controlBlacklist = blackListString.split(";"); //$NON-NLS-1$
 		}
 	}
 

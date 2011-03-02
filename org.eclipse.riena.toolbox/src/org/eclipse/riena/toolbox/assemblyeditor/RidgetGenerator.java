@@ -46,6 +46,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
+@SuppressWarnings("restriction")
 public class RidgetGenerator {
 	protected static final String NATURE_JAVA = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
 	protected static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
@@ -103,6 +104,7 @@ public class RidgetGenerator {
 	 * @param fullyQualifiedClassName
 	 * @return all found SwtControls, or an empty list
 	 */
+	@SuppressWarnings("unchecked")
 	public List<SwtControl> findSwtControls(final String fullyQualifiedClassName) {
 		final CompilationUnit astNode = findCompilationUnit(fullyQualifiedClassName);
 		if (null == astNode) {
@@ -135,6 +137,7 @@ public class RidgetGenerator {
 	 * @param controls
 	 * @return true if the given class was found, otherwise false
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean generateConfigureRidgets(final String fullyQualifiedControllerClassName,
 			final List<SwtControl> controls) {
 		final ICompilationUnit unit = findICompilationUnit(fullyQualifiedControllerClassName);
@@ -175,7 +178,7 @@ public class RidgetGenerator {
 	private String cleanVariableName(final String ridgetId) {
 		String cleanVariableName = ridgetId.replaceAll("[^a-zA-Z0-9]", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		// cut off any digits at beginning of string
-		cleanVariableName = cleanVariableName.replaceFirst("^\\d+(.*?)$", "$1");
+		cleanVariableName = cleanVariableName.replaceFirst("^\\d+(.*?)$", "$1"); //$NON-NLS-1$ //$NON-NLS-2$
 		cleanVariableName = Character.toLowerCase(cleanVariableName.charAt(0)) + cleanVariableName.substring(1);
 
 		// FIXME Generator can break, if ridgetId is Java keyword like static or privat
@@ -192,6 +195,7 @@ public class RidgetGenerator {
 	 * @param parentMethod
 	 * @param controls
 	 */
+	@SuppressWarnings("unchecked")
 	private void generateGetRidgetCalls(final AST ast, final MethodDeclaration parentMethod,
 			final List<SwtControl> controls) {
 
@@ -231,6 +235,7 @@ public class RidgetGenerator {
 	 * @param unit
 	 * @param controls
 	 */
+	@SuppressWarnings("unchecked")
 	private void addImportStatements(final AST ast, final CompilationUnit unit, final List<SwtControl> controls) {
 		for (final SwtControl swtControl : controls) {
 			if (!hasImportStatement(unit, swtControl.getFullyQualifiedRidgetClassName())) {

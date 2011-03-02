@@ -12,12 +12,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.CONST_CUSTOM_UI_CONTROLS_FACTORY, "");
-		store.setDefault(PreferenceConstants.CONST_GENERATE_CONTROLLER_PACKAGE_NAME, "controller");
-		store.setDefault(PreferenceConstants.CONST_GENERATE_VIEW_PACKAGE_NAME, "views");
+		store.setDefault(PreferenceConstants.CONST_CUSTOM_UI_CONTROLS_FACTORY, ""); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.CONST_GENERATE_CONTROLLER_PACKAGE_NAME, "controller"); //$NON-NLS-1$
+		store.setDefault(PreferenceConstants.CONST_GENERATE_VIEW_PACKAGE_NAME, "views"); //$NON-NLS-1$
 
 		store.setDefault(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST,
-				"org.eclipse.swt.widgets.Label;org.eclipse.swt.widgets.Composite");
+				"org.eclipse.swt.widgets.Label;org.eclipse.swt.widgets.Composite"); //$NON-NLS-1$
 	}
 
 }

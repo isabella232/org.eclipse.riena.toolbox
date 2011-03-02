@@ -27,7 +27,7 @@ public class AddUIControlCallVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(final MethodInvocation node) {
-		if ("addUIControl".equals(node.getName().getFullyQualifiedName())) {
+		if ("addUIControl".equals(node.getName().getFullyQualifiedName())) { //$NON-NLS-1$
 			if (!node.arguments().isEmpty()) {
 				final Object obj = node.arguments().get(0);
 

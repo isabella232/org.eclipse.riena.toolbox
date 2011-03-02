@@ -28,6 +28,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  * selectable by the user.
  * 
  */
+@SuppressWarnings("restriction")
 public class IconSelectorText extends TextButtonComposite {
 
 	private IProject project;
@@ -77,8 +78,8 @@ public class IconSelectorText extends TextButtonComposite {
 		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 			if (element instanceof File) {
 				final File file = (File) element;
-				return (file.getName().endsWith(".gif") || file.getName().endsWith(".jpg") || file.getName().endsWith(
-						".png"));
+				return (file.getName().endsWith(".gif") || file.getName().endsWith(".jpg") || file.getName().endsWith( //$NON-NLS-1$ //$NON-NLS-2$
+						".png")); //$NON-NLS-1$
 			}
 			return true;
 		}

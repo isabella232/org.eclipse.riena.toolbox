@@ -118,7 +118,6 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 				}
 
 			} else if (res.getType() == IResource.PROJECT) {
-				final IProject project = (IProject) res;
 				if (delta.getKind() == IResourceDelta.ADDED) {
 					addedProject = (IProject) res;
 					return false;

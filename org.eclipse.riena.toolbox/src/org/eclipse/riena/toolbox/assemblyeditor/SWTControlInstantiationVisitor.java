@@ -76,7 +76,7 @@ public class SWTControlInstantiationVisitor extends ASTVisitor {
 		final ITypeBinding binding = node.resolveTypeBinding();
 
 		final String fullClassName = binding.getQualifiedName();
-		if (null != fullClassName && fullClassName.startsWith("org.eclipse.swt.widgets")) {
+		if (null != fullClassName && fullClassName.startsWith("org.eclipse.swt.widgets")) { //$NON-NLS-1$
 
 			if (controlBlackList.contains(fullClassName)) {
 				return false;
@@ -103,12 +103,13 @@ public class SWTControlInstantiationVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void generateAddUIControlCall(final MethodDeclaration enclosingMethod, final String variableName) {
 		final AST ast = enclosingMethod.getAST();
 
 		final MethodInvocation methodAddUIControl = ast.newMethodInvocation();
 
-		methodAddUIControl.setName(ast.newSimpleName("addUIControl"));
+		methodAddUIControl.setName(ast.newSimpleName("addUIControl")); //$NON-NLS-1$
 		methodAddUIControl.arguments().add(ast.newSimpleName(variableName));
 		final StringLiteral ridgetId = ast.newStringLiteral();
 		ridgetId.setLiteralValue(variableName);

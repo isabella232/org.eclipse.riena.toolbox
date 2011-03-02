@@ -20,7 +20,7 @@ public class BundleComposite extends AbstractDetailComposite<BundleNode> {
 	private Text txtName;
 
 	public BundleComposite(final Composite parent) {
-		super(parent, "", "");
+		super(parent, "", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class ModuleGroupComposite extends AbstractDetailComposite<ModuleGroupNod
 	private Text txtName;
 
 	public ModuleGroupComposite(final Composite parent) {
-		super(parent, "modulegroup_li.png", "modulegroup_re.png");
+		super(parent, "modulegroup_li.png", "modulegroup_re.png"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -38,7 +37,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.ViewSelectorText;
 
-public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> extends Composite {
+public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode<?>> extends Composite {
 	protected T node;
 	protected Color workareaBackground;
 	private final Color headerBackground;
@@ -156,15 +155,6 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode> ex
 		}
 
 		GridDataFactory.fillDefaults().grab(true, true).align(SWT.RIGHT, SWT.CENTER).applyTo(lblImageRight);
-	}
-
-	private class Separator extends Canvas {
-		public Separator(final Composite parent) {
-			super(parent, SWT.None);
-			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
-			GridDataFactory.fillDefaults().span(2, 1).align(SWT.CENTER, SWT.END).hint(2000, 1).grab(true, false)
-					.applyTo(this);
-		}
 	}
 
 	/**

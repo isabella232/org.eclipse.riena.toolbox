@@ -218,7 +218,7 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 		for (final AssemblyNode ass : bundleNode.getChildren()) {
 			final Element elmAss = renderAssembly(elmExtension, ass);
 
-			for (final AbstractAssemblyNode child : ass.getChildren()) {
+			for (final AbstractAssemblyNode<?> child : ass.getChildren()) {
 				if (child instanceof SubApplicationNode) {
 					renderSubApplication(elmAss, (SubApplicationNode) child);
 				} else if (child instanceof ModuleGroupNode) {

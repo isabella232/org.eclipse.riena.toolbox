@@ -19,13 +19,13 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 
 /**
- * Services for retrieving Information from the domainmodel.
+ * Services for retrieving Information of the domainmodel.
  * 
  */
 public interface IModelService {
 	public Set<String> getAllParentTypeIds(AssemblyModel model);
 
-	public Set<String> getAllTypeIds(AssemblyModel model, AbstractTypedNode nodesToIgnore);
+	public Set<String> getAllTypeIds(AssemblyModel model, AbstractTypedNode<?> nodesToIgnore);
 
 	public SubModuleNode findSubModuleByClassName(AssemblyModel model, IProject project, String className);
 }

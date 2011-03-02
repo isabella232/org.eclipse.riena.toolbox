@@ -17,15 +17,6 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="org.eclipse.riena.toolbox.assemblyeditor.editors.NodeEditor"
-            icon="icons/sample.gif"
-            id="org.eclipse.riena.toolbox.assemblyeditor.editors.NodeEditor"
-            name="NodeEditor">
-      </editor>
-   </extension>
-   <extension
          point="org.eclipse.ui.startup">
       <startup
             class="org.eclipse.riena.toolbox.assemblyeditor.StartupEditorListener">

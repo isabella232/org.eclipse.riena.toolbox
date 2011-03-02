@@ -46,9 +46,9 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
  */
 public class AssemblyTreeViewer extends FilteredTree {
 
-	private List<IDirtyListener> dirtyListener;
+	private final List<IDirtyListener> dirtyListener;
 
-	public AssemblyTreeViewer(Composite parent, int style) {
+	public AssemblyTreeViewer(final Composite parent, final int style) {
 		super(parent, SWT.SINGLE, new PatternFilter(), true);
 
 		dirtyListener = new ArrayList<IDirtyListener>();
@@ -56,10 +56,10 @@ public class AssemblyTreeViewer extends FilteredTree {
 		treeViewer.setLabelProvider(new TreeLabelProvider());
 
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-				Object selectedNode = selection.getFirstElement();
-				boolean expanded = treeViewer.getExpandedState(selectedNode);
+			public void doubleClick(final DoubleClickEvent event) {
+				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				final Object selectedNode = selection.getFirstElement();
+				final boolean expanded = treeViewer.getExpandedState(selectedNode);
 				if (expanded) {
 					treeViewer.collapseToLevel(selectedNode, TreeViewer.ALL_LEVELS);
 				} else {
@@ -77,22 +77,22 @@ public class AssemblyTreeViewer extends FilteredTree {
 		return treeViewer.getTree();
 	}
 
-	public boolean addDirtyListener(IDirtyListener e) {
+	public boolean addDirtyListener(final IDirtyListener e) {
 		return dirtyListener.add(e);
 	}
 
-	public boolean removeDirtyListener(IDirtyListener e) {
+	public boolean removeDirtyListener(final IDirtyListener e) {
 		return dirtyListener.remove(e);
 	}
 
-	private void fireDirtyChanged(boolean isDirty) {
-		for (IDirtyListener l : dirtyListener) {
+	private void fireDirtyChanged(final boolean isDirty) {
+		for (final IDirtyListener l : dirtyListener) {
 			l.dirtyStateChanged(null, isDirty);
 		}
 	}
 
-	public void setModel(AssemblyModel model, boolean refresh) {
-		Object[] exp = treeViewer.getExpandedElements();
+	public void setModel(final AssemblyModel model, final boolean refresh) {
+		final Object[] exp = treeViewer.getExpandedElements();
 		treeViewer.setInput(model);
 		if (refresh) {
 			treeViewer.refresh();
@@ -104,33 +104,33 @@ public class AssemblyTreeViewer extends FilteredTree {
 	 * Rebuilds the complete Tree from the previously set AssemblyModel.
 	 */
 	public void rebuild() {
-		Object[] exp = treeViewer.getExpandedElements();
+		final Object[] exp = treeViewer.getExpandedElements();
 		treeViewer.refresh();
 		treeViewer.setExpandedElements(exp);
 		fireDirtyChanged(true);
 	}
 
 	private static class TreeContentProvider implements ITreeContentProvider {
-		public Object[] getChildren(Object parentElement) {
-			return ((AbstractAssemblyNode) parentElement).getChildren().toArray();
+		public Object[] getChildren(final Object parentElement) {
+			return ((AbstractAssemblyNode<?>) parentElement).getChildren().toArray();
 		}
 
-		public Object getParent(Object element) {
-			return ((AbstractAssemblyNode) element).getParent();
+		public Object getParent(final Object element) {
+			return ((AbstractAssemblyNode<?>) element).getParent();
 		}
 
-		public boolean hasChildren(Object element) {
-			return ((AbstractAssemblyNode) element).hasChildren();
+		public boolean hasChildren(final Object element) {
+			return ((AbstractAssemblyNode<?>) element).hasChildren();
 		}
 
-		public Object[] getElements(Object inputElement) {
+		public Object[] getElements(final Object inputElement) {
 			return getChildren(inputElement);
 		}
 
 		public void dispose() {
 		}
 
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		}
 	}
 
@@ -139,12 +139,12 @@ public class AssemblyTreeViewer extends FilteredTree {
 	 * 
 	 */
 	private static class TreeLabelProvider extends LabelProvider {
-		private Map<Class, Image> images;
-		private Image imgAssemblyAutostart;
-		private Image imgAssembly;
+		private final Map<Class<?>, Image> images;
+		private final Image imgAssemblyAutostart;
+		private final Image imgAssembly;
 
 		public TreeLabelProvider() {
-			images = new HashMap<Class, Image>();
+			images = new HashMap<Class<?>, Image>();
 
 			imgAssembly = Activator.getImageDescriptor("icons/ass.png").createImage(); //$NON-NLS-1$
 			imgAssemblyAutostart = Activator.getImageDescriptor("icons/ass_s.png").createImage(); //$NON-NLS-1$
@@ -156,21 +156,21 @@ public class AssemblyTreeViewer extends FilteredTree {
 		}
 
 		@Override
-		public String getText(Object element) {
-			return ((AbstractAssemblyNode) element).getTreeLabel();
+		public String getText(final Object element) {
+			return ((AbstractAssemblyNode<?>) element).getTreeLabel();
 		}
 
 		@Override
-		public Image getImage(Object element) {
-			AbstractAssemblyNode ass = (AbstractAssemblyNode) element;
+		public Image getImage(final Object element) {
+			final AbstractAssemblyNode<?> ass = (AbstractAssemblyNode<?>) element;
 			if (null != ass) {
-				Image img = images.get(ass.getClass());
+				final Image img = images.get(ass.getClass());
 				if (null != img) {
 					return img;
 				}
 
 				if (ass instanceof AssemblyNode) {
-					AssemblyNode assNode = (AssemblyNode) ass;
+					final AssemblyNode assNode = (AssemblyNode) ass;
 					return null != assNode.getAutostartSequence() ? imgAssemblyAutostart : imgAssembly;
 				}
 

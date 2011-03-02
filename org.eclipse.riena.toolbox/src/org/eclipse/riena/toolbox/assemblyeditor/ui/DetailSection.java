@@ -75,7 +75,7 @@ public class DetailSection extends Composite {
 
 		dirtyListener = new ArrayList<IDirtyListener>();
 
-		emptyComposite = new AbstractDetailComposite(this, "", null) {
+		emptyComposite = new AbstractDetailComposite(this, "", null) { //$NON-NLS-1$
 			@Override
 			public void unbind() {
 			}

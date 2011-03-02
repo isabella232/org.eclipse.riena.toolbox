@@ -12,6 +12,16 @@ package org.eclipse.riena.toolbox.assemblyeditor.ui;
 
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 
+/**
+ * The listener interface for receiving dirty events.
+ */
 public interface IDirtyListener {
-	void dirtyStateChanged(AbstractAssemblyNode node, boolean isDirty);
+	/**
+	 * @param node
+	 *            the node that changed
+	 * @param isDirty
+	 *            <code>true</code> if the content changed otherwise
+	 *            <code>false</code>
+	 */
+	void dirtyStateChanged(AbstractAssemblyNode<?> node, boolean isDirty);
 }

@@ -24,6 +24,6 @@ public class ToolboxTransfer extends ByteArrayTransfer {
 
 	@Override
 	protected String[] getTypeNames() {
-		return new String[] { "FOO" };
+		return new String[] { "FOO" }; //$NON-NLS-1$
 	}
 }

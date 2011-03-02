@@ -60,7 +60,7 @@ public class UIControlVisitor extends ASTVisitor {
 		final String blackListString = Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST);
 		if (Util.isGiven(blackListString)) {
-			controlBlacklist = Arrays.asList(blackListString.split(";"));
+			controlBlacklist = Arrays.asList(blackListString.split(";")); //$NON-NLS-1$
 		}
 	}
 

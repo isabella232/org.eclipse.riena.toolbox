@@ -46,7 +46,8 @@ public class Util {
 		return cleanNodeId;
 	}
 
-	public static <T extends AbstractAssemblyNode> T findParentOfType(final AbstractAssemblyNode current,
+	@SuppressWarnings("unchecked")
+	public static <T extends AbstractAssemblyNode<?>> T findParentOfType(final AbstractAssemblyNode<?> current,
 			final Class<? extends T> type) {
 
 		if (null == current) {
