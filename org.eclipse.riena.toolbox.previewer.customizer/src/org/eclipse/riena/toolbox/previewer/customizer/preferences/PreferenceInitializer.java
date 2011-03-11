@@ -2,7 +2,6 @@ package org.eclipse.riena.toolbox.previewer.customizer.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-
 import org.eclipse.riena.toolbox.previewer.customizer.Activator;
 
 /**
