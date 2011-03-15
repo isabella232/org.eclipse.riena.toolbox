@@ -23,6 +23,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import org.eclipse.riena.toolbox.internal.previewer.Activator;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
+import org.eclipse.riena.toolbox.previewer.ui.WorkbenchUtil;
 
 public class ClassFinder {
 
@@ -35,9 +36,10 @@ public class ClassFinder {
 
 	public ICompilationUnit getSelectionFromPackageExplorer() {
 		selectionService = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-		ITreeSelection selection = (ITreeSelection) selectionService.getSelection("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
+		final ITreeSelection selection = (ITreeSelection) selectionService
+				.getSelection("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
 
-		Object firstSelection = selection.getFirstElement();
+		final Object firstSelection = selection.getFirstElement();
 
 		if (!(firstSelection instanceof ICompilationUnit)) {
 			return null;
@@ -46,15 +48,15 @@ public class ClassFinder {
 		return (ICompilationUnit) firstSelection;
 	}
 
-	public ViewPartInfo loadClass(ICompilationUnit comp) {
+	public ViewPartInfo loadClass(final ICompilationUnit comp) {
 
-		IPath path = comp.getPath();
+		final IPath path = comp.getPath();
 
 		if (path.segmentCount() < 2) {
 			return null;
 		}
 
-		StringBuilder className = new StringBuilder();
+		final StringBuilder className = new StringBuilder();
 		for (int i = 2; i < path.segmentCount(); i++) {
 			String segment = path.segment(i);
 
@@ -68,43 +70,44 @@ public class ClassFinder {
 			}
 		}
 
-		IPreviewCustomizer contrib = getContributedPreviewCustomizer();
+		final IPreviewCustomizer contrib = getContributedPreviewCustomizer();
 
 		Class<?> parentClass = ViewPart.class;
 		if (null != contrib && null != contrib.getParentClass()) {
-			 parentClass = contrib.getParentClass();
+			parentClass = contrib.getParentClass();
 		}
 
-		URLClassLoader classLoader = createClassloader(parentClass.getClassLoader(), comp.getJavaProject());
+		final URLClassLoader classLoader = createClassloader(parentClass.getClassLoader(), comp.getJavaProject());
 
 		try {
 			if (null != contrib) {
 				contrib.beforeClassLoad(classLoader);
 			}
 
-			Class<?> viewClass = classLoader.loadClass(className.toString());
+			final Class<?> viewClass = classLoader.loadClass(className.toString());
 			if (!isValidType(viewClass)) {
 				return null;
 			}
 			return new ViewPartInfo(className.toString(), viewClass, comp);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
+		} catch (final ClassNotFoundException e) {
+			WorkbenchUtil.handleException(e);
+		} catch (final IllegalArgumentException e) {
+			WorkbenchUtil.handleException(e);
+		} catch (final SecurityException e) {
+			WorkbenchUtil.handleException(e);
 		}
+		return null;
 	}
 
 	public static IPreviewCustomizer getContributedPreviewCustomizer() {
-		IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+		final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				Activator.getDefault().getBundle().getSymbolicName() + ".previewCustomizer"); //$NON-NLS-1$
-		for (IConfigurationElement elm : config) {
+		for (final IConfigurationElement elm : config) {
 			try {
-				IPreviewCustomizer listenerContrib = (IPreviewCustomizer) elm.createExecutableExtension("class"); //$NON-NLS-1$
+				final IPreviewCustomizer listenerContrib = (IPreviewCustomizer) elm.createExecutableExtension("class"); //$NON-NLS-1$
 				return listenerContrib;
-			} catch (CoreException e) {
-				e.printStackTrace();
+			} catch (final CoreException e) {
+				WorkbenchUtil.handleException(e);
 			}
 		}
 		return null;
@@ -113,33 +116,35 @@ public class ClassFinder {
 	/**
 	 * @param type
 	 */
-	public boolean isValidType(Class<?> type) {
+	public boolean isValidType(final Class<?> type) {
 		return (Composite.class.isAssignableFrom(type) || ViewPart.class.isAssignableFrom(type));
 
 	}
 
-	private URLClassLoader createClassloader(ClassLoader parentClass, IJavaProject project) {
+	private URLClassLoader createClassloader(final ClassLoader parentClass, final IJavaProject project) {
 		try {
 
 			String[] classPathEntries = null;
 			try {
 				classPathEntries = JavaRuntime.computeDefaultRuntimeClassPath(project);
-			} catch (JavaModelException ex) {
+			} catch (final JavaModelException ex) {
+				WorkbenchUtil.handleException(ex);
 				return null;
 			}
 
-			List<URL> urlList = new ArrayList<URL>();
-			for (String entry : classPathEntries) {
+			final List<URL> urlList = new ArrayList<URL>();
+			for (final String entry : classPathEntries) {
 				urlList.add(new Path(entry).toFile().toURI().toURL());
 			}
 
-			URL[] urls = (URL[]) urlList.toArray(new URL[urlList.size()]);
+			final URL[] urls = urlList.toArray(new URL[urlList.size()]);
 			return new URLClassLoader(urls, parentClass);
 
-		} catch (CoreException e) {
-			throw new RuntimeException(e);
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
+		} catch (final CoreException e) {
+			WorkbenchUtil.handleException(e);
+		} catch (final MalformedURLException e) {
+			WorkbenchUtil.handleException(e);
 		}
+		return null;
 	}
 }

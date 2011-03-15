@@ -25,11 +25,11 @@ public final class ReflectionUtil {
 				try {
 					method.invoke(viewPart, parent);
 				} catch (final IllegalArgumentException e) {
-					throw new RuntimeException(e);
+					WorkbenchUtil.handleException(e);
 				} catch (final IllegalAccessException e) {
-					throw new RuntimeException(e);
+					WorkbenchUtil.handleException(e);
 				} catch (final InvocationTargetException e) {
-					throw new RuntimeException(e);
+					WorkbenchUtil.handleException(e);
 				}
 				return true;
 			}
@@ -60,14 +60,15 @@ public final class ReflectionUtil {
 			constructor.setAccessible(true);
 			return constructor.newInstance(params);
 		} catch (final IllegalArgumentException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		} catch (final InstantiationException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		} catch (final IllegalAccessException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		} catch (final InvocationTargetException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		}
+		return null;
 	}
 
 	/**
@@ -77,14 +78,15 @@ public final class ReflectionUtil {
 		try {
 			return viewPart.getType().newInstance();
 		} catch (final IllegalArgumentException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		} catch (final SecurityException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		} catch (final InstantiationException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		} catch (final IllegalAccessException e) {
-			throw new RuntimeException(e);
+			WorkbenchUtil.handleException(e);
 		}
+		return null;
 	}
 
 	private ReflectionUtil() {

@@ -49,7 +49,7 @@
             class="org.eclipse.riena.toolbox.previewer.ui.Preview"
             icon="icons/sample.gif"
             id="org.eclipse.riena.toolbox.previewer.ui.Preview"
-            name="Riena Previewer"
+            name="Previewer"
             restorable="true">
       </view>
    </extension>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.riena.toolbox.feature"
-      label="Riena Eclipse IDE Toolbox"
+      label="Riena AssemblyEditor"
       version="3.0.0.qualifier">
 
    <description>
-      Riena Eclipse IDE Toolbox
+      Treebased Editor for Riena Assembly-Extensionpoint
    </description>
 
    <copyright>

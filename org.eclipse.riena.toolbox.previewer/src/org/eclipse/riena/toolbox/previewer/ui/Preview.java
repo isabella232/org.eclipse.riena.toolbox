@@ -193,6 +193,7 @@ public class Preview extends ViewPart {
 
 				}
 			} catch (final CoreException e) {
+				WorkbenchUtil.handleException(e);
 				throw new RuntimeException(e);
 			}
 		}
