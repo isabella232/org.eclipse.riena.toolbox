@@ -94,7 +94,6 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 				}
 			};
 			finder.run();
-			return;
 		}
 
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.SHOW_RIDGET_IDS)) {
@@ -104,8 +103,9 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 		final SWTControlFinder finder = new SWTControlFinder(parent) {
 			@Override
 			public void handleBoundControl(final Control control, final String bindingProperty) {
-				control.setToolTipText(String.format("RidgetId: '%s'", bindingProperty));
+				control.setToolTipText(String.format("Ridget-Id '%s'", bindingProperty)); //$NON-NLS-1$
 				control.redraw();
+				System.out.println("setTooltip " + bindingProperty);
 			}
 
 			@Override
