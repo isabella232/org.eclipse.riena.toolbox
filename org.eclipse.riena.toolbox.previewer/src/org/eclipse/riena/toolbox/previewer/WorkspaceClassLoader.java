@@ -25,13 +25,22 @@ import org.eclipse.riena.toolbox.internal.previewer.Activator;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.riena.toolbox.previewer.ui.WorkbenchUtil;
 
-public class ClassFinder {
+public class WorkspaceClassLoader {
 
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
+	private static WorkspaceClassLoader classFinder;
+	private static IPreviewCustomizer previewCustomizer;
 	private ISelectionService selectionService;
 
-	public ClassFinder() {
+	private WorkspaceClassLoader() {
 
+	}
+
+	public static WorkspaceClassLoader getInstance() {
+		if (null == classFinder) {
+			classFinder = new WorkspaceClassLoader();
+		}
+		return classFinder;
 	}
 
 	public ICompilationUnit getSelectionFromPackageExplorer() {
@@ -99,18 +108,19 @@ public class ClassFinder {
 		return null;
 	}
 
-	public static IPreviewCustomizer getContributedPreviewCustomizer() {
-		final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				Activator.getDefault().getBundle().getSymbolicName() + ".previewCustomizer"); //$NON-NLS-1$
-		for (final IConfigurationElement elm : config) {
-			try {
-				final IPreviewCustomizer listenerContrib = (IPreviewCustomizer) elm.createExecutableExtension("class"); //$NON-NLS-1$
-				return listenerContrib;
-			} catch (final CoreException e) {
-				WorkbenchUtil.handleException(e);
+	public IPreviewCustomizer getContributedPreviewCustomizer() {
+		if (null == previewCustomizer) {
+			final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(
+					Activator.getDefault().getBundle().getSymbolicName() + ".previewCustomizer"); //$NON-NLS-1$
+			for (final IConfigurationElement elm : config) {
+				try {
+					previewCustomizer = (IPreviewCustomizer) elm.createExecutableExtension("class"); //$NON-NLS-1$
+				} catch (final CoreException e) {
+					WorkbenchUtil.handleException(e);
+				}
 			}
 		}
-		return null;
+		return previewCustomizer;
 	}
 
 	/**

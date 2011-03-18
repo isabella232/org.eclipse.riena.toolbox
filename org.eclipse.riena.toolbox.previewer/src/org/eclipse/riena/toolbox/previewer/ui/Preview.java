@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -18,13 +19,19 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import org.eclipse.riena.toolbox.previewer.ClassFinder;
 import org.eclipse.riena.toolbox.previewer.IPreviewCustomizer;
+import org.eclipse.riena.toolbox.previewer.WorkspaceClassLoader;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public class Preview extends ViewPart {
+	/**
+	 * 
+	 */
+	private static final String VIEW_TITLE = "Previewer";
+
 	public final static String ID = "org.eclipse.riena.toolbox.previewer.ui.Preview"; //$NON-NLS-1$
 
 	private Composite parent;
@@ -35,7 +42,7 @@ public class Preview extends ViewPart {
 	public void createPartControl(final Composite parent) {
 		this.parent = parent;
 		parent.setLayout(new FillLayout());
-		setPartName("Previewer");
+		setPartName(VIEW_TITLE);
 
 		getViewSite().getActionBars().getToolBarManager().add(new ViewSizeToolBar(parent));
 
@@ -58,25 +65,7 @@ public class Preview extends ViewPart {
 
 		@Override
 		public void fill(final ToolBar parent, final int index) {
-
 			final Text txtSize = createText(parent);
-
-			//			ToolItem toolApply = new ToolItem(parent, SWT.PUSH);
-			//			toolApply.setWidth(60);
-			//			toolApply.setText("Reset");
-			//			toolApply.addSelectionListener(new SelectionAdapter() {
-			//				@Override
-			//				public void widgetSelected(SelectionEvent e) {
-			//					//viewParent.setSize(1024, 768);
-			//					if (getSite().getShell() != PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell()){
-			//						Rectangle oldBounds = getSite().getShell().getBounds();
-			//						oldBounds.width = 1024;
-			//						oldBounds.height = 768;
-			//						getSite().getShell().setBounds(oldBounds);
-			//					}
-			//				}
-			//			});
-
 			viewParent.addListener(SWT.Resize, new Listener() {
 				public void handleEvent(final Event e) {
 					txtSize.setText(viewParent.getSize().x + "x" + viewParent.getSize().y); //$NON-NLS-1$
@@ -111,25 +100,34 @@ public class Preview extends ViewPart {
 			child.dispose();
 		}
 
+		parent.layout(true);
+		parent.redraw();
 		setPartName(viewPart.getName());
 
-		Object instance = null;
 		if (ViewPart.class.isAssignableFrom(viewPart.getType())) {
-			instance = ReflectionUtil.loadClass(viewPart);
+			final Object instance = ReflectionUtil.loadClass(viewPart);
 			if (!ReflectionUtil.invokeMethod("createPartControl", instance, //$NON-NLS-1$
 					parent)) {
+				setPartName(VIEW_TITLE);
+				return;
 			}
 		} else {
-			instance = ReflectionUtil.newInstance(viewPart.getType(), parent);
+			final Control instance = (Control) ReflectionUtil.newInstance(viewPart.getType(), parent);
+			if (null == instance) {
+				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
+						"Can not instantiate Composite " + viewPart.getType().getName()
+								+ "\nNo valid SWT-style constructor found");
+				return;
+			}
 		}
 
-		final IPreviewCustomizer contribution = ClassFinder.getContributedPreviewCustomizer();
+		final IPreviewCustomizer contribution = WorkspaceClassLoader.getInstance().getContributedPreviewCustomizer();
 		if (null != contribution) {
 			contribution.afterCreation(parent);
 		}
 
-		parent.redraw();
 		parent.layout(true);
+		parent.redraw();
 	}
 
 	@Override
@@ -187,7 +185,7 @@ public class Preview extends ViewPart {
 				if (pluginXmlVisitor.isCompilationUnitChanged()) {
 					display.syncExec(new Runnable() {
 						public void run() {
-							updateView(new ClassFinder().loadClass(viewPart.getCompilationUnit()));
+							updateView(WorkspaceClassLoader.getInstance().loadClass(viewPart.getCompilationUnit()));
 						}
 					});
 

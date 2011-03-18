@@ -10,7 +10,7 @@ import org.eclipse.jdt.ui.IWorkingCopyManager;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import org.eclipse.riena.toolbox.previewer.ClassFinder;
+import org.eclipse.riena.toolbox.previewer.WorkspaceClassLoader;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.riena.toolbox.previewer.ui.Preview;
 import org.eclipse.riena.toolbox.previewer.ui.WorkbenchUtil;
@@ -28,7 +28,7 @@ public class PreviewActiveEditorHandler extends AbstractHandler {
 		if (activeEditor instanceof CompilationUnitEditor) {
 			final IWorkingCopyManager manager = JavaPlugin.getDefault().getWorkingCopyManager();
 			final ICompilationUnit unit = manager.getWorkingCopy(activeEditor.getEditorInput());
-			final ViewPartInfo viewPart = new ClassFinder().loadClass(unit);
+			final ViewPartInfo viewPart = WorkspaceClassLoader.getInstance().loadClass(unit);
 			WorkbenchUtil.showView(viewPart);
 		}
 

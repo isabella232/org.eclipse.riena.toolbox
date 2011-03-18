@@ -25,11 +25,14 @@ public final class ReflectionUtil {
 				try {
 					method.invoke(viewPart, parent);
 				} catch (final IllegalArgumentException e) {
-					WorkbenchUtil.handleException(e);
+					WorkbenchUtil.handleException(e, "Can not invoke method: " + methodName);
+					return false;
 				} catch (final IllegalAccessException e) {
-					WorkbenchUtil.handleException(e);
+					WorkbenchUtil.handleException(e, "Can not invoke method: " + methodName);
+					return false;
 				} catch (final InvocationTargetException e) {
-					WorkbenchUtil.handleException(e);
+					WorkbenchUtil.handleException(e, "Can not invoke method: " + methodName);
+					return false;
 				}
 				return true;
 			}
