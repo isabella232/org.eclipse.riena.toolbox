@@ -23,7 +23,7 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 	private final List<SubModuleNode> subModules;
 	private RCPView rcpView;
 	private String controller;
-	private boolean shared;
+	private boolean sharedView;
 	private String icon;
 	private boolean selectable = true;
 	private boolean requiresPreparation;
@@ -82,12 +82,12 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 		this.controller = controller;
 	}
 
-	public boolean isShared() {
-		return shared;
+	public boolean isSharedView() {
+		return sharedView;
 	}
 
-	public void setShared(final boolean shared) {
-		this.shared = shared;
+	public void setSharedView(final boolean shared) {
+		this.sharedView = shared;
 	}
 
 	public String getIcon() {
@@ -123,8 +123,10 @@ public class SubModuleNode extends AbstractTypedNode<SubModuleNode> {
 
 	@Override
 	public String toString() {
-		return "SubModuleNode [subModules=" + subModules + ", rcpView=" + rcpView + ", controller=" + controller + ", shared=" + shared //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				+ ", icon=" + icon + ", selectable=" + selectable + ", requiresPreparation=" + requiresPreparation + ", nodeId=" + nodeId //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				+ ", name=" + name + "]"; //$NON-NLS-1$
+		return "SubModuleNode [subModules=" + subModules + ", rcpView=" + rcpView + ", controller=" + controller //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ ", sharedView=" + sharedView + ", icon=" + icon + ", selectable=" + selectable //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+				+ ", requiresPreparation=" + requiresPreparation + ", visible=" + visible + ", expanded=" + expanded //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ "]"; //$NON-NLS-1$
 	}
+
 }

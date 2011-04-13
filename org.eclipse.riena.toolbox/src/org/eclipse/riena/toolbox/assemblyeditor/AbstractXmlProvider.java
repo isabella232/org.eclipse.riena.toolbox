@@ -45,7 +45,7 @@ public class AbstractXmlProvider {
 	protected static final String ATTR_SUBMOD_VIEW = "viewId"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_NODE_ID = "nodeId"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_NAME = "name"; //$NON-NLS-1$
-	protected static final String ATTR_SUBMOD_SHARED = "shared"; //$NON-NLS-1$
+	protected static final String ATTR_SUBMOD_SHARED_VIEW = "sharedView"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_ICON = "icon"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_CONTROLLER = "controller"; //$NON-NLS-1$
 	protected static final String ATTR_SUBMOD_REQUIRES_PREPARATION = "requiresPreparation"; //$NON-NLS-1$

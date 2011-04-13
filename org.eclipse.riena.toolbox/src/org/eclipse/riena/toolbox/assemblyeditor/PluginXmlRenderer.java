@@ -350,7 +350,7 @@ public class PluginXmlRenderer extends AbstractXmlProvider implements IPluginXml
 			elm.setAttribute(ATTR_SUBMOD_ICON, subMod.getIcon());
 		}
 
-		elm.setAttribute(ATTR_SUBMOD_SHARED, subMod.isShared() + ""); //$NON-NLS-1$
+		elm.setAttribute(ATTR_SUBMOD_SHARED_VIEW, subMod.isSharedView() + ""); //$NON-NLS-1$
 
 		elm.setAttribute(ATTR_SUBMOD_REQUIRES_PREPARATION, subMod.isRequiresPreparation() + ""); //$NON-NLS-1$
 

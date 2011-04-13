@@ -90,7 +90,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 			lnkView.setClassName(node.getRcpView().getViewClass());
 		}
 
-		btnShared.setSelection(node.isShared());
+		btnShared.setSelection(node.isSharedView());
 		txtIcon.getText().setText(getTextSave(node.getIcon()));
 		txtIcon.setProject(node.getBundle().getProject());
 		btnSelectable.setSelection(node.isSelectable());
@@ -115,7 +115,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 
 		node.getRcpView().setId(txtView.getText().getText());
 		node.setController(txtController.getText().getText());
-		node.setShared(btnShared.getSelection());
+		node.setSharedView(btnShared.getSelection());
 		node.setIcon(txtIcon.getText().getText());
 		node.setSelectable(btnSelectable.getSelection());
 		node.setRequiresPreparation(btnRequiresPreparation.getSelection());

@@ -302,7 +302,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		sub.setName(elm.getAttribute(ATTR_SUBMOD_NAME));
 		sub.setNodeId(elm.getAttribute(ATTR_SUBMOD_NODE_ID));
 		sub.setController(elm.getAttribute(ATTR_SUBMOD_CONTROLLER));
-		sub.setShared(parseBoolean(elm, ATTR_SUBMOD_SHARED, false));
+		sub.setSharedView(parseBoolean(elm, ATTR_SUBMOD_SHARED_VIEW, false));
 		sub.setIcon(elm.getAttribute(ATTR_SUBMOD_ICON));
 		sub.setSelectable(parseBoolean(elm, ATTR_SUBMOD_SELECTABLE, true));
 		sub.setRequiresPreparation(parseBoolean(elm, ATTR_SUBMOD_REQUIRES_PREPARATION, false));
