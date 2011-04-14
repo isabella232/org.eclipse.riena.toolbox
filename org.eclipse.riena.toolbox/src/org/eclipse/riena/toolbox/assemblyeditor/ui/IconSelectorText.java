@@ -54,8 +54,9 @@ public class IconSelectorText extends TextButtonComposite {
 				final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(parent.getShell(),
 						new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
 
-				dialog.setTitle("Tree Selection");
-				dialog.setMessage("Select the elements from the tree:");
+				dialog.setTitle("Icon Selection");
+				dialog.setHelpAvailable(false);
+				dialog.setMessage("Select an icon from the list:");
 				dialog.setInput(project);
 				dialog.addFilter(new ImageFilter());
 				dialog.open();

@@ -30,12 +30,12 @@ import org.eclipse.riena.toolbox.Util;
  */
 public class IdSelectorText extends TextButtonComposite {
 
-	private List<String> ids;
-
 	/**
 	 * Sets the predefined value in the filter-textfield
 	 */
 	private String currentId;
+
+	private IDataProvider dataProvider;
 
 	public IdSelectorText(final Composite parent, final Color background, final String title, final String message) {
 		super(parent, background);
@@ -43,6 +43,8 @@ public class IdSelectorText extends TextButtonComposite {
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+				org.eclipse.core.runtime.Assert.isNotNull(dataProvider);
+				final List<String> ids = dataProvider.getData();
 				org.eclipse.core.runtime.Assert.isNotNull(ids);
 
 				final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
@@ -72,7 +74,22 @@ public class IdSelectorText extends TextButtonComposite {
 		this.currentId = currentId;
 	}
 
-	public void setIds(final List<String> viewIds) {
-		this.ids = viewIds;
+	/**
+	 * @return the dataProvider
+	 */
+	public IDataProvider getDataProvider() {
+		return dataProvider;
+	}
+
+	/**
+	 * @param dataProvider
+	 *            the dataProvider to set
+	 */
+	public void setDataProvider(final IDataProvider dataProvider) {
+		this.dataProvider = dataProvider;
+	}
+
+	public interface IDataProvider {
+		List<String> getData();
 	}
 }

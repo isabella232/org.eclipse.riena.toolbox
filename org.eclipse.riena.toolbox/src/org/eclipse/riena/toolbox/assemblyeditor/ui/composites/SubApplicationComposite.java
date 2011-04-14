@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor.ui.composites;
 
+import java.util.List;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.events.KeyAdapter;
@@ -23,6 +25,7 @@ import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubApplicationNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IdSelectorText;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.IdSelectorText.IDataProvider;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 
@@ -62,7 +65,11 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 		txtIcon.getText().setText(getTextSave(node.getIcon()));
 		txtIcon.setProject(node.getBundle().getProject());
 		txtPerspective.getText().setText(getTextSave(node.getPerspective()));
-		txtPerspective.setIds(Activator.getDefault().getAssemblyModel().getRcpPerspectiveIds());
+		txtPerspective.setDataProvider(new IDataProvider() {
+			public List<String> getData() {
+				return Activator.getDefault().getAssemblyModel().getRcpPerspectiveIds();
+			}
+		});
 	}
 
 	@Override

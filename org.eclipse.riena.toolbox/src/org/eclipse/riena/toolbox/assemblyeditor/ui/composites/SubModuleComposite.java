@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor.ui.composites;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -37,6 +39,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IdSelectorText;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.IdSelectorText.IDataProvider;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.OpenClassLink;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.TextButtonComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
@@ -162,9 +165,15 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		GridDataFactory.swtDefaults().applyTo(lnkView);
 		txtView = new IdSelectorText(parent, workareaBackground, "View Selection",
 				"Select a View (* = any string, ? = any char):");
-		txtView.setIds(Activator.getDefault().getAssemblyModel().getRcpViewIds()); // FIXME
-																					// use
-																					// RCPViews
+
+		// FIXME
+		// use
+		// RCPViews
+		txtView.setDataProvider(new IDataProvider() {
+			public List<String> getData() {
+				return Activator.getDefault().getAssemblyModel().getRcpViewIds();
+			}
+		});
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtView);
 	}
 
@@ -193,6 +202,8 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 
 					final FilteredTypesSelectionDialog dia = new FilteredTypesSelectionDialog(shell, false,
 							(IRunnableContext) null, searchScope, IJavaSearchConstants.CLASS_AND_ENUM);
+
+					dia.setTitle("Controller Selection");
 
 					if (Util.isGiven(controllerName)) {
 						dia.setInitialPattern(controllerName, FilteredItemsSelectionDialog.FULL_SELECTION);
