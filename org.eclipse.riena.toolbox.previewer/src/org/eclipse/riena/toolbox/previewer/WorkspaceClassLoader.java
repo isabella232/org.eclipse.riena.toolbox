@@ -68,6 +68,10 @@ public final class WorkspaceClassLoader {
 	}
 
 	public ViewPartInfo loadClass(final ICompilationUnit comp) {
+		return loadClass(comp, true);
+	}
+
+	public ViewPartInfo loadClass(final ICompilationUnit comp, final boolean notifyHooks) {
 
 		final IPath path = comp.getPath();
 
@@ -89,9 +93,12 @@ public final class WorkspaceClassLoader {
 			}
 		}
 
-		final IPreviewCustomizer contrib = getContributedPreviewCustomizer();
-
+		IPreviewCustomizer contrib = null;
 		Class<?> parentClass = ViewPart.class;
+		if (notifyHooks) {
+			contrib = getContributedPreviewCustomizer();
+		}
+
 		if (null != contrib && null != contrib.getParentClass()) {
 			parentClass = contrib.getParentClass();
 		}

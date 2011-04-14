@@ -27,7 +27,7 @@ public class CompilationUnitPropertyTester extends PropertyTester {
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 
 		final ICompilationUnit comp = (ICompilationUnit) receiver;
-		final ViewPartInfo partInfo = WorkspaceClassLoader.getInstance().loadClass(comp);
+		final ViewPartInfo partInfo = WorkspaceClassLoader.getInstance().loadClass(comp, false);
 		if (null == partInfo) {
 			return false;
 		}
