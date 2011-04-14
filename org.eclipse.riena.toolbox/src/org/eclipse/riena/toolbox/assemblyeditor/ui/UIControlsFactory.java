@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class UIControlsFactory {
+public final class UIControlsFactory {
 	public static Label createLabel(final Composite parent, final String text) {
 		final Label lbl = new Label(parent, SWT.None);
 		lbl.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -48,5 +48,9 @@ public class UIControlsFactory {
 		final OpenClassLink lnk = new OpenClassLink(parent, text);
 		lnk.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		return lnk;
+	}
+
+	private UIControlsFactory() {
+		// private
 	}
 }

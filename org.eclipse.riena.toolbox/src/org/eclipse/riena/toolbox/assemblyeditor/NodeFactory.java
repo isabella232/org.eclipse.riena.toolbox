@@ -26,14 +26,14 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 public class NodeFactory implements INodeFactory {
 
 	private static final String SEP = "."; //$NON-NLS-1$
-	private final String SUFFIX_ASSEMBLY = "assembly"; //$NON-NLS-1$
-	private final String SUFFIX_SUBAPPLICATION = "subapp"; //$NON-NLS-1$
-	private final String SUFFIX_MODULE_GROUP = "modulegroup"; //$NON-NLS-1$
-	private final String SUFFIX_MODULE = "module"; //$NON-NLS-1$
-	private final String SUFFIX_SUBMODULE = "submodule"; //$NON-NLS-1$
-	private final String SUFFIX_PERSPECTIVE = "perspective"; //$NON-NLS-1$
+	private static final String SUFFIX_ASSEMBLY = "assembly"; //$NON-NLS-1$
+	private static final String SUFFIX_SUBAPPLICATION = "subapp"; //$NON-NLS-1$
+	private static final String SUFFIX_MODULE_GROUP = "modulegroup"; //$NON-NLS-1$
+	private static final String SUFFIX_MODULE = "module"; //$NON-NLS-1$
+	private static final String SUFFIX_SUBMODULE = "submodule"; //$NON-NLS-1$
+	private static final String SUFFIX_PERSPECTIVE = "perspective"; //$NON-NLS-1$
 
-	private final String CONST_NEW_IDENTIFIER = "NEW"; //$NON-NLS-1$
+	private static final String CONST_NEW_IDENTIFIER = "NEW"; //$NON-NLS-1$
 
 	public AssemblyNode createAssembly(final BundleNode parentBundle) {
 		final AssemblyNode ass = new AssemblyNode(parentBundle);

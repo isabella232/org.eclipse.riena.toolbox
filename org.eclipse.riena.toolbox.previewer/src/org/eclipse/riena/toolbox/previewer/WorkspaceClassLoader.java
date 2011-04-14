@@ -35,7 +35,7 @@ import org.eclipse.riena.toolbox.internal.previewer.Activator;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 import org.eclipse.riena.toolbox.previewer.ui.WorkbenchUtil;
 
-public class WorkspaceClassLoader {
+public final class WorkspaceClassLoader {
 
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
 	private static WorkspaceClassLoader classFinder;

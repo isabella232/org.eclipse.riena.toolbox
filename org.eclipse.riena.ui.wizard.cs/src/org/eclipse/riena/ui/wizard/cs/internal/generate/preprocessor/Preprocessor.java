@@ -16,5 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 
 public interface Preprocessor {
 	InputStream process(InputStream input, String tag) throws CoreException;
+
 	String getChangedFileName();
 }

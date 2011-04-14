@@ -13,7 +13,7 @@ package org.eclipse.riena.ui.wizard.cs.internal.generate.preprocessor;
 import java.io.InputStream;
 
 public class NopPreprocessor implements Preprocessor {
-	public InputStream process(InputStream input, String tag) {
+	public InputStream process(final InputStream input, final String tag) {
 		return input;
 	}
 

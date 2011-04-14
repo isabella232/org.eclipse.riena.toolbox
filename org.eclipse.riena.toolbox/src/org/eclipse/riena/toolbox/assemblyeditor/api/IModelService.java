@@ -23,9 +23,9 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
  * 
  */
 public interface IModelService {
-	public Set<String> getAllParentTypeIds(AssemblyModel model);
+	Set<String> getAllParentTypeIds(AssemblyModel model);
 
-	public Set<String> getAllTypeIds(AssemblyModel model, AbstractTypedNode<?> nodesToIgnore);
+	Set<String> getAllTypeIds(AssemblyModel model, AbstractTypedNode<?> nodesToIgnore);
 
-	public SubModuleNode findSubModuleByClassName(AssemblyModel model, IProject project, String className);
+	SubModuleNode findSubModuleByClassName(AssemblyModel model, IProject project, String className);
 }

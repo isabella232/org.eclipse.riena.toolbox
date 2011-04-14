@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.riena.ui.wizard.cs.internal.pages;
 
-import org.eclipse.riena.ui.wizard.cs.internal.RienaApplicationPart;
-import org.eclipse.riena.ui.wizard.cs.internal.RienaWizardMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -21,22 +19,26 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import org.eclipse.riena.ui.wizard.cs.internal.RienaApplicationPart;
+import org.eclipse.riena.ui.wizard.cs.internal.RienaWizardMessages;
+
 public abstract class GeneralPageLayout extends AbstractPage {
 	protected Text projectBaseText, packageBaseText, projectsText;
 	protected Composite workingSetComposite;
 
-	protected GeneralPageLayout(String pageName) {
+	protected GeneralPageLayout(final String pageName) {
 		super(pageName);
 	}
 
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
-		Label lblProjectName = new Label(composite, SWT.NONE);
+		final Label lblProjectName = new Label(composite, SWT.NONE);
 		lblProjectName.setText(RienaWizardMessages.GeneralPage_ProjectName);
 		lblProjectName.setLayoutData(fd = new FormData());
 		fd.left = fd.top = new FormAttachment(0, 0);
-		fd.width = convertWidthInCharsToPixels(Math.max(RienaWizardMessages.GeneralPage_ProjectName.length(), RienaWizardMessages.GeneralPage_PackageName.length())) + 5;
+		fd.width = convertWidthInCharsToPixels(Math.max(RienaWizardMessages.GeneralPage_ProjectName.length(),
+				RienaWizardMessages.GeneralPage_PackageName.length())) + 5;
 
 		projectBaseText = new Text(composite, SWT.BORDER);
 		projectBaseText.setLayoutData(fd = new FormData());
@@ -53,7 +55,7 @@ public abstract class GeneralPageLayout extends AbstractPage {
 		fd.right = new FormAttachment(projectBaseText, 0, SWT.RIGHT);
 		fd.height = convertHeightInCharsToPixels(RienaApplicationPart.values().length + 1);
 
-		Label lblPackage = new Label(composite, SWT.NONE);
+		final Label lblPackage = new Label(composite, SWT.NONE);
 		lblPackage.setLayoutData(fd = new FormData());
 		lblPackage.setText(RienaWizardMessages.GeneralPage_PackageName);
 		fd.left = new FormAttachment(lblProjectName, 0, SWT.LEFT);
@@ -69,7 +71,7 @@ public abstract class GeneralPageLayout extends AbstractPage {
 		workingSetComposite = new Composite(composite, SWT.NONE);
 		workingSetComposite.setLayoutData(fd = new FormData());
 
-		GridLayout gl = new GridLayout();
+		final GridLayout gl = new GridLayout();
 		gl.marginWidth = gl.marginHeight = 0;
 
 		workingSetComposite.setLayout(gl);

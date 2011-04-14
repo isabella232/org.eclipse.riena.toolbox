@@ -37,9 +37,6 @@ import org.eclipse.riena.toolbox.previewer.WorkspaceClassLoader;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public class Preview extends ViewPart {
-	/**
-	 * 
-	 */
 	private static final String VIEW_TITLE = "Previewer";
 
 	public final static String ID = "org.eclipse.riena.toolbox.previewer.ui.Preview"; //$NON-NLS-1$

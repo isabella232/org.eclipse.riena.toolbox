@@ -128,7 +128,7 @@ public class ModelService implements IModelService {
 	}
 
 	private interface AssemblyNodeVisitor {
-		public boolean visit(AbstractTypedNode<?> node);
+		boolean visit(AbstractTypedNode<?> node);
 	}
 
 }

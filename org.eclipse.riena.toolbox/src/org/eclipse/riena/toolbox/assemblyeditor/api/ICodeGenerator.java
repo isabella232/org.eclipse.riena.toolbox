@@ -14,11 +14,11 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 
 public interface ICodeGenerator {
-	public RCPView generateView(SubModuleNode subModule);
+	RCPView generateView(SubModuleNode subModule);
 
-	public String generateController(SubModuleNode subModule);
+	String generateController(SubModuleNode subModule);
 
-	public void deleteControllerClass(SubModuleNode subModule);
+	void deleteControllerClass(SubModuleNode subModule);
 
-	public void deleteViewClass(SubModuleNode subModule);
+	void deleteViewClass(SubModuleNode subModule);
 }

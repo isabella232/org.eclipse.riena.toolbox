@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IProject;
  * 
  */
 public interface ResourceChangeListener {
-	public void pluginXmlChanged(IProject project);
+	void pluginXmlChanged(IProject project);
 
-	public void projectAdded(IProject project);
+	void projectAdded(IProject project);
 }

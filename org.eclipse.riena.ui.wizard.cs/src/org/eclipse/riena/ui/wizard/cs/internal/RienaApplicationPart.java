@@ -11,13 +11,13 @@
 package org.eclipse.riena.ui.wizard.cs.internal;
 
 public enum RienaApplicationPart {
-	COMMON(RienaWizardMessages.ProjectSuffixCommon, "common"),  //$NON-NLS-1$
-	SERVICE(RienaWizardMessages.ProjectSuffixService, "service"),  //$NON-NLS-1$
+	COMMON(RienaWizardMessages.ProjectSuffixCommon, "common"), //$NON-NLS-1$
+	SERVICE(RienaWizardMessages.ProjectSuffixService, "service"), //$NON-NLS-1$
 	CLIENT(RienaWizardMessages.ProjectSuffixClient, "client"); //$NON-NLS-1$
 
 	private final String suffix, packageSuffix;
 
-	RienaApplicationPart(String suffix, String packageSuffix) {
+	RienaApplicationPart(final String suffix, final String packageSuffix) {
 		this.suffix = suffix;
 		this.packageSuffix = packageSuffix;
 	}
@@ -26,7 +26,7 @@ public enum RienaApplicationPart {
 		return packageSuffix;
 	}
 
-	public String makeProjectFullName(String projectBaseName) {
+	public String makeProjectFullName(final String projectBaseName) {
 		return String.format("%s_%s", projectBaseName, suffix); //$NON-NLS-1$
 	}
 }

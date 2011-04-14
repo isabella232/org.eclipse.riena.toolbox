@@ -27,21 +27,25 @@ public class RienaWizardPlugin extends AbstractUIPlugin {
 	}
 
 	public static RienaWizardPlugin getDefault() {
-		if (instance == null)
+		if (instance == null) {
 			throw new NullPointerException("Plugin instance is not available"); //$NON-NLS-1$
+		}
 
 		return instance;
 	}
 
 	public static void error(Throwable e) {
-		if (e instanceof InvocationTargetException)
+		if (e instanceof InvocationTargetException) {
 			e = ((InvocationTargetException) e).getTargetException();
+		}
 
 		IStatus status = null;
-		if (e instanceof CoreException)
+		if (e instanceof CoreException) {
 			status = ((CoreException) e).getStatus();
-		else
-			status = new Status(IStatus.ERROR, getDefault().getBundle().getSymbolicName(), IStatus.OK, e.getMessage(), e);
+		} else {
+			status = new Status(IStatus.ERROR, getDefault().getBundle().getSymbolicName(), IStatus.OK, e.getMessage(),
+					e);
+		}
 
 		StatusManager.getManager().handle(status, StatusManager.SHOW | StatusManager.BLOCK | StatusManager.LOG);
 	}

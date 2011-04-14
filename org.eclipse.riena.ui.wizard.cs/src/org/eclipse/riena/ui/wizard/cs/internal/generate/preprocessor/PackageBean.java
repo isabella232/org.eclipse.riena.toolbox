@@ -16,11 +16,12 @@ public class PackageBean {
 	private final String base;
 	private final RienaApplicationPart part;
 
-	public PackageBean(String base, RienaApplicationPart part) {
+	public PackageBean(final String base, final RienaApplicationPart part) {
 		this.base = base;
 		this.part = part;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("%s.%s", base, part.getPackageSuffix()); //$NON-NLS-1$
 	}

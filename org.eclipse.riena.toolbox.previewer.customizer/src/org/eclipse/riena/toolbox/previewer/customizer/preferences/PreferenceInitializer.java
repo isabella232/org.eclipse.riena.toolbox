@@ -12,6 +12,7 @@ package org.eclipse.riena.toolbox.previewer.customizer.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+
 import org.eclipse.riena.toolbox.previewer.customizer.Activator;
 
 /**
@@ -19,9 +20,11 @@ import org.eclipse.riena.toolbox.previewer.customizer.Activator;
  */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
+	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.LNF_CLASS_NAME, "org.eclipse.riena.ui.swt.lnf.rienadefault.RienaDefaultLnf");
+		final IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(PreferenceConstants.LNF_CLASS_NAME,
+				"org.eclipse.riena.ui.swt.lnf.rienadefault.RienaDefaultLnf"); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.SHOW_RIDGET_IDS, true);
 	}
 

@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.riena.ui.wizard.cs.internal.pages;
 
-import org.eclipse.riena.ui.wizard.cs.internal.RienaWizardMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -19,24 +18,26 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import org.eclipse.riena.ui.wizard.cs.internal.RienaWizardMessages;
+
 public class ClientPageLayout extends AbstractPage {
 
 	protected Button guiButton, consoleButton, noClientButton;
 
-	protected ClientPageLayout(String pageName) {
+	protected ClientPageLayout(final String pageName) {
 		super(pageName);
 	}
 
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
-		Group grpClientType = new Group(composite, SWT.NONE);
+		final Group grpClientType = new Group(composite, SWT.NONE);
 		grpClientType.setText(RienaWizardMessages.ClientPageLayout_ClientType);
 		grpClientType.setLayoutData(fd = new FormData());
 		fd.left = fd.top = new FormAttachment(0, 0);
 		fd.right = new FormAttachment(100, 0);
 
-		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
+		final RowLayout layout = new RowLayout(SWT.HORIZONTAL);
 		layout.spacing = 5;
 		layout.marginWidth = layout.marginHeight = 5;
 		layout.justify = true;

@@ -19,13 +19,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.osgi.framework.Bundle;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.ui.templates.OptionTemplateSection;
 import org.eclipse.pde.ui.templates.PluginReference;
-import org.osgi.framework.Bundle;
 
 public abstract class RienaTemplateSection extends OptionTemplateSection {
 
@@ -37,34 +38,39 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	public static final String VALUE_PERSPECTIVE_NAME = "Riena Perspective"; //$NON-NLS-1$
 	public static final String VALUE_APPLICATION_ID = "application"; //$NON-NLS-1$
 
+	@Override
 	protected ResourceBundle getPluginResourceBundle() {
-		Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle().getSymbolicName());
+		final Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle().getSymbolicName());
 		return Platform.getResourceBundle(bundle);
 	}
 
+	@Override
 	protected URL getInstallURL() {
 		return Activator.getDefault().getInstallURL();
 	}
 
+	@Override
 	public URL getTemplateLocation() {
 		try {
-			String[] candidates = getDirectoryCandidates();
-			for (int i = 0; i < candidates.length; i++) {
-				if (Activator.getDefault().getBundle().getEntry(candidates[i]) != null) {
-					URL candidate = new URL(getInstallURL(), candidates[i]);
+			final String[] candidates = getDirectoryCandidates();
+			for (final String candidate2 : candidates) {
+				if (Activator.getDefault().getBundle().getEntry(candidate2) != null) {
+					final URL candidate = new URL(getInstallURL(), candidate2);
 					return candidate;
 				}
 			}
-		} catch (MalformedURLException e) { // do nothing
+		} catch (final MalformedURLException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
 
 	private String[] getDirectoryCandidates() {
-		double version = getTargetVersion();
-		List<String> result = new ArrayList<String>();
-		if (version >= 3.4)
+		final double version = getTargetVersion();
+		final List<String> result = new ArrayList<String>();
+		if (version >= 3.4) {
 			result.add("templates_3.4" + "/" + getSectionId() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
 		return result.toArray(new String[result.size()]);
 	}
 
@@ -77,22 +83,25 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		return new String[0];
 	}
 
-	protected String getFormattedPackageName(String id) {
-		StringBuffer buffer = new StringBuffer();
+	protected String getFormattedPackageName(final String id) {
+		final StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < id.length(); i++) {
-			char ch = id.charAt(i);
+			final char ch = id.charAt(i);
 			if (buffer.length() == 0) {
-				if (Character.isJavaIdentifierStart(ch))
+				if (Character.isJavaIdentifierStart(ch)) {
 					buffer.append(Character.toLowerCase(ch));
+				}
 			} else {
-				if (Character.isJavaIdentifierPart(ch) || ch == '.')
+				if (Character.isJavaIdentifierPart(ch) || ch == '.') {
 					buffer.append(ch);
+				}
 			}
 		}
 		return buffer.toString().toLowerCase(Locale.ENGLISH);
 	}
 
-	protected void generateFiles(IProgressMonitor monitor) throws CoreException {
+	@Override
+	protected void generateFiles(final IProgressMonitor monitor) throws CoreException {
 		super.generateFiles(monitor);
 		// Copy the default splash screen if the branding option is selected
 		if (copyBrandingDirectory()) {
@@ -104,23 +113,23 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		return getBooleanOption(KEY_PRODUCT_BRANDING);
 	}
 
-	public IPluginReference[] getCoreDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[1];
+	public IPluginReference[] getCoreDependencies(final String schemaVersion) {
+		final IPluginReference[] dep = new IPluginReference[1];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		return dep;
 	}
 
-	public IPluginReference[] getCommonDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[2];
+	public IPluginReference[] getCommonDependencies(final String schemaVersion) {
+		final IPluginReference[] dep = new IPluginReference[2];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.communication.core", null, 0); //$NON-NLS-1$
 		return dep;
 	}
 
-	public IPluginReference[] getHeadlessClientDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[4];
+	public IPluginReference[] getHeadlessClientDependencies(final String schemaVersion) {
+		final IPluginReference[] dep = new IPluginReference[4];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.core", null, 0); //$NON-NLS-1$
@@ -129,16 +138,16 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 		return dep;
 	}
 
-	public IPluginReference[] getUIDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[2];
+	public IPluginReference[] getUIDependencies(final String schemaVersion) {
+		final IPluginReference[] dep = new IPluginReference[2];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.client", null, 0); //$NON-NLS-1$
 		return dep;
 	}
 
-	public IPluginReference[] getServiceDependencies(String schemaVersion) {
-		IPluginReference[] dep = new IPluginReference[2];
+	public IPluginReference[] getServiceDependencies(final String schemaVersion) {
+		final IPluginReference[] dep = new IPluginReference[2];
 		int i = 0;
 		dep[i++] = new PluginReference("org.eclipse.core.runtime", null, 0); //$NON-NLS-1$
 		dep[i++] = new PluginReference("org.eclipse.riena.server", null, 0); //$NON-NLS-1$
@@ -146,7 +155,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	}
 
 	@Override
-	protected boolean isOkToCreateFolder(File sourceFolder) {
+	protected boolean isOkToCreateFolder(final File sourceFolder) {
 		if (sourceFolder.getName().equals("CVS")) {
 			return false;
 		} else {
@@ -155,7 +164,7 @@ public abstract class RienaTemplateSection extends OptionTemplateSection {
 	}
 
 	@Override
-	public String getReplacementString(String fileName, String key) {
+	public String getReplacementString(final String fileName, final String key) {
 		if ((fileName.endsWith(".launch") || fileName.endsWith(".java")) && key.startsWith("{") && key.contains("}")) {
 			return "$" + key;
 		}

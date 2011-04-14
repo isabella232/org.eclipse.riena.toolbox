@@ -17,8 +17,7 @@ public class RienaWizardMessages extends NLS {
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, RienaWizardMessages.class);
 	}
-	
-	
+
 	public static String ClientPage_Title;
 	public static String ClientPageLayout_ClientType;
 	public static String ClientPageLayout_ConsoleClient;
@@ -26,21 +25,18 @@ public class RienaWizardMessages extends NLS {
 	public static String ClientPageLayout_NoClient;
 	public static String NewApplicationWizard_title;
 	public static String GeneralPage_title;
-	
-	
+
 	public static String ProjectSuffixCommon;
 	public static String ProjectSuffixClient;
 	public static String ProjectSuffixService;
-	
+
 	public static String GeneralPage_ProjectName;
 	public static String GeneralPage_PackageName;
-	
+
 	public static String GeneralPage_Validation_GeneralPage_ProjectsToBeCreated;
 	public static String GeneralPage_Validation_NoBasePluginId;
 	public static String GeneralPage_Validation_NoProjectName;
 	public static String GeneralPage_Validation_ProjectAlreadyExists;
 	public static String GenerateProjectOperation_Name;
-	
-	
-	
+
 }

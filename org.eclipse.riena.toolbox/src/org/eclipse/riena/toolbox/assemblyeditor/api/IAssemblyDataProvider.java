@@ -13,7 +13,7 @@ package org.eclipse.riena.toolbox.assemblyeditor.api;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
 
 public interface IAssemblyDataProvider {
-	public void saveData(AssemblyModel model);
+	void saveData(AssemblyModel model);
 
 	/**
 	 * Iterates over all Projects in the workspace and parses the plugin.xml if
@@ -21,13 +21,13 @@ public interface IAssemblyDataProvider {
 	 * 
 	 * @return the AssemblyModel
 	 */
-	public AssemblyModel createData();
+	AssemblyModel createData();
 
-	public IPluginXmlRenderer getXmlRenderer();
+	IPluginXmlRenderer getXmlRenderer();
 
-	public void setXmlRenderer(IPluginXmlRenderer xmlRenderer);
+	void setXmlRenderer(IPluginXmlRenderer xmlRenderer);
 
-	public IPluginXmlParser getXmlParser();
+	IPluginXmlParser getXmlParser();
 
-	public void setXmlParser(IPluginXmlParser xmlParser);
+	void setXmlParser(IPluginXmlParser xmlParser);
 }

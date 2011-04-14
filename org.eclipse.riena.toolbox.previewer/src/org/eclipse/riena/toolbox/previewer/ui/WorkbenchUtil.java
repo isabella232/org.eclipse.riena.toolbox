@@ -19,7 +19,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.riena.toolbox.internal.previewer.Activator;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
-public class WorkbenchUtil {
+public final class WorkbenchUtil {
 
 	public static void showView(final ViewPartInfo info) {
 		if (null == info) {
@@ -47,6 +47,10 @@ public class WorkbenchUtil {
 					message);
 		}
 		throw new RuntimeException(e);
+	}
+
+	private WorkbenchUtil() {
+		// private
 	}
 
 }

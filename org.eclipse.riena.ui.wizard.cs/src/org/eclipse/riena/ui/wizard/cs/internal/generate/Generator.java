@@ -39,34 +39,37 @@ import org.eclipse.jdt.launching.environments.IExecutionEnvironmentsManager;
 import org.eclipse.riena.ui.wizard.cs.internal.generate.preprocessor.Preprocessor;
 
 public class Generator {
-	private String path;
-	private Bundle bundle;
-	private Properties properties;
-	private Preprocessor macro;
+	private final String path;
+	private final Bundle bundle;
+	private final Properties properties;
+	private final Preprocessor macro;
 
-	public Generator(String path, Bundle bundle, Preprocessor macro, Properties properties) {
+	public Generator(final String path, final Bundle bundle, final Preprocessor macro, final Properties properties) {
 		this.path = path;
 		this.bundle = bundle;
 		this.macro = macro;
 		this.properties = properties;
 	}
 
-	public void generate(IProject project, IProgressMonitor monitor) throws CoreException {
-		IJavaProject javaProject = JavaCore.create(project);
+	public void generate(final IProject project, final IProgressMonitor monitor) throws CoreException {
+		final IJavaProject javaProject = JavaCore.create(project);
 
 		String src = properties.getProperty(GeneratorProperties.SOURCE_FOLDER);
-		if (src == null)
+		if (src == null) {
 			src = "src"; //$NON-NLS-1$
+		}
 
-		IFolder sourceFolder = project.getFolder(src); // source folder in the target project
-		if (!sourceFolder.exists())
+		final IFolder sourceFolder = project.getFolder(src); // source folder in the target project
+		if (!sourceFolder.exists()) {
 			sourceFolder.create(true, true, monitor);
+		}
 
 		String _package = properties.getProperty(GeneratorProperties.PACKAGE);
-		if (_package == null)
+		if (_package == null) {
 			_package = ""; //$NON-NLS-1$
+		}
 
-		String sourcePrefix = String.format("/%s/%s", path, src); // source folder in the template project //$NON-NLS-1$
+		final String sourcePrefix = String.format("/%s/%s", path, src); // source folder in the template project //$NON-NLS-1$
 
 		copy(String.format("/%s", path), project, sourcePrefix, monitor); // copy everything except for sources from the root to the root //$NON-NLS-1$
 		copy(sourcePrefix, createSourceFolder(sourceFolder, monitor, _package), null, monitor); // copy sources from src to src
@@ -74,13 +77,12 @@ public class Generator {
 		javaProject.setRawClasspath(classpath(sourceFolder), monitor); // include source folder to classpath
 	}
 
-	@SuppressWarnings("unchecked")
-	private void copy(String source, IContainer destination, String skip, IProgressMonitor monitor)
-			throws CoreException {
-		Enumeration<URL> entries = bundle.findEntries(source, "*", true); //$NON-NLS-1$
+	private void copy(final String source, final IContainer destination, final String skip,
+			final IProgressMonitor monitor) throws CoreException {
+		final Enumeration<URL> entries = bundle.findEntries(source, "*", true); //$NON-NLS-1$
 
 		while (entries.hasMoreElements()) {
-			URL element = entries.nextElement();
+			final URL element = entries.nextElement();
 			String entry = element.getPath();
 
 			if (entry.startsWith(source) && !entry.contains("/CVS/") && !(skip != null && entry.startsWith(skip))) { //$NON-NLS-1$
@@ -91,62 +93,68 @@ public class Generator {
 						String fileFolder = ""; //$NON-NLS-1$
 						String fileName = null;
 
-						int ix = entry.lastIndexOf('/');
+						final int ix = entry.lastIndexOf('/');
 						if (ix > 0) { // see if it has a folder prefix (a/b/c in /a/b/c/MyFile.java)
 							fileFolder = entry.substring(0, ix);
 							fileName = entry.substring(ix + 1);
 							createSourceFolder(destination, monitor, fileFolder); // create folder for prefix
-						} else
+						} else {
 							fileName = entry;
+						}
 
 						InputStream is = null;
 
 						try {
 							is = macro.process(element.openStream(), entry);
-							if (macro.getChangedFileName() != null)
+							if (macro.getChangedFileName() != null) {
 								fileName = macro.getChangedFileName();
+							}
 
-							IFile file = destination.getFile(new Path(fileFolder).append(fileName)); // get entry for file, relative to destination  folder
+							final IFile file = destination.getFile(new Path(fileFolder).append(fileName)); // get entry for file, relative to destination  folder
 							file.create(is, true, monitor); // copy it
-						} catch (Throwable t) {
+						} catch (final Throwable t) {
 							t.printStackTrace();
 							throw new RuntimeException(t);
 						} finally {
-							if (is != null)
+							if (is != null) {
 								is.close();
+							}
 						}
-					} else
+					} else {
 						createSourceFolder(destination, monitor, entry); // only create folder
-				} catch (IOException ex) {
+					}
+				} catch (final IOException ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
 	}
 
-	private IFolder createSourceFolder(IContainer source, IProgressMonitor monitor, String _package)
+	private IFolder createSourceFolder(final IContainer source, final IProgressMonitor monitor, final String _package)
 			throws CoreException {
 		IFolder current = null;
 
-		StringTokenizer segments = new StringTokenizer(_package, "./"); //$NON-NLS-1$
+		final StringTokenizer segments = new StringTokenizer(_package, "./"); //$NON-NLS-1$
 		while (segments.hasMoreTokens()) {
 			current = current != null ? current.getFolder(segments.nextToken()) : source.getFolder(new Path(segments
 					.nextToken()));
 
-			if (!current.exists())
+			if (!current.exists()) {
 				current.create(true, true, monitor);
+			}
 		}
 
 		return current;
 	}
 
-	private static IPath getEEPath(String ee) {
+	private static IPath getEEPath(final String ee) {
 		IPath path = null;
 		if (ee != null) {
-			IExecutionEnvironmentsManager manager = JavaRuntime.getExecutionEnvironmentsManager();
-			IExecutionEnvironment env = manager.getEnvironment(ee);
-			if (env != null)
+			final IExecutionEnvironmentsManager manager = JavaRuntime.getExecutionEnvironmentsManager();
+			final IExecutionEnvironment env = manager.getEnvironment(ee);
+			if (env != null) {
 				path = JavaRuntime.newJREContainerPath(env);
+			}
 		}
 		if (path == null) {
 			path = JavaRuntime.newDefaultJREContainerPath();
@@ -154,16 +162,17 @@ public class Generator {
 		return path;
 	}
 
-	private IClasspathEntry[] classpath(IFolder source) throws JavaModelException {
-		ArrayList<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+	private IClasspathEntry[] classpath(final IFolder source) throws JavaModelException {
+		final ArrayList<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 
 		entries.add(JavaCore.newSourceEntry(source.getFullPath()));
 
-		String ee = properties.getProperty(GeneratorProperties.EXECUTION_ENVIRONMENT);
-		if (ee != null)
+		final String ee = properties.getProperty(GeneratorProperties.EXECUTION_ENVIRONMENT);
+		if (ee != null) {
 			entries.add(JavaCore.newContainerEntry(getEEPath(ee)));
-		else
+		} else {
 			entries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
+		}
 
 		entries.add(JavaCore.newContainerEntry(new Path("org.eclipse.pde.core.requiredPlugins"))); //$NON-NLS-1$
 

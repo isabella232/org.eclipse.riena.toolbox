@@ -20,23 +20,22 @@ import org.eclipse.swt.widgets.Composite;
 public class AbstractPage extends WizardPage {
 	protected FormData fd;
 
-
 	protected Composite composite;
 
-	protected AbstractPage(String pageName) {
+	protected AbstractPage(final String pageName) {
 		super(pageName);
 	}
 
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		composite = new Composite(parent, SWT.NULL);
 
 		initializeDialogUnits(composite);
 
-		FormLayout layout = new FormLayout();
+		final FormLayout layout = new FormLayout();
 		layout.marginHeight = layout.marginWidth = 5;
 
 		composite.setLayout(layout);
-		
+
 		setControl(composite);
 
 		Dialog.applyDialogFont(composite);

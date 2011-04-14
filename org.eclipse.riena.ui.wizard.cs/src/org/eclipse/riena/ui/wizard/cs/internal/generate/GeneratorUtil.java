@@ -16,19 +16,20 @@ import java.net.URL;
 
 public class GeneratorUtil {
 	// true if URL points to real file
-	public static boolean isFile(URL url) throws IOException {
+	public static boolean isFile(final URL url) throws IOException {
 		InputStream is = null;
-		
+
 		try {
-			// check if we can read from the url, to 
+			// check if we can read from the url, to
 			//determine between a file and a directory
 			is = url.openStream();
 			return is.read() > -1;
-		} catch (IOException aEx) {
+		} catch (final IOException aEx) {
 			return false;
 		} finally {
-			if (is != null)
+			if (is != null) {
 				is.close();
+			}
 		}
 	}
 }

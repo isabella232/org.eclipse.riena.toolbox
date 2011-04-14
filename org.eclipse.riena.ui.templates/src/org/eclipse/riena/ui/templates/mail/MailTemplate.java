@@ -22,6 +22,7 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.IPluginReference;
 import org.eclipse.pde.internal.ui.IHelpContextIds;
 import org.eclipse.pde.ui.IFieldData;
+
 import org.eclipse.riena.ui.templates.RienaTemplateSection;
 
 public class MailTemplate extends RienaTemplateSection {
@@ -34,11 +35,11 @@ public class MailTemplate extends RienaTemplateSection {
 		createOptions();
 	}
 
-	public void addPages(Wizard wizard) {
-		WizardPage page = createPage(0, IHelpContextIds.TEMPLATE_RCP_MAIL);
+	@Override
+	public void addPages(final Wizard wizard) {
+		final WizardPage page = createPage(0, IHelpContextIds.TEMPLATE_RCP_MAIL);
 		page.setTitle("Riena Mail Template");
-		page
-				.setDescription("Creates a Riena application based on the Mail example, complete with navigation, views, menu and toolbar actions, keybindings and a product definition.");
+		page.setDescription("Creates a Riena application based on the Mail example, complete with navigation, views, menu and toolbar actions, keybindings and a product definition.");
 		wizard.addPage(page);
 		markPagesAdded();
 	}
@@ -46,20 +47,22 @@ public class MailTemplate extends RienaTemplateSection {
 	private void createOptions() {
 		addOption(KEY_PRODUCT_NAME, "&Product name:", VALUE_PRODUCT_NAME, 0);
 
-		addOption(KEY_PACKAGE_NAME, "Pa&ckage name:", (String) null, 0); //		
+		addOption(KEY_PACKAGE_NAME, "Pa&ckage name:", (String) null, 0); //
 
-		addOption(KEY_APPLICATION_CLASS, "App&lication class:", "Application", 0); //$NON-NLS-1$ 
+		addOption(KEY_APPLICATION_CLASS, "App&lication class:", "Application", 0); //$NON-NLS-1$
 	}
 
-	protected void initializeFields(IFieldData data) {
+	@Override
+	protected void initializeFields(final IFieldData data) {
 		// In a new project wizard, we don't know this yet - the
 		// model has not been created
-		String packageName = getFormattedPackageName(data.getId());
+		final String packageName = getFormattedPackageName(data.getId());
 		initializeOption(KEY_PACKAGE_NAME, packageName);
 	}
 
-	public void initializeFields(IPluginModelBase model) {
-		String packageName = getFormattedPackageName(model.getPluginBase().getId());
+	@Override
+	public void initializeFields(final IPluginModelBase model) {
+		final String packageName = getFormattedPackageName(model.getPluginBase().getId());
 		initializeOption(KEY_PACKAGE_NAME, packageName);
 	}
 
@@ -68,6 +71,7 @@ public class MailTemplate extends RienaTemplateSection {
 	 * 
 	 * @see org.eclipse.pde.ui.templates.OptionTemplateSection#getSectionId()
 	 */
+	@Override
 	public String getSectionId() {
 		return "mail"; //$NON-NLS-1$
 	}
@@ -79,7 +83,8 @@ public class MailTemplate extends RienaTemplateSection {
 	 * org.eclipse.pde.ui.templates.AbstractTemplateSection#updateModel(org.
 	 * eclipse.core.runtime.IProgressMonitor)
 	 */
-	protected void updateModel(IProgressMonitor monitor) throws CoreException {
+	@Override
+	protected void updateModel(final IProgressMonitor monitor) throws CoreException {
 		createApplicationExtension();
 		createPerspectiveExtension();
 		createViewExtension();
@@ -91,45 +96,47 @@ public class MailTemplate extends RienaTemplateSection {
 	}
 
 	private void createApplicationExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
+		final IPluginBase plugin = model.getPluginBase();
 
-		IPluginExtension extension = createExtension("org.eclipse.core.runtime.applications", true); //$NON-NLS-1$
+		final IPluginExtension extension = createExtension("org.eclipse.core.runtime.applications", true); //$NON-NLS-1$
 		extension.setId(VALUE_APPLICATION_ID);
 
-		IPluginElement element = model.getPluginFactory().createElement(extension);
+		final IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("application"); //$NON-NLS-1$
 		extension.add(element);
 
-		IPluginElement run = model.getPluginFactory().createElement(element);
+		final IPluginElement run = model.getPluginFactory().createElement(element);
 		run.setName("run"); //$NON-NLS-1$
 		run.setAttribute("class", getStringOption(KEY_PACKAGE_NAME) + "." + getStringOption(KEY_APPLICATION_CLASS)); //$NON-NLS-1$ //$NON-NLS-2$
 		element.add(run);
 
-		if (!extension.isInTheModel())
+		if (!extension.isInTheModel()) {
 			plugin.add(extension);
+		}
 	}
 
 	private void createPerspectiveExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
+		final IPluginBase plugin = model.getPluginBase();
 
-		IPluginExtension extension = createExtension("org.eclipse.ui.perspectives", true); //$NON-NLS-1$
-		IPluginElement element = model.getPluginFactory().createElement(extension);
+		final IPluginExtension extension = createExtension("org.eclipse.ui.perspectives", true); //$NON-NLS-1$
+		final IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("perspective"); //$NON-NLS-1$
 		element.setAttribute("class", "org.eclipse.riena.navigation.ui.swt.views.SubApplicationView"); //$NON-NLS-1$ //$NON-NLS-2$
 		element.setAttribute("name", VALUE_PERSPECTIVE_NAME); //$NON-NLS-1$
 		element.setAttribute("id", "rcp.mail.perspective"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(element);
 
-		if (!extension.isInTheModel())
+		if (!extension.isInTheModel()) {
 			plugin.add(extension);
+		}
 	}
 
 	private void createViewExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
+		final IPluginBase plugin = model.getPluginBase();
 		// String id = plugin.getId();
-		IPluginExtension extension = createExtension("org.eclipse.ui.views", true); //$NON-NLS-1$
+		final IPluginExtension extension = createExtension("org.eclipse.ui.views", true); //$NON-NLS-1$
 
-		IPluginElement view = model.getPluginFactory().createElement(extension);
+		final IPluginElement view = model.getPluginFactory().createElement(extension);
 		view.setName("view"); //$NON-NLS-1$
 		view.setAttribute("allowMultiple", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		view.setAttribute("icon", "icons/sample2.gif"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -138,14 +145,15 @@ public class MailTemplate extends RienaTemplateSection {
 		view.setAttribute("id", "rcp.mail.view"); //$NON-NLS-1$ //$NON-NLS-2$
 		extension.add(view);
 
-		if (!extension.isInTheModel())
+		if (!extension.isInTheModel()) {
 			plugin.add(extension);
+		}
 	}
 
 	private void createCommandExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
-		String id = plugin.getId();
-		IPluginExtension extension = createExtension("org.eclipse.ui.commands", true); //$NON-NLS-1$
+		final IPluginBase plugin = model.getPluginBase();
+		final String id = plugin.getId();
+		final IPluginExtension extension = createExtension("org.eclipse.ui.commands", true); //$NON-NLS-1$
 
 		IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("category"); //$NON-NLS-1$
@@ -171,14 +179,15 @@ public class MailTemplate extends RienaTemplateSection {
 		element.setAttribute("defaultHandler", getStringOption(KEY_PACKAGE_NAME) + ".MessagePopupHandler");
 		extension.add(element);
 
-		if (!extension.isInTheModel())
+		if (!extension.isInTheModel()) {
 			plugin.add(extension);
+		}
 	}
 
 	private void createBindingsExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
+		final IPluginBase plugin = model.getPluginBase();
 		// String id = plugin.getId();
-		IPluginExtension extension = createExtension("org.eclipse.ui.bindings", true); //$NON-NLS-1$
+		final IPluginExtension extension = createExtension("org.eclipse.ui.bindings", true); //$NON-NLS-1$
 
 		IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("key"); //$NON-NLS-1$
@@ -204,20 +213,21 @@ public class MailTemplate extends RienaTemplateSection {
 		element.setAttribute("contextId", "org.eclipse.ui.contexts.window");
 		extension.add(element);
 
-		if (!extension.isInTheModel())
+		if (!extension.isInTheModel()) {
 			plugin.add(extension);
+		}
 	}
 
 	private void createUIMenusExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
-		IPluginExtension extension = createExtension("org.eclipse.ui.menus", true);
+		final IPluginBase plugin = model.getPluginBase();
+		final IPluginExtension extension = createExtension("org.eclipse.ui.menus", true);
 
-		IPluginElement element = model.getPluginFactory().createElement(extension);
+		final IPluginElement element = model.getPluginFactory().createElement(extension);
 		element.setName("menuContribution");
 		element.setAttribute("locationURI", "toolbar:org.eclipse.ui.main.toolbar?after=additions");
 		extension.add(element);
 
-		IPluginElement toolbar = model.getPluginFactory().createElement(element);
+		final IPluginElement toolbar = model.getPluginFactory().createElement(element);
 		toolbar.setName("toolbar");
 		toolbar.setAttribute("id", "riena.rcp.toolbar");
 		element.add(toolbar);
@@ -236,12 +246,12 @@ public class MailTemplate extends RienaTemplateSection {
 		command.setAttribute("style", "push");
 		toolbar.add(command);
 
-		IPluginElement element2 = model.getPluginFactory().createElement(extension);
+		final IPluginElement element2 = model.getPluginFactory().createElement(extension);
 		element2.setName("menuContribution");
 		element2.setAttribute("locationURI", "menu:org.eclipse.ui.main.menu");
 		extension.add(element2);
 
-		IPluginElement fileMenu = model.getPluginFactory().createElement(element);
+		final IPluginElement fileMenu = model.getPluginFactory().createElement(element);
 		fileMenu.setName("menu");
 		fileMenu.setAttribute("label", "&File");
 		element2.add(fileMenu);
@@ -273,7 +283,7 @@ public class MailTemplate extends RienaTemplateSection {
 		command.setAttribute("style", "push");
 		fileMenu.add(command);
 
-		IPluginElement helpMenu = model.getPluginFactory().createElement(element);
+		final IPluginElement helpMenu = model.getPluginFactory().createElement(element);
 		helpMenu.setName("menu");
 		helpMenu.setAttribute("label", "&Help");
 		element2.add(helpMenu);
@@ -285,18 +295,19 @@ public class MailTemplate extends RienaTemplateSection {
 		command.setAttribute("style", "push");
 		helpMenu.add(command);
 
-		if (!extension.isInTheModel())
+		if (!extension.isInTheModel()) {
 			plugin.add(extension);
+		}
 	}
 
 	private void createProductExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
-		IPluginExtension extension = createExtension("org.eclipse.core.runtime.products", true); //$NON-NLS-1$
+		final IPluginBase plugin = model.getPluginBase();
+		final IPluginExtension extension = createExtension("org.eclipse.core.runtime.products", true); //$NON-NLS-1$
 		extension.setId(VALUE_PRODUCT_ID);
 
-		IPluginElement element = model.getFactory().createElement(extension);
+		final IPluginElement element = model.getFactory().createElement(extension);
 		element.setName("product"); //$NON-NLS-1$
-		element.setAttribute("name", getStringOption(KEY_PRODUCT_NAME)); //$NON-NLS-1$		
+		element.setAttribute("name", getStringOption(KEY_PRODUCT_NAME)); //$NON-NLS-1$
 		element.setAttribute("application", plugin.getId() + "." + VALUE_APPLICATION_ID); //$NON-NLS-1$ //$NON-NLS-2$
 
 		IPluginElement property = model.getFactory().createElement(element);
@@ -325,12 +336,12 @@ public class MailTemplate extends RienaTemplateSection {
 	}
 
 	private void createImagePathsExtension() throws CoreException {
-		IPluginBase plugin = model.getPluginBase();
-		IPluginExtension extension = createExtension("org.eclipse.riena.ui.swt.imagePaths", true); //$NON-NLS-1$
+		final IPluginBase plugin = model.getPluginBase();
+		final IPluginExtension extension = createExtension("org.eclipse.riena.ui.swt.imagePaths", true); //$NON-NLS-1$
 
-		IPluginElement element = model.getFactory().createElement(extension);
+		final IPluginElement element = model.getFactory().createElement(extension);
 		element.setName("path"); //$NON-NLS-1$
-		element.setAttribute("path", "icons"); //$NON-NLS-1$		
+		element.setAttribute("path", "icons"); //$NON-NLS-1$
 
 		extension.add(element);
 
@@ -355,6 +366,7 @@ public class MailTemplate extends RienaTemplateSection {
 	 * @seeorg.eclipse.pde.ui.templates.BaseOptionTemplateSection#
 	 * isDependentOnParentWizard()
 	 */
+	@Override
 	public boolean isDependentOnParentWizard() {
 		return true;
 	}
@@ -366,6 +378,7 @@ public class MailTemplate extends RienaTemplateSection {
 	 * org.eclipse.pde.ui.templates.AbstractTemplateSection#getNumberOfWorkUnits
 	 * ()
 	 */
+	@Override
 	public int getNumberOfWorkUnits() {
 		return super.getNumberOfWorkUnits() + 1;
 	}
@@ -377,7 +390,8 @@ public class MailTemplate extends RienaTemplateSection {
 	 * org.eclipse.pde.ui.templates.AbstractTemplateSection#getDependencies(
 	 * java.lang.String)
 	 */
-	public IPluginReference[] getDependencies(String schemaVersion) {
+	@Override
+	public IPluginReference[] getDependencies(final String schemaVersion) {
 
 		return getUIDependencies(schemaVersion);
 	}
@@ -389,8 +403,9 @@ public class MailTemplate extends RienaTemplateSection {
 	 * org.eclipse.pde.internal.ui.wizards.templates.PDETemplateSection#getNewFiles
 	 * ()
 	 */
+	@Override
 	public String[] getNewFiles() {
-		return new String[] { "icons/", "product_lg.gif" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return new String[] { "icons/", "product_lg.gif" }; //$NON-NLS-1$ //$NON-NLS-2$ 
 	}
 
 	/*
@@ -399,6 +414,7 @@ public class MailTemplate extends RienaTemplateSection {
 	 * @seeorg.eclipse.pde.internal.ui.templates.PDETemplateSection#
 	 * copyBrandingDirectory()
 	 */
+	@Override
 	protected boolean copyBrandingDirectory() {
 		return true;
 	}

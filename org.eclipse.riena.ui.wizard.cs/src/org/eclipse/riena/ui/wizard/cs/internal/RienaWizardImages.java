@@ -23,13 +23,13 @@ public class RienaWizardImages {
 
 	public static final ImageDescriptor DESC_NEW_APPLICATION_WIZARD = descriptor(WIZBAN, "newapp_wizard.png"); //$NON-NLS-1$
 
-	private static ImageDescriptor descriptor(String prefix, String name) {
+	private static ImageDescriptor descriptor(final String prefix, final String name) {
 		return ImageDescriptor.createFromURL(url(prefix, name));
 	}
 
-	private static URL url(String prefix, String name) {
-		
-		Path path = new Path(String.format("/%s/%s/%s", ICONS, prefix, name)); //$NON-NLS-1$
+	private static URL url(final String prefix, final String name) {
+
+		final Path path = new Path(String.format("/%s/%s/%s", ICONS, prefix, name)); //$NON-NLS-1$
 		return FileLocator.find(RienaWizardPlugin.getDefault().getBundle(), path, null);
 	}
 }

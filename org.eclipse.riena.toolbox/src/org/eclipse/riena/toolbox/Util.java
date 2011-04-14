@@ -12,7 +12,7 @@ package org.eclipse.riena.toolbox;
 
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 
-public class Util {
+public final class Util {
 	public static boolean isGiven(final String in) {
 		return (null != in && in.trim().length() > 0);
 	}
@@ -58,6 +58,10 @@ public class Util {
 			return (T) current;
 		}
 		return findParentOfType(current.getParent(), type);
+	}
+
+	private Util() {
+		// private
 	}
 
 }

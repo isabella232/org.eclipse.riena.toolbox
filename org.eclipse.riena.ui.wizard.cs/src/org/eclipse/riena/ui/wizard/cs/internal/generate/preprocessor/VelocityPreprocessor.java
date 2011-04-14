@@ -21,14 +21,16 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogChute;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.riena.ui.wizard.cs.internal.RienaWizardPlugin;
 import org.eclipse.ui.statushandlers.StatusManager;
 
+import org.eclipse.riena.ui.wizard.cs.internal.RienaWizardPlugin;
+
 public class VelocityPreprocessor implements Preprocessor {
-	private Properties properties;
+	private final Properties properties;
 
 	private String changedName;
 
@@ -38,62 +40,67 @@ public class VelocityPreprocessor implements Preprocessor {
 		ve.setProperty(VelocityEngine.RUNTIME_LOG_LOGSYSTEM, new EclipseLogChute());
 		try {
 			ve.init();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public VelocityPreprocessor(Properties properties) {
+	public VelocityPreprocessor(final Properties properties) {
 		this.properties = properties;
-		
+
 		properties.put("d", "$"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public InputStream process(InputStream input, String tag) throws CoreException {
+	public InputStream process(final InputStream input, final String tag) throws CoreException {
 		try {
 			try {
 				changedName = null;
-				
-				VelocityContext context = new VelocityContext(properties);
 
-				ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
-				OutputStreamWriter osw = new OutputStreamWriter(output);
+				final VelocityContext context = new VelocityContext(properties);
+
+				final ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
+				final OutputStreamWriter osw = new OutputStreamWriter(output);
 
 				ve.evaluate(context, osw, tag, new InputStreamReader(input));
 				osw.flush();
-				
+
 				changedName = (String) context.get("filename"); //$NON-NLS-1$
-				if(changedName != null)
+				if (changedName != null) {
 					context.remove("filename"); //$NON-NLS-1$
-				
+				}
+
 				return new ByteArrayInputStream(output.toByteArray());
 			} finally {
 				input.close();
 			}
-		} catch (Exception ex) {
-			throw new CoreException(new Status(IStatus.ERROR, RienaWizardPlugin.getDefault().getBundle().getSymbolicName(), ex.getMessage(), ex));
+		} catch (final Exception ex) {
+			throw new CoreException(new Status(IStatus.ERROR, RienaWizardPlugin.getDefault().getBundle()
+					.getSymbolicName(), ex.getMessage(), ex));
 		}
 	}
 
 	static private class EclipseLogChute implements LogChute {
-		public void init(RuntimeServices runtime) throws Exception {
+		public void init(final RuntimeServices runtime) throws Exception {
 		}
 
-		public boolean isLevelEnabled(int level) {
+		public boolean isLevelEnabled(final int level) {
 			return convertLevel(level) != null;
 		}
 
-		public void log(int level, String message) {
+		public void log(final int level, final String message) {
 			log(level, message, null);
 		}
 
-		public void log(int level, String message, Throwable throwable) {
-			Integer converted = convertLevel(level);
-			if (converted != null)
-				StatusManager.getManager().handle(new Status(converted, RienaWizardPlugin.getDefault().getBundle().getSymbolicName(), message, throwable), StatusManager.LOG);
+		public void log(final int level, final String message, final Throwable throwable) {
+			final Integer converted = convertLevel(level);
+			if (converted != null) {
+				StatusManager.getManager().handle(
+						new Status(converted, RienaWizardPlugin.getDefault().getBundle().getSymbolicName(), message,
+								throwable), StatusManager.LOG);
+			}
 		}
 
-		private Integer convertLevel(int level) {
+		private Integer convertLevel(final int level) {
 			switch (level) {
 			case LogChute.ERROR_ID:
 				return IStatus.ERROR;

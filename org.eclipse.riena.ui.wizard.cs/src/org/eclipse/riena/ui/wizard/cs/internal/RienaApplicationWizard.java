@@ -14,12 +14,13 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
+
 import org.eclipse.riena.ui.wizard.cs.internal.generate.GenerateProjectOperation;
 import org.eclipse.riena.ui.wizard.cs.internal.pages.ClientPage;
 import org.eclipse.riena.ui.wizard.cs.internal.pages.ClientType;
 import org.eclipse.riena.ui.wizard.cs.internal.pages.GeneralPage;
-import org.eclipse.ui.INewWizard;
-import org.eclipse.ui.IWorkbench;
 
 public class RienaApplicationWizard extends Wizard implements INewWizard {
 	private GeneralPage generalPage;
@@ -36,7 +37,7 @@ public class RienaApplicationWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		addPage(generalPage = new GeneralPage());
 		addPage(clientPage = new ClientPage());
-		
+
 		clientPage.setClientType(ClientType.GUI);
 	}
 
@@ -44,14 +45,14 @@ public class RienaApplicationWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		try {
 			getContainer().run(false, true, new GenerateProjectOperation(generalPage, clientPage));
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			RienaWizardPlugin.error(e);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 		}
 		return true;
 	}
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
 
 	}
 }
