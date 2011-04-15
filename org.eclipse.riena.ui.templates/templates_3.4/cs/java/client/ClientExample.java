@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  * Contributors:
  *    compeople AG - initial API and implementation
  *******************************************************************************/
+
 package $packageName$.client;
 
 import org.eclipse.riena.communication.core.IRemoteServiceRegistration;
@@ -26,7 +27,7 @@ public class ClientExample {
 	public ClientExample(String port) {
 		this.port = port;
 	}
-	
+
 	public void start(BundleContext context) {
 		if (customerServiceReg != null) {
 			return;
@@ -34,7 +35,7 @@ public class ClientExample {
 
 		RemoteServiceFactory rsf = new RemoteServiceFactory();
 		Class<?> serviceInterface = ICustomerService.class;
-		String url = "http://localhost" 
+		String url = "http://localhost"
 			    + (port != null ? ":" + port : "")
 				+ "/hessian/CustomerService";
 		String protocol = "hessian";
@@ -54,7 +55,7 @@ public class ClientExample {
 			System.out.println(customer);
 		}
 	}
-	
+
 	public void unbind(ICustomerService customerService) {
 		System.out.println("ClientExample.unbind()");
 	}

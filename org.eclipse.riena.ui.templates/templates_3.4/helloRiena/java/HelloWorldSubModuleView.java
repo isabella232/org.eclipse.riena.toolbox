@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Text;
 /**
  * Very simple sub module view, that displays only a label with the text "Hello
  * World!".
- * 
+ *
  */
 public class HelloWorldSubModuleView extends SubModuleView {
 
@@ -38,11 +38,11 @@ public class HelloWorldSubModuleView extends SubModuleView {
 		parent.setBackground(LnfManager.getLnf().getColor(LnfKeyConstants.SUB_MODULE_BACKGROUND));
 		parent.setLayout(new GridLayout(2, false));
 		GridDataFactory gdf = GridDataFactory.fillDefaults().hint(200, SWT.DEFAULT);
-		
+
 		UIControlsFactory.createLabel(parent, "First Name:");
 		Text txtFirst = UIControlsFactory.createText(parent, SWT.NONE, "txtFirst");
 		gdf.applyTo(txtFirst);
-		
+
 		UIControlsFactory.createLabel(parent, "Last Name:");
 		Text txtLast = UIControlsFactory.createText(parent, SWT.NONE, "txtLast");
 		gdf.applyTo(txtLast);

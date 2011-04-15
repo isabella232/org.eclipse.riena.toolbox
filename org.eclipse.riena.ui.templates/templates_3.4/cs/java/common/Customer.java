@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -95,7 +95,7 @@ public class Customer {
 
 	/**
 	 * Returns the address of the customer
-	 * 
+	 *
 	 * @return address of the customer
 	 */
 	public Address getAddress() {
@@ -106,7 +106,7 @@ public class Customer {
 
 	/**
 	 * Sets the address of the customer
-	 * 
+	 *
 	 * @param address
 	 *            of the customer
 	 */
@@ -119,7 +119,7 @@ public class Customer {
 
 	/**
 	 * Returns the birth of the customer
-	 * 
+	 *
 	 * @return birth of the customer
 	 */
 	public Birth getBirth() {
@@ -130,7 +130,7 @@ public class Customer {
 
 	/**
 	 * Sets the birth of the customer
-	 * 
+	 *
 	 * @param birth
 	 *            - the birth to set
 	 */
@@ -143,7 +143,7 @@ public class Customer {
 
 	/**
 	 * Returns the first name of the customer
-	 * 
+	 *
 	 * @return first name of the customer
 	 */
 	public String getFirstName() {
@@ -154,7 +154,7 @@ public class Customer {
 
 	/**
 	 * Sets the first name of the customer
-	 * 
+	 *
 	 * @param firstName
 	 *            - the first name to set
 	 */
@@ -167,7 +167,7 @@ public class Customer {
 
 	/**
 	 * Returns the form of the customer
-	 * 
+	 *
 	 * @return form of the customer
 	 */
 	public String getForm() {
@@ -178,7 +178,7 @@ public class Customer {
 
 	/**
 	 * Sets the form of the customer
-	 * 
+	 *
 	 * @param form
 	 *            - the form to set.
 	 */
@@ -191,7 +191,7 @@ public class Customer {
 
 	/**
 	 * Returns the last name of the customer
-	 * 
+	 *
 	 * @return last name of the customer
 	 */
 	public String getLastName() {
@@ -202,7 +202,7 @@ public class Customer {
 
 	/**
 	 * Sets the last name of the customer
-	 * 
+	 *
 	 * @param lastName
 	 *            - the last name to set
 	 */
@@ -215,7 +215,7 @@ public class Customer {
 
 	/**
 	 * Returns the title of the customer
-	 * 
+	 *
 	 * @return title of the customer
 	 */
 	public String getTitle() {
@@ -226,7 +226,7 @@ public class Customer {
 
 	/**
 	 * Set the title of the customer
-	 * 
+	 *
 	 * @param title
 	 *            - the title to set
 	 */
@@ -239,7 +239,7 @@ public class Customer {
 
 	/**
 	 * Returns the fax number of the customer
-	 * 
+	 *
 	 * @return fax number
 	 */
 	public String getFax() {
@@ -250,7 +250,7 @@ public class Customer {
 
 	/**
 	 * Sets the given fax number
-	 * 
+	 *
 	 * @param fax
 	 *            - the fax number to set
 	 */
@@ -263,7 +263,7 @@ public class Customer {
 
 	/**
 	 * Returns the business phone number of the customer
-	 * 
+	 *
 	 * @return business phone number
 	 */
 	public String getPhoneBusiness() {
@@ -274,7 +274,7 @@ public class Customer {
 
 	/**
 	 * Sets the given business phone number
-	 * 
+	 *
 	 * @param phoneBusiness
 	 *            - the phone number to set
 	 */
@@ -287,7 +287,7 @@ public class Customer {
 
 	/**
 	 * Returns the mobile phone number of the customer
-	 * 
+	 *
 	 * @return mobile phone number
 	 */
 	public String getPhoneMobile() {
@@ -298,7 +298,7 @@ public class Customer {
 
 	/**
 	 * Sets the given mobile phone number
-	 * 
+	 *
 	 * @param phoneMobile
 	 *            - the phone number to set
 	 */
@@ -311,7 +311,7 @@ public class Customer {
 
 	/**
 	 * Returns the private phone number of the customer
-	 * 
+	 *
 	 * @return private phone number
 	 */
 	public String getPhonePrivate() {
@@ -322,7 +322,7 @@ public class Customer {
 
 	/**
 	 * Sets the given private phone number
-	 * 
+	 *
 	 * @param phonePrivate
 	 *            - the phone number to set
 	 */
@@ -335,7 +335,7 @@ public class Customer {
 
 	/**
 	 * Returns the eMail address of the customer
-	 * 
+	 *
 	 * @return eMail address
 	 */
 	public String getEmail() {
@@ -346,7 +346,7 @@ public class Customer {
 
 	/**
 	 * Sets the given eMail address
-	 * 
+	 *
 	 * @param email
 	 *            - the eMail address to set
 	 */
@@ -379,7 +379,7 @@ public class Customer {
 
 	/**
 	 * Compares two customers by customerNumber.
-	 * 
+	 *
 	 * @param obj
 	 *            The reference object with which to compare.
 	 * @return <code>true</code> if the argument is a Customer with the same
@@ -414,7 +414,7 @@ public class Customer {
 
 	/**
 	 * Returns a list with all bank data
-	 * 
+	 *
 	 * @return list of bank data
 	 */
 	public List<BankData> getBankData() {
@@ -425,7 +425,7 @@ public class Customer {
 
 	/**
 	 * Sets the given list of bank data
-	 * 
+	 *
 	 * @param bankData
 	 *            - the list of bank data to set
 	 */

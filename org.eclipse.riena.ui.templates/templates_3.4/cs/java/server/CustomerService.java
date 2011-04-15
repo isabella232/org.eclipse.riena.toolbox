@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -39,7 +39,7 @@ public class CustomerService implements ICustomerService {
 		nextUniqueCustomerNumber = 1;
 		initializeCustomers();
 	}
-	
+
 	public Customer[] findCustomer(Customer searchedCustomer) {
 		List<Customer> l = new ArrayList<Customer>();
 
@@ -59,7 +59,7 @@ public class CustomerService implements ICustomerService {
 
 	// helping methods
 	//////////////////
-	
+
 	private boolean contains(String original, String other) {
 		if (other == null || other.equals("")) {
 			return true;
@@ -160,7 +160,7 @@ public class CustomerService implements ICustomerService {
 	/**
 	 * This method is also used internally to store customers. No security is
 	 * checked.
-	 * 
+	 *
 	 * @param customer
 	 */
 	private void storeInternal(Customer customer) {

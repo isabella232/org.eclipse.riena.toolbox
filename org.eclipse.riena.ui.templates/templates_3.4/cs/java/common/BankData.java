@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -30,7 +30,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Creates bank data and sets the given values
-	 * 
+	 *
 	 * @param accountNumber
 	 *            - the accountNumber to set
 	 * @param bank
@@ -62,7 +62,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Returns the account number
-	 * 
+	 *
 	 * @return account number
 	 */
 	public String getAccountNumber() {
@@ -73,7 +73,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Sets the given account number
-	 * 
+	 *
 	 * @param accountNumber
 	 *            - the account number to set
 	 */
@@ -85,7 +85,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Returns the name of the bank
-	 * 
+	 *
 	 * @return name of bank
 	 */
 	public String getBank() {
@@ -96,7 +96,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Sets the given name of the bank
-	 * 
+	 *
 	 * @param bank
 	 *            - the name of bank to set
 	 */
@@ -108,7 +108,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Returns the bank code
-	 * 
+	 *
 	 * @return Returns the bankCode.
 	 */
 	public String getBankCode() {
@@ -119,7 +119,7 @@ public class BankData implements Cloneable {
 
 	/**
 	 * Sets the given bank code
-	 * 
+	 *
 	 * @param bankCode
 	 *            - the bank codd to set.
 	 */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,7 +31,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Creates an address and sets the given values
-	 * 
+	 *
 	 * @param country
 	 *            - the country to set
 	 * @param zipCode
@@ -54,7 +54,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Returns the city
-	 * 
+	 *
 	 * @return city
 	 */
 	public String getCity() {
@@ -65,7 +65,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Sets the given city
-	 * 
+	 *
 	 * @param city
 	 *            - the city to set
 	 */
@@ -77,7 +77,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Returns the street
-	 * 
+	 *
 	 * @return street
 	 */
 	public String getStreet() {
@@ -88,7 +88,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Sets the given street
-	 * 
+	 *
 	 * @param street
 	 *            - the street to set
 	 */
@@ -100,7 +100,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Returns the zip code
-	 * 
+	 *
 	 * @return zip code
 	 */
 	public String getZipCode() {
@@ -111,7 +111,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Sets the given zip code
-	 * 
+	 *
 	 * @param zipCode
 	 *            - the zip code to set
 	 */
@@ -123,7 +123,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Returns the country
-	 * 
+	 *
 	 * @return country
 	 */
 	public String getCountry() {
@@ -134,7 +134,7 @@ public class Address implements Cloneable {
 
 	/**
 	 * Sets the given country
-	 * 
+	 *
 	 * @param country
 	 *            - the country to set
 	 */

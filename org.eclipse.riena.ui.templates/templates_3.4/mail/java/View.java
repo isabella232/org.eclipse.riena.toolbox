@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2007, 2011 compeople AG and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    compeople AG - initial API and implementation
+ *******************************************************************************/
 package $packageName$;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -17,7 +27,7 @@ import org.eclipse.ui.part.ViewPart;
 public class View extends ViewPart {
 
 	public static final String ID = "rcp.mail.view";
-	
+
 	public void createPartControl(Composite parent) {
 		Composite top = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -32,28 +42,28 @@ public class View extends ViewPart {
 		layout.marginWidth = 10;
 		layout.numColumns = 2;
 		banner.setLayout(layout);
-		
+
 		// setup bold font
-		Font boldFont = JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT);    
-		
+		Font boldFont = JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT);
+
 		Label l = new Label(banner, SWT.WRAP);
 		l.setText("Subject:");
 		l.setFont(boldFont);
 		l = new Label(banner, SWT.WRAP);
 		l.setText("This is a message about the cool Eclipse RCP!");
-		
+
 		l = new Label(banner, SWT.WRAP);
 		l.setText("From:");
 		l.setFont(boldFont);
-    
+
 		final Link link = new Link(banner, SWT.NONE);
 		link.setText("<a>nicole@mail.org</a>");
-		link.addSelectionListener(new SelectionAdapter() {    
+		link.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog.openInformation(getSite().getShell(), "Not Implemented", "Imagine the address book or a new message being created now.");
-			}    
+			}
 		});
-    
+
 		l = new Label(banner, SWT.WRAP);
 		l.setText("Date:");
 		l.setFont(boldFont);

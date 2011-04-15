@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2009 compeople AG and others.
+ * Copyright (c) 2007, 2011 compeople AG and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,7 +31,7 @@ public class Birth {
 
 	/**
 	 * Creates a birth and sets the given values
-	 * 
+	 *
 	 * @param day
 	 *            - birthday to set
 	 * @param place
@@ -48,7 +48,7 @@ public class Birth {
 
 	/**
 	 * Returns the birthday
-	 * 
+	 *
 	 * @return birthday
 	 */
 	public Date getBirthDay() {
@@ -59,7 +59,7 @@ public class Birth {
 
 	/**
 	 * Sets the given birthday
-	 * 
+	 *
 	 * @param day
 	 *            - the birth day to set.
 	 */
@@ -71,7 +71,7 @@ public class Birth {
 
 	/**
 	 * Returns the birth place
-	 * 
+	 *
 	 * @return birthplace.
 	 */
 	public String getBirthPlace() {
@@ -82,14 +82,14 @@ public class Birth {
 
 	/**
 	 * Sets the given birth place
-	 * 
+	 *
 	 * @param birthPlace
 	 *            - the birthplace to set.
 	 */
 	public void setBirthPlace(String birthPlace) {
 
 		this.birthPlace = birthPlace;
-	
+
 	} // end method
 
 } // end class
