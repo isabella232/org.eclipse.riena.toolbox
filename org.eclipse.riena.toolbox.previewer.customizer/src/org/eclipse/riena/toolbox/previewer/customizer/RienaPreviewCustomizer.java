@@ -92,10 +92,11 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 	public void afterCreation(final Composite parent) {
 		final String currentLnf = getLnfFromPreferences();
 		if (null == currentLnf) {
-			// reset the view to its original state 
+			// reset the view to its original state
 			final SWTControlFinder finder = new SWTControlFinder(parent) {
 				@Override
 				public void handleControl(final Control control) {
+					super.handleControl(control);
 					control.redraw();
 				}
 
@@ -114,12 +115,6 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 			@Override
 			public void handleBoundControl(final Control control, final String bindingProperty) {
 				control.setToolTipText(String.format("Ridget-Id '%s'", bindingProperty)); //$NON-NLS-1$
-				control.redraw();
-				System.out.println("setTooltip " + bindingProperty);
-			}
-
-			@Override
-			public void handleControl(final Control control) {
 				control.redraw();
 			}
 		};

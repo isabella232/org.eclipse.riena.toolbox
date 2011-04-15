@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.previewer.customizer.preferences;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -29,8 +30,8 @@ public class PreviewCustomizerPreferencePage extends FieldEditorPreferencePage i
 	public void createFieldEditors() {
 		addField(new StringFieldEditor(PreferenceConstants.LNF_CLASS_NAME, "Look and Feel Classname",
 				getFieldEditorParent()));
-		//addField(new BooleanFieldEditor(PreferenceConstants.SHOW_RIDGET_IDS, "Show Ridget Ids as Tooltip", getFieldEditorParent()));
-		// FIXME show RidgetIds does not work at the moment
+		addField(new BooleanFieldEditor(PreferenceConstants.SHOW_RIDGET_IDS, "Show Ridget Ids as Tooltip",
+				getFieldEditorParent()));
 	}
 
 	public void init(final IWorkbench workbench) {
