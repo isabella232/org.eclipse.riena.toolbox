@@ -129,7 +129,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 	@Override
 	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
-		txtName = createLabeledText(parent, "Name");
+		txtName = createLabeledText(parent, "Name", true);
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(final KeyEvent e) {
@@ -191,7 +191,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		private String controllerName;
 
 		public BrowseControllerComposite(final Composite parent, final Color background) {
-			super(parent, background);
+			super(parent, background, true);
 
 			getBrowseButton().addSelectionListener(new SelectionAdapter() {
 

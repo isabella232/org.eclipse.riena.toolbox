@@ -26,7 +26,7 @@ public class ViewSelectorText extends TextButtonComposite {
 	private List<String> viewIds;
 
 	public ViewSelectorText(final Composite parent, final Color background) {
-		super(parent, background);
+		super(parent, background, true);
 
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override

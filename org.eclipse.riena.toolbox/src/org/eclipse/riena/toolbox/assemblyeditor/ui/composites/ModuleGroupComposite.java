@@ -58,7 +58,7 @@ public class ModuleGroupComposite extends AbstractDetailComposite<ModuleGroupNod
 	@Override
 	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
-		txtName = createLabeledText(parent, "Name");
-		txtNodeId = createLabeledText(parent, "NodeId");
+		txtName = createLabeledText(parent, "Name", true);
+		txtNodeId = createLabeledText(parent, "NodeId", true);
 	}
 }

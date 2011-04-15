@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,12 +42,19 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.text.Document;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
+import org.eclipse.riena.toolbox.ReflectionUtil;
 import org.eclipse.riena.toolbox.Util;
+import org.eclipse.riena.toolbox.assemblyeditor.model.SwtControl;
+import org.eclipse.riena.toolbox.assemblyeditor.model.ViewPartInfo;
+import org.eclipse.riena.ui.swt.utils.SWTControlFinder;
+import org.eclipse.riena.ui.swt.utils.SwtUtilities;
 
 @SuppressWarnings("restriction")
 public class RidgetGenerator {
@@ -124,6 +132,48 @@ public class RidgetGenerator {
 		final UIControlVisitor visitor = new UIControlVisitor(collector.getMethods());
 		methodBasicCreatePartControl.accept(visitor);
 		final List<SwtControl> controls = visitor.getControls();
+		return controls;
+	}
+
+	public List<SwtControl> findSwtControlsReflectionStyle(final String fullyQualifiedClassName) {
+		final ICompilationUnit astNode = findICompilationUnit(fullyQualifiedClassName);
+		if (null == astNode) {
+			return Collections.emptyList();
+		}
+
+		final ViewPartInfo viewPart = WorkspaceClassLoader.getInstance().loadClass(astNode);
+		final Shell shell = new Shell();
+		final Object viewInstance = ReflectionUtil.loadClass(viewPart);
+		if (null == viewInstance) {
+			return findSwtControls(fullyQualifiedClassName);
+		}
+
+		if (!ReflectionUtil.invokeMethod(METHOD_BASIC_CREATE_PART_CONTROL, viewInstance, shell)) {
+			return findSwtControls(fullyQualifiedClassName);
+		}
+
+		final List<SwtControl> controls = new ArrayList<SwtControl>();
+		final List<String> controlBlackList = UIControlVisitor.getControlBlackList();
+
+		final SWTControlFinder swtControlFinder = new SWTControlFinder(shell) {
+			@Override
+			public void handleBoundControl(final Control control, final String bindingProperty) {
+				final String controlClassName = control.getClass().getName();
+
+				// ignore ui-controls that are on the blacklist defined in the user preferences
+				if (controlBlackList.contains(controlClassName)) {
+					return;
+				}
+
+				final Class<?> ridgetInterface = UIControlVisitor.getRidgetInterface(controlClassName);
+				if (null != ridgetInterface) {
+					controls.add(new SwtControl(controlClassName, bindingProperty, ridgetInterface));
+				}
+			}
+		};
+
+		swtControlFinder.run();
+		SwtUtilities.dispose(shell);
 		return controls;
 	}
 

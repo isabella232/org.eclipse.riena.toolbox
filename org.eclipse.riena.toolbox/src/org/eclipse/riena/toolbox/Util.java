@@ -10,7 +10,12 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 
@@ -66,9 +71,31 @@ public final class Util {
 		Activator.getDefault().getLog().log(new Status(Status.WARNING, Activator.PLUGIN_ID, message));
 	}
 
+	public static void logError(final Exception e) {
+		e.printStackTrace();
+		Activator.getDefault().getLog().log(new Status(Status.WARNING, Activator.PLUGIN_ID, e.getMessage(), e));
+	}
+
 	public static void logInfo(final String message) {
 		Activator.getDefault().getLog().log(new Status(Status.INFO, Activator.PLUGIN_ID, message));
 		System.out.println(message);
+	}
+
+	public static void showError(Throwable e) {
+		// FIXME move Utilitiy-class to common bundle and use it in all toolbox bundles
+		if (e instanceof InvocationTargetException) {
+			e = ((InvocationTargetException) e).getTargetException();
+		}
+
+		IStatus status = null;
+		if (e instanceof CoreException) {
+			status = ((CoreException) e).getStatus();
+		} else {
+			status = new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), IStatus.OK,
+					e.getMessage(), e);
+		}
+
+		StatusManager.getManager().handle(status, StatusManager.SHOW | StatusManager.BLOCK | StatusManager.LOG);
 	}
 
 	private Util() {

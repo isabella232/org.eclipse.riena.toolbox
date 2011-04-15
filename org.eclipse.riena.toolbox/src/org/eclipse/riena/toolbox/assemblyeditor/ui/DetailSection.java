@@ -43,7 +43,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.composites.SubModuleComposite
  */
 public class DetailSection extends Composite {
 	private final StackLayout stackLayout;
-	private final Map<Class<?>, AbstractDetailComposite> compositeMap;
+	private final Map<Class<?>, AbstractDetailComposite<?>> compositeMap;
 	private final Composite emptyComposite;
 
 	private final List<IDirtyListener> dirtyListener;
@@ -56,7 +56,7 @@ public class DetailSection extends Composite {
 		return dirtyListener.remove(e);
 	}
 
-	private void fireDirtyChanged(final AbstractAssemblyNode abstractAssemblyNode, final boolean isDirty) {
+	private void fireDirtyChanged(final AbstractAssemblyNode<?> abstractAssemblyNode, final boolean isDirty) {
 		for (final IDirtyListener l : dirtyListener) {
 			l.dirtyStateChanged(abstractAssemblyNode, isDirty);
 		}
@@ -89,7 +89,7 @@ public class DetailSection extends Composite {
 			}
 		};
 
-		compositeMap = new HashMap<Class<?>, AbstractDetailComposite>();
+		compositeMap = new HashMap<Class<?>, AbstractDetailComposite<?>>();
 		compositeMap.put(BundleNode.class, new BundleComposite(this));
 		compositeMap.put(AssemblyNode.class, new AssemblyComposite(this));
 		compositeMap.put(SubApplicationNode.class, new SubApplicationComposite(this));
@@ -97,9 +97,9 @@ public class DetailSection extends Composite {
 		compositeMap.put(ModuleNode.class, new ModuleComposite(this));
 		compositeMap.put(SubModuleNode.class, new SubModuleComposite(this));
 
-		for (final AbstractDetailComposite comp : compositeMap.values()) {
+		for (final AbstractDetailComposite<?> comp : compositeMap.values()) {
 			comp.addDirtyListener(new IDirtyListener() {
-				public void dirtyStateChanged(final AbstractAssemblyNode node, final boolean isDirty) {
+				public void dirtyStateChanged(final AbstractAssemblyNode<?> node, final boolean isDirty) {
 					fireDirtyChanged(comp.getNode(), isDirty);
 				}
 			});
@@ -116,9 +116,9 @@ public class DetailSection extends Composite {
 	 * Writes the Data of the current {@link AbstractDetailComposite} to the
 	 * model.
 	 */
-	public AbstractDetailComposite unbindCurrentComposite() {
+	public AbstractDetailComposite<?> unbindCurrentComposite() {
 		if (null != stackLayout.topControl) {
-			final AbstractDetailComposite comp = (AbstractDetailComposite) stackLayout.topControl;
+			final AbstractDetailComposite<?> comp = (AbstractDetailComposite<?>) stackLayout.topControl;
 			comp.unbind();
 			return comp;
 		}
@@ -130,7 +130,7 @@ public class DetailSection extends Composite {
 	 * 
 	 * @param node
 	 */
-	public void update(final AbstractAssemblyNode node) {
+	public void update(final AbstractAssemblyNode<?> node) {
 		Assert.isNotNull(node);
 
 		if (null != stackLayout.topControl) {
@@ -141,7 +141,7 @@ public class DetailSection extends Composite {
 	public void showDetails(final AbstractAssemblyNode node) {
 
 		if (null != stackLayout.topControl) {
-			((AbstractDetailComposite) stackLayout.topControl).unbind();
+			((AbstractDetailComposite<?>) stackLayout.topControl).unbind();
 		}
 
 		if (null == node) {

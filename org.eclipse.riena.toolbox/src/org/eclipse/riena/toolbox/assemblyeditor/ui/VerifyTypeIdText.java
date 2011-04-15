@@ -27,13 +27,13 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractTypedNode;
 
 public class VerifyTypeIdText extends Composite {
 	private final Text text;
-	private AbstractTypedNode ignoreNode;
+	private AbstractTypedNode<?> ignoreNode;
 	private final ControlDecoration decoration;
 
 	public VerifyTypeIdText(final Composite parent) {
 		super(parent, SWT.None);
 		setLayout(new FillLayout());
-		text = new Text(this, SWT.BORDER);
+		text = UIControlsFactory.createText(this, true);
 
 		decoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
 		decoration.setShowHover(true);
@@ -62,11 +62,11 @@ public class VerifyTypeIdText extends Composite {
 		return !valid;
 	}
 
-	public AbstractTypedNode getIgnoreNode() {
+	public AbstractTypedNode<?> getIgnoreNode() {
 		return ignoreNode;
 	}
 
-	public void setIgnoreNode(final AbstractTypedNode ignoreNode) {
+	public void setIgnoreNode(final AbstractTypedNode<?> ignoreNode) {
 		this.ignoreNode = ignoreNode;
 	}
 

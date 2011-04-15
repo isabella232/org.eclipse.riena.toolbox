@@ -42,7 +42,7 @@ public class IconSelectorText extends TextButtonComposite {
 	}
 
 	public IconSelectorText(final Composite parent, final Color background) {
-		super(parent, background);
+		super(parent, background, false);
 
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override

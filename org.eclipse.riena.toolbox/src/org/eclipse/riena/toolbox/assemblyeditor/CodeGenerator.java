@@ -29,6 +29,14 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.internal.corext.codemanipulation.StubUtility;
+import org.eclipse.jdt.internal.corext.util.CodeFormatterUtil;
+import org.eclipse.jdt.internal.corext.util.Strings;
+import org.eclipse.jdt.ui.CodeGeneration;
 
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.Util;
@@ -38,6 +46,10 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 
 public class CodeGenerator implements ICodeGenerator {
+	/**
+	 *
+	 */
+	private static final String CONST_CLASS_IDENT = "public class";
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
 	private static final String DIR_TEMPLATES = "templates"; //$NON-NLS-1$
 	private static final String PACKAGE_SEPARATOR = "."; //$NON-NLS-1$
@@ -69,7 +81,7 @@ public class CodeGenerator implements ICodeGenerator {
 			velocityEngine = new VelocityEngine(p);
 			velocityEngine.init();
 		} catch (final Exception e) {
-			throw new RuntimeException();
+			Util.showError(e);
 		}
 	}
 
@@ -123,8 +135,24 @@ public class CodeGenerator implements ICodeGenerator {
 				outFile.create(bis, true, null);
 				return true;
 			} catch (final CoreException e) {
-				throw new RuntimeException(e);
+				Util.showError(e);
 			}
+		}
+		return false;
+	}
+
+	private boolean modifyFile(final IFile outFile, final String data) {
+		final ByteArrayInputStream bis = new ByteArrayInputStream(data.getBytes());
+
+		if (!outFile.exists()) {
+			return createFile(outFile, data);
+		}
+
+		try {
+			outFile.setContents(bis, IFile.FORCE, null);
+			return true;
+		} catch (final CoreException e) {
+			Util.showError(e);
 		}
 		return false;
 	}
@@ -143,6 +171,7 @@ public class CodeGenerator implements ICodeGenerator {
 			}
 			return bundleAbsolutePath + "/" + DIR_TEMPLATES; //$NON-NLS-1$
 		} catch (final IOException e) {
+			Util.showError(e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -162,7 +191,7 @@ public class CodeGenerator implements ICodeGenerator {
 			t.merge(context, writer);
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			Util.showError(e);
 			throw new RuntimeException("exception in generateClass: basePath =" + baseAbsolutePath, e); //$NON-NLS-1$
 		}
 
@@ -172,10 +201,61 @@ public class CodeGenerator implements ICodeGenerator {
 				.getFolder(
 						subModule.getBundle().getSourceFolder() + File.separator
 								+ packageName.replace(PACKAGE_SEPARATOR, File.separator));
+
 		createFolder(packageFolder);
 		final IFile classFile = packageFolder.getFile(className + EXTENSION_JAVA);
 		createFile(classFile, writer.toString());
-		return packageName + PACKAGE_SEPARATOR + className;
+
+		final String fullClassName = packageName + PACKAGE_SEPARATOR + className;
+		generateComments(classFile, subModule, fullClassName, writer);
+		return fullClassName;
+	}
+
+	@SuppressWarnings("restriction")
+	private void generateComments(final IFile classFile, final SubModuleNode subModule, final String fullClassName,
+			final StringWriter writer) {
+		final RidgetGenerator ridgetGenerator = new RidgetGenerator(subModule.getBundle().getProject());
+		final ICompilationUnit newClassCompilationUnit = ridgetGenerator.findICompilationUnit(fullClassName);
+
+		final IJavaProject javaProject = JavaCore.create(subModule.getBundle().getProject());
+		final String lineDelimiter = StubUtility.getLineDelimiterUsed(javaProject);
+
+		try {
+			final String[] typeParamNames = new String[0];
+			final String comment = getTypeComment(fullClassName, newClassCompilationUnit, lineDelimiter, typeParamNames);
+			final String fileComment = getFileComment(newClassCompilationUnit, lineDelimiter);
+			final StringBuffer classContent = writer.getBuffer().insert(0, fileComment + lineDelimiter);
+
+			final String cleanContent = classContent.toString().replace(CONST_CLASS_IDENT,
+					comment + lineDelimiter + CONST_CLASS_IDENT);
+
+			String formattedContent = CodeFormatterUtil.format(CodeFormatter.K_CLASS_BODY_DECLARATIONS, cleanContent,
+					0, lineDelimiter, javaProject);
+			formattedContent = Strings.trimLeadingTabsAndSpaces(formattedContent);
+			modifyFile(classFile, formattedContent);
+		} catch (final CoreException e) {
+			Util.showError(e);
+		}
+	}
+
+	private String getTypeComment(final String fullClassName, final ICompilationUnit newClassCompilationUnit,
+			final String lineDelimiter, final String[] typeParamNames) throws CoreException {
+
+		try {
+			return CodeGeneration.getTypeComment(newClassCompilationUnit, fullClassName, typeParamNames, lineDelimiter);
+		} catch (final NullPointerException e) {
+			return "";
+		}
+	}
+
+	private String getFileComment(final ICompilationUnit newClassCompilationUnit, final String lineDelimiter)
+			throws CoreException {
+
+		try {
+			return CodeGeneration.getFileComment(newClassCompilationUnit, lineDelimiter);
+		} catch (final NullPointerException e) {
+			return "";
+		}
 	}
 
 	private void createFolder(final IFolder folder) {
@@ -187,7 +267,7 @@ public class CodeGenerator implements ICodeGenerator {
 			try {
 				folder.create(true, true, null);
 			} catch (final CoreException e) {
-				e.printStackTrace();
+				Util.showError(e);
 			}
 		}
 	}
@@ -209,8 +289,7 @@ public class CodeGenerator implements ICodeGenerator {
 				file.delete(true, null);
 				return true;
 			} catch (final CoreException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+				Util.showError(e);
 			}
 		}
 		return false;

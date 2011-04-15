@@ -11,6 +11,8 @@
 package org.eclipse.riena.toolbox.assemblyeditor.ui;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -25,7 +27,14 @@ public final class UIControlsFactory {
 	}
 
 	public static Text createText(final Composite parent) {
+		return createText(parent, false);
+	}
+
+	public static Text createText(final Composite parent, final boolean mandatory) {
 		final Text txt = new Text(parent, SWT.BORDER);
+		if (mandatory) {
+			txt.addModifyListener(new MandatoryModifyListener());
+		}
 		return txt;
 	}
 
@@ -48,6 +57,18 @@ public final class UIControlsFactory {
 		final OpenClassLink lnk = new OpenClassLink(parent, text);
 		lnk.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		return lnk;
+	}
+
+	private static class MandatoryModifyListener implements ModifyListener {
+		public void modifyText(final ModifyEvent e) {
+			final Text control = (Text) e.widget;
+			if (org.eclipse.riena.core.util.StringUtils.isGiven(control.getText())) {
+				control.setBackground(control.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			} else {
+				control.setBackground(new org.eclipse.swt.graphics.Color(control.getDisplay(), 255, 255, 175));
+			}
+
+		}
 	}
 
 	private UIControlsFactory() {

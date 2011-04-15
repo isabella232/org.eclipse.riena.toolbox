@@ -8,7 +8,7 @@
  * Contributors:
  *    compeople AG - initial API and implementation
  *******************************************************************************/
-package org.eclipse.riena.toolbox.assemblyeditor;
+package org.eclipse.riena.toolbox.assemblyeditor.model;
 
 /**
  * Containerclass that consists of: - the Name of the SwtControlClass in die

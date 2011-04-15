@@ -22,13 +22,13 @@ public class TextButtonComposite extends Composite {
 	private final Text text;
 	private final Button browseButton;
 
-	public TextButtonComposite(final Composite parent, final Color background) {
+	public TextButtonComposite(final Composite parent, final Color background, final boolean mandatory) {
 		super(parent, SWT.None);
 
 		setBackground(background);
 		GridLayoutFactory.fillDefaults().numColumns(2).applyTo(this);
 
-		text = UIControlsFactory.createText(this);
+		text = UIControlsFactory.createText(this, mandatory);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 
 		browseButton = new Button(this, SWT.PUSH);

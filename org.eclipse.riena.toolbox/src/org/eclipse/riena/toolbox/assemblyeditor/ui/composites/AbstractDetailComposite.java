@@ -32,7 +32,6 @@ import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IDirtyListener;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IconSelectorText;
-import org.eclipse.riena.toolbox.assemblyeditor.ui.TextButtonComposite;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.UIControlsFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.VerifyTypeIdText;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.ViewSelectorText;
@@ -180,32 +179,16 @@ public abstract class AbstractDetailComposite<T extends AbstractAssemblyNode<?>>
 	}
 
 	protected Text createLabeledText(final Composite parent, final String labelText) {
+		return createLabeledText(parent, labelText, false);
+	}
+
+	protected Text createLabeledText(final Composite parent, final String labelText, final boolean mandatory) {
 		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
 		lbl.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lbl);
-		final Text text = UIControlsFactory.createText(parent);
+		final Text text = UIControlsFactory.createText(parent, mandatory);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		return text;
-	}
-
-	protected TextButtonComposite createLabeledBrowseableText(final Composite parent, final String labelText) {
-		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
-		lbl.setBackground(workareaBackground);
-		GridDataFactory.swtDefaults().applyTo(lbl);
-
-		final TextButtonComposite cmpControl = new TextButtonComposite(parent, workareaBackground);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpControl);
-		return cmpControl;
-	}
-
-	protected TextButtonComposite createLinkedBrowseableText(final Composite parent, final String labelText) {
-		final Label lbl = UIControlsFactory.createLabel(parent, labelText);
-		lbl.setBackground(workareaBackground);
-		GridDataFactory.swtDefaults().applyTo(lbl);
-
-		final TextButtonComposite cmpControl = new TextButtonComposite(parent, workareaBackground);
-		GridDataFactory.fillDefaults().grab(true, false).applyTo(cmpControl);
-		return cmpControl;
 	}
 
 	protected IconSelectorText createLabeledIconSelector(final Composite parent, final String labelText) {

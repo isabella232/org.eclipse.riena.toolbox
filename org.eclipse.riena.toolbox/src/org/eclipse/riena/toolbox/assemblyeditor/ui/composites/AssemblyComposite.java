@@ -81,7 +81,7 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode> {
 	@Override
 	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
-		txtName = createLabeledText(parent, "Name");
+		txtName = createLabeledText(parent, "Name", true);
 		txtName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(final KeyEvent e) {
@@ -93,9 +93,9 @@ public class AssemblyComposite extends AbstractDetailComposite<AssemblyNode> {
 			}
 		});
 
-		txtId = createLabeledText(parent, "Id");
+		txtId = createLabeledText(parent, "Id", true);
 		txtAssembler = createLabeledText(parent, "Assembler");
-		txtParentTypeId = createLabeledText(parent, "ParentNodeId");
+		txtParentTypeId = createLabeledText(parent, "ParentNodeId", true);
 		contentProposalTypeId = new ContentProposalAdapter(txtParentTypeId, new TextContentAdapter(),
 				new SimpleContentProposalProvider(null), null, null);
 		contentProposalTypeId.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);

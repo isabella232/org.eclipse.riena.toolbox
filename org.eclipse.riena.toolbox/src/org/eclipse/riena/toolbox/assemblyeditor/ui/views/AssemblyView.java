@@ -57,7 +57,6 @@ import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.AddUIControlCallGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.ResourceChangeListener;
 import org.eclipse.riena.toolbox.assemblyeditor.RidgetGenerator;
-import org.eclipse.riena.toolbox.assemblyeditor.SwtControl;
 import org.eclipse.riena.toolbox.assemblyeditor.api.INodeFactory;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractTypedNode;
@@ -70,6 +69,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.RCPPerspective;
 import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubApplicationNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.model.SwtControl;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.AssemblyTreeViewer;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.DetailSection;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IDirtyListener;
@@ -97,6 +97,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private GenerateAddUIControlCallsAction generateAddUIControlCallsAction;
 	private final PluginXmlResourceChangeListener changeListener = new PluginXmlResourceChangeListener();
 	private RegisterPerspectiveAction registerPerspectiveAction;
+	private ShowPreview showApplicationPreview;
 
 	public AssemblyView() {
 		initActions();
@@ -121,6 +122,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		generateAddUIControlCallsAction = new GenerateAddUIControlCallsAction();
 		refreshAction = new RefreshAction();
 		registerPerspectiveAction = new RegisterPerspectiveAction();
+		showApplicationPreview = new ShowPreview();
 	}
 
 	public AssemblyTreeViewer getAssemblyTree() {
@@ -133,6 +135,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		final SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
 
 		getViewSite().getActionBars().getToolBarManager().add(refreshAction);
+		//getViewSite().getActionBars().getToolBarManager().add(showApplicationPreview);
 		new TreeComposite(sashForm);
 
 		detailSection = new DetailSection(sashForm);
@@ -148,7 +151,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	public void openClassInEditor(final SubModuleNode submod, final String className) {
 		if (className == null) {
-			System.err.println("Controller is null " + submod);
+			Util.logWarning("Controller is null " + submod); //$NON-NLS-1$
 			return;
 		}
 
@@ -299,9 +302,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 			boolean enableViewControllerAction = false;
 			if (null != subMod.getRcpView()) {
-				//				enableViewControllerAction = !Util.isGiven(subMod.getRcpView().getId()) && 
-				//											 !Util.isGiven(subMod.getController()) && 
-				//											 Util.isGiven(subMod.getName());
 				enableViewControllerAction = Util.isGiven(subMod.getName());
 			}
 
@@ -635,7 +635,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public SubModuleNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
+		public SubModuleNode createNode(@SuppressWarnings("rawtypes")
+		final AbstractAssemblyNode parent) {
 			return nodeFactory.createSubModule(parent, findBundle());
 		}
 	}
@@ -648,7 +649,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public ModuleNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
+		public ModuleNode createNode(@SuppressWarnings("rawtypes")
+		final AbstractAssemblyNode parent) {
 			return nodeFactory.createModule(parent, findBundle());
 		}
 	}
@@ -661,7 +663,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public AssemblyNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
+		public AssemblyNode createNode(@SuppressWarnings("rawtypes")
+		final AbstractAssemblyNode parent) {
 			return nodeFactory.createAssembly(findBundle());
 		}
 	}
@@ -674,7 +677,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public ModuleGroupNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
+		public ModuleGroupNode createNode(@SuppressWarnings("rawtypes")
+		final AbstractAssemblyNode parent) {
 			return nodeFactory.createModuleGroup(parent, findBundle());
 		}
 	}
@@ -687,7 +691,8 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		}
 
 		@Override
-		public SubApplicationNode createNode(@SuppressWarnings("rawtypes") final AbstractAssemblyNode parent) {
+		public SubApplicationNode createNode(@SuppressWarnings("rawtypes")
+		final AbstractAssemblyNode parent) {
 			return nodeFactory.createSubApplication(parent, findBundle());
 		}
 	}
@@ -800,7 +805,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 					final String className = rcpView.getViewClass();
 					final RidgetGenerator generator = new RidgetGenerator(selectedNode.getBundle().getProject());
 
-					final List<SwtControl> controls = generator.findSwtControls(className);
+					final List<SwtControl> controls = generator.findSwtControlsReflectionStyle(className);
 					generator.generateConfigureRidgets(((SubModuleNode) selectedNode).getController(), controls);
 
 					if (Platform.inDebugMode()) {
@@ -955,6 +960,18 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 					checkActionEnabledState();
 				}
 			}
+		}
+	}
+
+	private class ShowPreview extends Action {
+		public ShowPreview() {
+			setText("Preview Application");
+			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.showpreview.action"); //$NON-NLS-1$
+		}
+
+		@Override
+		public void run() {
+			//new ApplicationPreviewer().start();
 		}
 	}
 }

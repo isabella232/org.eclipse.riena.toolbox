@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.Util;
+import org.eclipse.riena.toolbox.assemblyeditor.model.SwtControl;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 import org.eclipse.riena.ui.ridgets.IRidget;
 import org.eclipse.riena.ui.ridgets.swt.uibinding.SwtControlRidgetMapper;
@@ -57,11 +58,20 @@ public class UIControlVisitor extends ASTVisitor {
 			uiControlFactoryNames.add(customUIControlsFactory);
 		}
 
+		controlBlacklist = getControlBlackList();
+	}
+
+	/**
+	 * @return
+	 * 
+	 */
+	public static List<String> getControlBlackList() {
 		final String blackListString = Activator.getDefault().getPreferenceStore()
 				.getString(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST);
 		if (Util.isGiven(blackListString)) {
-			controlBlacklist = Arrays.asList(blackListString.split(";")); //$NON-NLS-1$
+			return Arrays.asList(blackListString.split(";")); //$NON-NLS-1$
 		}
+		return new ArrayList<String>();
 	}
 
 	private MethodDeclaration getMethodDeclaration(final MethodInvocation invocation) {
@@ -73,7 +83,7 @@ public class UIControlVisitor extends ASTVisitor {
 		return null;
 	}
 
-	private Class<?> getRidgetInterface(final String swtControlClassName) {
+	public static Class<?> getRidgetInterface(final String swtControlClassName) {
 		final SwtControlRidgetMapper mapper = SwtControlRidgetMapper.getInstance();
 
 		try {
@@ -184,7 +194,7 @@ public class UIControlVisitor extends ASTVisitor {
 		return true;
 	}
 
-	private String getConstantStringFromSimpleName(final SimpleName simpleName) {
+	public static String getConstantStringFromSimpleName(final SimpleName simpleName) {
 		final IBinding swtControlBinding = simpleName.resolveBinding();
 		if (swtControlBinding instanceof IVariableBinding) {
 			final IVariableBinding decl = ((IVariableBinding) swtControlBinding).getVariableDeclaration();

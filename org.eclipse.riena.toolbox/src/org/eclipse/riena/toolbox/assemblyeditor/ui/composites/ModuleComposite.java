@@ -74,7 +74,7 @@ public class ModuleComposite extends AbstractDetailComposite<ModuleNode> {
 	@Override
 	protected void createWorkarea(final Composite parent) {
 		GridLayoutFactory.swtDefaults().numColumns(2).applyTo(parent);
-		txtName = createLabeledText(parent, "Name");
+		txtName = createLabeledText(parent, "Name", true);
 		txtNodeId = createLabeledVerifyText(parent, "NodeId");
 		txtIcon = createLabeledIconSelector(parent, "Icon");
 		btnUncloseable = createLabeledCheckbox(parent, "Closable");

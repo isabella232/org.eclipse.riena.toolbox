@@ -241,6 +241,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		return assemblyNode;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private SubApplicationNode parseSubApplication(final AbstractAssemblyNode parent, final Element elm) {
 		final SubApplicationNode subapp = new SubApplicationNode(parent);
 		subapp.setNodeId(elm.getAttribute(ATTR_SUBAPP_NODE_ID));
@@ -260,6 +261,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		return subapp;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private ModuleGroupNode parseModuleGroup(final AbstractAssemblyNode parent, final Element elm) {
 		final ModuleGroupNode moduleGroup = new ModuleGroupNode(parent);
 		moduleGroup.setNodeId(elm.getAttribute(ATTR_MODGROUP_NODE_ID));
@@ -277,6 +279,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		return moduleGroup;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private ModuleNode parseModule(final AbstractAssemblyNode parent, final Element elm) {
 		final ModuleNode module = new ModuleNode(parent);
 		module.setNodeId(elm.getAttribute(ATTR_MODULE_NODE_ID));
@@ -298,6 +301,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		return module;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private SubModuleNode parseSubModule(final AbstractAssemblyNode parent, final Element elm) {
 		final SubModuleNode sub = new SubModuleNode(parent);
 		sub.setName(elm.getAttribute(ATTR_SUBMOD_NAME));

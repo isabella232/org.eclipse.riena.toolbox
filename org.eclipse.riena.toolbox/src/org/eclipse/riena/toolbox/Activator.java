@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox;
 
+import java.beans.Beans;
+
 import org.osgi.framework.BundleContext;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -61,7 +63,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-
+		Beans.setDesignTime(true);
 		dataProvider = new AssemblyDataProvider();
 		dataProvider.setXmlParser(new PluginXmlParser());
 		dataProvider.setXmlRenderer(new PluginXmlRenderer());
