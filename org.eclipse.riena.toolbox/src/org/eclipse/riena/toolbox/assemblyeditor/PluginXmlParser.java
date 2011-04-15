@@ -26,6 +26,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlParser;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractTypedNode;
@@ -41,7 +42,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlParser {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final String NODE_SEPARATOR = "."; //$NON-NLS-1$
 
@@ -320,7 +321,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 			if (null != rcpView) {
 				sub.setRcpView(rcpView);
 			} else {
-				System.err.println("rcpView not found for subModule " + sub);
+				Util.logInfo("rcpView not found for subModule " + sub); //$NON-NLS-1$
 			}
 		}
 

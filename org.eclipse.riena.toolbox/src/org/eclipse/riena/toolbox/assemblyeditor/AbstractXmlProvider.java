@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 
 import org.eclipse.core.resources.IFile;
 
+import org.eclipse.riena.core.util.Nop;
 import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 
@@ -130,7 +131,7 @@ public class AbstractXmlProvider {
 		try {
 			transformerFactory.setAttribute("indent-number", new Integer(4)); //$NON-NLS-1$
 		} catch (final IllegalArgumentException exception) {
-			// Ignore
+			Nop.reason("empty"); //$NON-NLS-1$
 		}
 
 		final Transformer transformer = transformerFactory.newTransformer();

@@ -46,6 +46,8 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
+import org.eclipse.riena.toolbox.Util;
+
 @SuppressWarnings("restriction")
 public class RidgetGenerator {
 	protected static final String NATURE_JAVA = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
@@ -142,7 +144,7 @@ public class RidgetGenerator {
 			final List<SwtControl> controls) {
 		final ICompilationUnit unit = findICompilationUnit(fullyQualifiedControllerClassName);
 		if (null == unit) {
-			System.err.println("controller not found " + fullyQualifiedControllerClassName);
+			Util.logWarning("controller not found " + fullyQualifiedControllerClassName); //$NON-NLS-1$
 			return false;
 		}
 
@@ -336,7 +338,7 @@ public class RidgetGenerator {
 			final ICompilationUnit unit = (ICompilationUnit) astNode.getJavaElement();
 
 			if (unit == null) {
-				System.err.println("iCompilationUnit is null " + astNode);
+				Util.logWarning("iCompilationUnit is null " + astNode); //$NON-NLS-1$
 				return false;
 			}
 

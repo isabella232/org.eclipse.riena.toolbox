@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -155,8 +154,7 @@ public class CodeGenerator implements ICodeGenerator {
 			final Template t = velocityEngine.getTemplate(templateName);
 			final VelocityContext context = new VelocityContext();
 
-			for (final Iterator<Entry<String, String>> it = properties.entrySet().iterator(); it.hasNext();) {
-				final Entry<String, String> entry = it.next();
+			for (final Entry<String, String> entry : properties.entrySet()) {
 				context.put(entry.getKey(), entry.getValue());
 			}
 
@@ -196,7 +194,7 @@ public class CodeGenerator implements ICodeGenerator {
 
 	private boolean deleteSourceFile(final SubModuleNode subModule, final String className) {
 		if (!Util.isGiven(className)) {
-			System.err.println("ClassName is null subModule " + subModule);
+			Util.logWarning("ClassName is null subModule " + subModule); //$NON-NLS-1$
 			return false;
 		}
 

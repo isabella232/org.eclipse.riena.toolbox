@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox;
 
+import org.eclipse.core.runtime.Status;
+
 import org.eclipse.riena.toolbox.assemblyeditor.model.AbstractAssemblyNode;
 
 public final class Util {
@@ -58,6 +60,15 @@ public final class Util {
 			return (T) current;
 		}
 		return findParentOfType(current.getParent(), type);
+	}
+
+	public static void logWarning(final String message) {
+		Activator.getDefault().getLog().log(new Status(Status.WARNING, Activator.PLUGIN_ID, message));
+	}
+
+	public static void logInfo(final String message) {
+		Activator.getDefault().getLog().log(new Status(Status.INFO, Activator.PLUGIN_ID, message));
+		System.out.println(message);
 	}
 
 	private Util() {

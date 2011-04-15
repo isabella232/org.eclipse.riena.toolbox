@@ -27,6 +27,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 
+import org.eclipse.riena.core.util.Nop;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IAssemblyDataProvider;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlParser;
 import org.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlRenderer;
@@ -218,8 +219,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 					xmlRenderer.saveDocument(bundle);
 					bundle.setDirty(false);
 				} else {
-					// plugin.xml does not exist, assemblies do not exist
-					// DO NOTHING
+					Nop.reason("plugin.xml does not exist, assemblies do not exist DO NOTHING"); //$NON-NLS-1$
 				}
 			} else {
 				if (bundle.getChildren() != null && bundle.getChildren().size() != 0) {

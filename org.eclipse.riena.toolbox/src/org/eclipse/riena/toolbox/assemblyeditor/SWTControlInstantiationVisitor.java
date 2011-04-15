@@ -27,6 +27,8 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 
+import org.eclipse.riena.toolbox.Util;
+
 public class SWTControlInstantiationVisitor extends ASTVisitor {
 
 	private final Set<String> controlBlackList;
@@ -91,7 +93,7 @@ public class SWTControlInstantiationVisitor extends ASTVisitor {
 
 				final MethodDeclaration enclosingMethod = findDeclaringMethod(node);
 				if (null == enclosingMethod) {
-					System.err.println("could not detect enclosing method for " + node);
+					Util.logWarning("could not detect enclosing method for " + node); //$NON-NLS-1$
 					return false;
 				}
 

@@ -76,26 +76,33 @@ public abstract class AbstractTypedNode<T extends AbstractTypedNode> extends Abs
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		final AbstractTypedNode other = (AbstractTypedNode) obj;
 		final AssemblyNode ass = getAssemblyNode();
 		final AssemblyNode otherAss = other.getAssemblyNode();
 
 		if (ass == null) {
-			if (otherAss != null)
+			if (otherAss != null) {
 				return false;
-		} else if (!ass.equals(otherAss))
+			}
+		} else if (!ass.equals(otherAss)) {
 			return false;
+		}
 		if (nodeId == null) {
-			if (other.nodeId != null)
+			if (other.nodeId != null) {
 				return false;
-		} else if (!nodeId.equals(other.nodeId))
+			}
+		} else if (!nodeId.equals(other.nodeId)) {
 			return false;
+		}
 		return true;
 	}
 }

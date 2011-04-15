@@ -108,7 +108,7 @@ public class UIControlVisitor extends ASTVisitor {
 			final List<?> args = methodCall.arguments();
 
 			if (args.isEmpty()) {
-				System.err.println("call to UIControlsFactory without arguments: " + methodCall);
+				System.err.println("call to UIControlsFactory without arguments: " + methodCall); //$NON-NLS-1$
 				return true;
 			}
 
@@ -127,7 +127,7 @@ public class UIControlVisitor extends ASTVisitor {
 						controls.add(new SwtControl(swtControlClassName, value, ridgetClass));
 					}
 				} else {
-					System.err.println("Parameter is not a constant " + sm);
+					Util.logWarning("Parameter is not a constant " + sm); //$NON-NLS-1$
 				}
 			} else if (lastArgument instanceof org.eclipse.jdt.core.dom.QualifiedName) {
 				// TODO use the constant in the Controller, instead of extracting the value
@@ -140,7 +140,7 @@ public class UIControlVisitor extends ASTVisitor {
 						controls.add(new SwtControl(swtControlClassName, value, ridgetClass));
 					}
 				} else {
-					System.err.println("Parameter is not a constant " + sm);
+					Util.logWarning("Parameter is not a constant " + sm); //$NON-NLS-1$
 				}
 			} else if (lastArgument instanceof StringLiteral) {
 				final StringLiteral sm = (StringLiteral) lastArgument;
@@ -151,13 +151,13 @@ public class UIControlVisitor extends ASTVisitor {
 					controls.add(new SwtControl(swtControlClassName, sm.getLiteralValue(), ridgetClass));
 				}
 			} else {
-				System.err.println("unknown arg type " + lastArgument);
+				Util.logWarning("unknown arg type " + lastArgument); //$NON-NLS-1$
 			}
 		} else if (METHOD_ADD_UI_CONTROL.equals(methodCall.getName().getIdentifier())) {
 			final List<?> args = methodCall.arguments();
 
 			if (args.size() < 2) {
-				System.err.println("call to addUIControl without arguments: " + methodCall);
+				Util.logWarning("call to addUIControl without arguments: " + methodCall); //$NON-NLS-1$
 				return true;
 			}
 
@@ -176,7 +176,7 @@ public class UIControlVisitor extends ASTVisitor {
 		} else {
 			if (null != exp) {
 				if (Platform.inDebugMode()) {
-					System.out.println("DEBUG: expression type " + exp.getClass() + " node: " + methodCall);
+					Util.logInfo("DEBUG: expression type " + exp.getClass() + " node: " + methodCall); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}
@@ -200,7 +200,10 @@ public class UIControlVisitor extends ASTVisitor {
 			if (!controlBlacklist.contains(control.getSwtControlClassName())) {
 				out.add(control);
 			} else {
-				System.out.println("UIControlVisitor.getControls() ignoreControl " + control.getSwtControlClassName());
+				if (Platform.inDebugMode()) {
+					Util.logInfo("UIControlVisitor.getControls() ignoreControl " //$NON-NLS-1$
+							+ control.getSwtControlClassName());
+				}
 			}
 		}
 		return out;
