@@ -20,6 +20,7 @@ import org.eclipse.pde.ui.templates.ITemplateSection;
 import org.eclipse.pde.ui.templates.NewPluginTemplateWizard;
 import org.eclipse.pde.ui.templates.PluginReference;
 
+@SuppressWarnings("restriction")
 public class ClientServerNewWizard extends NewPluginTemplateWizard {
 
 	private ClientServerTemplate csTemplate;
@@ -32,7 +33,8 @@ public class ClientServerNewWizard extends NewPluginTemplateWizard {
 	 * org.eclipse.pde.ui.templates.AbstractNewPluginTemplateWizard#init(org
 	 * .eclipse.pde.ui.IFieldData)
 	 */
-	public void init(IFieldData data) {
+	@Override
+	public void init(final IFieldData data) {
 		super.init(data);
 		setWindowTitle("Riena Client/Server Template");
 		fieldData = data;
@@ -45,25 +47,27 @@ public class ClientServerNewWizard extends NewPluginTemplateWizard {
 	 * org.eclipse.pde.ui.templates.NewPluginTemplateWizard#createTemplateSections
 	 * ()
 	 */
+	@Override
 	public ITemplateSection[] createTemplateSections() {
 		csTemplate = new ClientServerTemplate();
 		return new ITemplateSection[] { csTemplate };
 	}
 
+	@Override
 	public String[] getImportPackages() {
 		return new String[] { "org.osgi.framework" };
 	}
 
 	@Override
-	public IPluginReference[] getDependencies(String schemaVersion) {
+	public IPluginReference[] getDependencies(final String schemaVersion) {
 		return new IPluginReference[] { new PluginReference("org.eclipse.riena.server", null, 0),
 				new PluginReference("org.eclipse.riena.communication.core", null, 0) };
 	}
 
 	@Override
-	public boolean performFinish(IProject project, IPluginModelBase model, IProgressMonitor monitor) {
+	public boolean performFinish(final IProject project, final IPluginModelBase model, final IProgressMonitor monitor) {
 		// do not generate default activator, there is one in the template
-		PluginFieldData pdf = (PluginFieldData) fieldData;
+		final PluginFieldData pdf = (PluginFieldData) fieldData;
 		pdf.setDoGenerateClass(false);
 		return super.performFinish(project, model, monitor);
 	}

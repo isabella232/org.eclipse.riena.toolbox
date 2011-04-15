@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 
-public class RienaWizardImages {
+public final class RienaWizardImages {
 
 	private final static String ICONS = "icons"; //$NON-NLS-1$
 	private final static String WIZBAN = "wizban"; //$NON-NLS-1$
@@ -31,5 +31,12 @@ public class RienaWizardImages {
 
 		final Path path = new Path(String.format("/%s/%s/%s", ICONS, prefix, name)); //$NON-NLS-1$
 		return FileLocator.find(RienaWizardPlugin.getDefault().getBundle(), path, null);
+	}
+
+	/**
+	 *
+	 */
+	private RienaWizardImages() {
+		// TODO Auto-generated constructor stub
 	}
 }

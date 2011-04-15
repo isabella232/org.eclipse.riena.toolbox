@@ -32,4 +32,11 @@ public class GeneratorUtil {
 			}
 		}
 	}
+
+	/**
+	 *
+	 */
+	private GeneratorUtil() {
+		// TODO Auto-generated constructor stub
+	}
 }

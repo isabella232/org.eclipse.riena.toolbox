@@ -32,11 +32,11 @@ public class RienaWizardMessages extends NLS {
 
 	public static String GeneralPage_ProjectName;
 	public static String GeneralPage_PackageName;
-
+	//CHECKSTYLE:OFF
 	public static String GeneralPage_Validation_GeneralPage_ProjectsToBeCreated;
 	public static String GeneralPage_Validation_NoBasePluginId;
 	public static String GeneralPage_Validation_NoProjectName;
 	public static String GeneralPage_Validation_ProjectAlreadyExists;
 	public static String GenerateProjectOperation_Name;
-
+	//CHECKSTYLE:ON
 }

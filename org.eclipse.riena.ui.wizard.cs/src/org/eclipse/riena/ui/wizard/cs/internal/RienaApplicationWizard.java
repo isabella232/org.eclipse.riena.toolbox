@@ -48,6 +48,7 @@ public class RienaApplicationWizard extends Wizard implements INewWizard {
 		} catch (final InvocationTargetException e) {
 			RienaWizardPlugin.error(e);
 		} catch (final InterruptedException e) {
+			e.printStackTrace();
 		}
 		return true;
 	}

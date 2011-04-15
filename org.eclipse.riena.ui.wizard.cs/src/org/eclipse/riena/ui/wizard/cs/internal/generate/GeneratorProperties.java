@@ -10,8 +10,15 @@
  *******************************************************************************/
 package org.eclipse.riena.ui.wizard.cs.internal.generate;
 
-public interface GeneratorProperties {
-	public static final String SOURCE_FOLDER = "src"; //$NON-NLS-1$
-	public static final String PACKAGE = "package"; //$NON-NLS-1$
-	public static final String EXECUTION_ENVIRONMENT = "executionEnvironment"; //$NON-NLS-1$
+/**
+ *
+ */
+public class GeneratorProperties {
+	public final static String SOURCE_FOLDER = "src"; //$NON-NLS-1$
+	public final static String PACKAGE = "package"; //$NON-NLS-1$
+	public final static String EXECUTION_ENVIRONMENT = "executionEnvironment"; //$NON-NLS-1$
+
+	private GeneratorProperties() {
+		// TODO Auto-generated constructor stub
+	}
 }

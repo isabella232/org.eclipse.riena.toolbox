@@ -25,6 +25,7 @@ import org.eclipse.pde.ui.IFieldData;
 
 import org.eclipse.riena.ui.templates.RienaTemplateSection;
 
+@SuppressWarnings("restriction")
 public class MailTemplate extends RienaTemplateSection {
 
 	public static final String KEY_WORKBENCH_ADVISOR = "advisor"; //$NON-NLS-1$
@@ -405,7 +406,7 @@ public class MailTemplate extends RienaTemplateSection {
 	 */
 	@Override
 	public String[] getNewFiles() {
-		return new String[] { "icons/", "product_lg.gif" }; //$NON-NLS-1$ //$NON-NLS-2$ 
+		return new String[] { "icons/", "product_lg.gif" }; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/*

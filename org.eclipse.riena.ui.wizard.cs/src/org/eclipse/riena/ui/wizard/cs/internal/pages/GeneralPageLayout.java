@@ -30,6 +30,7 @@ public abstract class GeneralPageLayout extends AbstractPage {
 		super(pageName);
 	}
 
+	@Override
 	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
