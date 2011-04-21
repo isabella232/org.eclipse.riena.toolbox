@@ -35,9 +35,6 @@ public class ToolboxConfigurationPreferencePage extends FieldEditorPreferencePag
 		setDescription("General Settings for the AssemblyEditor");
 	}
 
-	public static final String CONST_GENERATE_VIEW_PACKAGE_NAME = "Generate View packagename"; //$NON-NLS-1$
-	public static final String CONST_GENERATE_CONTROLLER_PACKAGE_NAME = "Generate Controller packagename"; //$NON-NLS-1$
-
 	private Group createGroup(final String text) {
 		final Group groupUIControls = new Group(getFieldEditorParent(), SWT.None);
 		groupUIControls.setText(text);

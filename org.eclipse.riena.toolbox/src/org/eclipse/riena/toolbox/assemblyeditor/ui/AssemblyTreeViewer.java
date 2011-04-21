@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -38,6 +39,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleGroupNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.ModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubApplicationNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 
 /**
  * This class renders the {@link AssemblyModel} as a Tree.
@@ -47,9 +49,12 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 public class AssemblyTreeViewer extends FilteredTree {
 
 	private final List<IDirtyListener> dirtyListener;
+	private final ProjectsWithAssembliesFilter projectsWithAssembliesFilter;
 
 	public AssemblyTreeViewer(final Composite parent, final int style) {
 		super(parent, SWT.SINGLE, new PatternFilter(), true);
+
+		projectsWithAssembliesFilter = new ProjectsWithAssembliesFilter();
 
 		dirtyListener = new ArrayList<IDirtyListener>();
 		treeViewer.setContentProvider(new TreeContentProvider());
@@ -67,6 +72,7 @@ public class AssemblyTreeViewer extends FilteredTree {
 				}
 			}
 		});
+		treeViewer.addFilter(projectsWithAssembliesFilter);
 	}
 
 	public TreeViewer getTreeViewer() {
@@ -108,6 +114,24 @@ public class AssemblyTreeViewer extends FilteredTree {
 		treeViewer.refresh();
 		treeViewer.setExpandedElements(exp);
 		fireDirtyChanged(true);
+
+	}
+
+	private class ProjectsWithAssembliesFilter extends ViewerFilter {
+
+		@Override
+		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+			if (!Activator.getDefault().getPreferenceStore()
+					.getBoolean(PreferenceConstants.CONST_ONLY_SHOW_PROJECTS_WITH_ASSEMBLIES)) {
+				return true;
+			}
+
+			if (element instanceof BundleNode) {
+				return !((BundleNode) element).getChildren().isEmpty();
+			}
+			return true;
+		}
+
 	}
 
 	private static class TreeContentProvider implements ITreeContentProvider {

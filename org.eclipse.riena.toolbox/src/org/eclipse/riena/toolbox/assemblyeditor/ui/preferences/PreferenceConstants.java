@@ -19,7 +19,11 @@ public final class PreferenceConstants {
 
 	public static final String CONST_CONFIGURE_RIDGETS_BLACKLIST = "configureRidgets Blacklist"; //$NON-NLS-1$
 	public static final String CONST_GENERATE_VIEW_PACKAGE_NAME = "Generate View packagename"; //$NON-NLS-1$
+
 	public static final String CONST_GENERATE_CONTROLLER_PACKAGE_NAME = "Generate Controller packagename"; //$NON-NLS-1$
+	public static final String CONST_LINK_WITH_EDITOR = "Link with editor"; //$NON-NLS-1$
+
+	public static final String CONST_ONLY_SHOW_PROJECTS_WITH_ASSEMBLIES = "Only show projects with assemblies"; //$NON-NLS-1$
 
 	private PreferenceConstants() {
 		// empty

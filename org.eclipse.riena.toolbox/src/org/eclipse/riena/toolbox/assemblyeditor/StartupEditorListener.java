@@ -27,6 +27,7 @@ import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.assemblyeditor.model.AssemblyModel;
 import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
+import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView;
 
 @SuppressWarnings("restriction")
@@ -40,9 +41,9 @@ public class StartupEditorListener implements IStartup {
 		IWorkbenchPart activePart = null;
 
 		windows = PlatformUI.getWorkbench().getWorkbenchWindows();
-		for (int i = 0; i < windows.length; i++) {
-			if (windows[i] != null) {
-				activePage = windows[i].getActivePage();
+		for (final IWorkbenchWindow window : windows) {
+			if (window != null) {
+				activePage = window.getActivePage();
 				if (activePage != null) {
 					activePage.addPartListener(listener);
 					activePart = activePage.getActivePart();
@@ -74,6 +75,10 @@ public class StartupEditorListener implements IStartup {
 		}
 
 		private void selectCorrespondingNodeInAssemblyTree(final IWorkbenchPart part) {
+			if (!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.CONST_LINK_WITH_EDITOR)) {
+				return;
+			}
+
 			if (part instanceof CompilationUnitEditor) {
 				final CompilationUnitEditor edi = (CompilationUnitEditor) part;
 				final FileEditorInput inp = (FileEditorInput) edi.getEditorInput();

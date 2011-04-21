@@ -10,7 +10,16 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor;
 
-import org.eclipse.riena.navigation.model.ModuleGroupNode;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+
+import org.eclipse.osgi.framework.internal.core.EquinoxLauncher;
 
 /**
  *
@@ -18,57 +27,46 @@ import org.eclipse.riena.navigation.model.ModuleGroupNode;
 @SuppressWarnings("restriction")
 public class ApplicationPreviewer {
 
-	public void start(final ModuleGroupNode moduleGroup) {
-		//		final String className = "org.eclipse.equinox.frameworkadmin.equinox.internal.EquinoxFrameworkAdminFactory";
-		//		//only this final part is dependent final on the target final framework implementation.
-		//
-		//		FrameworkAdmin fwAdmin = null;
-		//		try {
-		//			fwAdmin = FrameworkAdminFactory.getInstance(className);
-		//		} catch (final InstantiationException e1) {
-		//			e1.printStackTrace();
-		//		} catch (final IllegalAccessException e1) {
-		//			e1.printStackTrace();
-		//		} catch (final ClassNotFoundException e1) {
-		//			e1.printStackTrace();
-		//		}
-		//
-		//		//After instanciating FrameworkAdmin object, completely same code can be used
-		//		//as the case that you get the object from a service registry on OSGi framework.
-		//		final Manipulator manipulator = fwAdmin.getManipulator();
-		//		final ConfigData configData = manipulator.getConfigData();
-		//		final LauncherData launcherData = manipulator.getLauncherData();
-		//
-		//		//1. Set Parameters to LaunchData.
-		//		//launcherData.setJvm(new File("C:\Java\jre1.5.0_09\bin\java.exe"));
-		//		launcherData.setJvmArgs(new String[] { "-Dms40" });
-		//		launcherData.setFwPersistentDataLocation(new File("C:/eclipse/configuration"), true);
-		//		launcherData.setFwJar(new File("C:/eclipse/plugins/org.eclipse.osgi_3.3.0.v20070208.jar"));
-		//		launcherData.setFwConfigLocation(new File("C:/eclipse/configuration"));
-		//
-		//		//2. Set Parameters to ConfigData.
-		//		final URI bundleLocation = null;
-		//		final int startlevel = 4;
-		//		final boolean markedAsStartedOrNot = true;
-		//		configData.addBundle(new BundleInfo(bundleLocation, startlevel, markedAsStartedOrNot));
-		//
-		//		configData.setBeginningFwStartLevel(6);
-		//		configData.setInitialBundleStartLevel(5);
-		//		//configData.setFwDependentProp("osgi.console","9000");
-		//
-		//		//3. Save them.
-		//		try {
-		//			manipulator.save(false);
-		//			final Process process = fwAdmin.launch(manipulator, new File("C:/eclipse"));
-		//		} catch (final FrameworkAdminRuntimeException e) {
-		//			e.printStackTrace();
-		//		} catch (final IOException e) {
-		//			e.printStackTrace();
-		//		}
-		//
-		//		final EquinoxLauncher equinoxLauncher = new EquinoxLauncher(null);
+	private final static String TP = "reference:file:/C:/build/targets/Riena-target-201104130523-win32/eclipse/plugins/"; //$NON-NLS-1$
 
-		//4. Launch it.
+	private final List<String> targetPlatformBundles = Arrays.asList(new String[] {//
+			"com.caucho.hessian_3.2.0.jar", // 
+					"org.eclipse.core.databinding_1.4.0.I20110111-0800.jar",//
+					"org.eclipse.core.databinding.beans_1.2.100.I20100824-0800.jar",//
+					"org.eclipse.core.databinding.property_1.4.0.I20110222-0800.jar",//
+					"org.eclipse.riena.beans.common_3.0.0.HEAD.jar", //
+					"org.eclipse.riena.communication.console_3.0.0.HEAD.jar",// 
+					"org.eclipse.riena.communication.core_3.0.0.HEAD.jar",//
+					"org.eclipse.riena.communication.factory.hessian_3.0.0.HEAD.jar",// 
+					"org.eclipse.riena.core_3.0.0.HEAD.jar",// 
+					"org.eclipse.riena.ui.common_3.0.0.HEAD",//
+					"org.eclipse.riena.ui.core_3.0.0.HEAD",// 
+					"org.eclipse.riena.ui.filter_3.0.0.HEAD",//
+					"org.eclipse.riena.ui.ridgets_3.0.0.HEAD",//
+					"org.eclipse.riena.ui.ridgets.swt_3.0.0.HEAD",//
+					"org.eclipse.riena.navigation_3.0.0.HEAD",// 
+					"org.eclipse.riena.navigation.ui_3.0.0.HEAD",//
+					"org.eclipse.riena.navigation.ui.swt_3.0.0.HEAD",//
+					"org.apache.oro_2.0.8.v200903061218.jar" });
+
+	public void start() throws BundleException {
+		final Map<String, String> configuration = new HashMap<String, String>();
+		final EquinoxLauncher launcher = new EquinoxLauncher(configuration);
+		launcher.start();
+		final BundleContext ctx = launcher.getBundleContext();
+
+		//		for (final String tpBundle : targetPlatformBundles) {
+		//			ctx.installBundle(TP + tpBundle);
+		//			System.out.println(">> " + tpBundle);
+		//
+		//			for (final Bundle installed : ctx.getBundles()) {
+		//				System.out.println("installed " + installed.getSymbolicName());
+		//			}
+		//		}
+
+		final Bundle minimalBundle = ctx
+				.installBundle("reference:file:C:/build/workspaces/toolbox_runtime/org.eclipse.riena.toolbox.minimal"); //$NON-NLS-1$
+		minimalBundle.start();
 
 	}
 

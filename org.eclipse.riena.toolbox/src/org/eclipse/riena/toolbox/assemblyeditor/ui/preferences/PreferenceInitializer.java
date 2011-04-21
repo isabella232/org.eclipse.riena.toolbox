@@ -25,9 +25,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.CONST_CUSTOM_UI_CONTROLS_FACTORY, ""); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.CONST_GENERATE_CONTROLLER_PACKAGE_NAME, "controller"); //$NON-NLS-1$
 		store.setDefault(PreferenceConstants.CONST_GENERATE_VIEW_PACKAGE_NAME, "views"); //$NON-NLS-1$
-
 		store.setDefault(PreferenceConstants.CONST_CONFIGURE_RIDGETS_BLACKLIST,
 				"org.eclipse.swt.widgets.Label;org.eclipse.swt.widgets.Composite"); //$NON-NLS-1$
+
+		store.setDefault(PreferenceConstants.CONST_LINK_WITH_EDITOR, true);
+		store.setDefault(PreferenceConstants.CONST_ONLY_SHOW_PROJECTS_WITH_ASSEMBLIES, false);
 	}
 
 }

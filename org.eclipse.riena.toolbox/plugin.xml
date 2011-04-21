@@ -37,4 +37,38 @@
       </initializer>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.jdt.ui.CompilationUnitEditor.EditorContext?after=additions">
+         <menu
+               id="org.eclipse.riena.toolbox.annotationviewer.rienatoolbox.menu"
+               label="Riena Toolbox">
+            <command
+                  commandId="org.eclipse.riena.toolbox.generateConfigureRidgets.command"
+                  label="Generate configureRidgets"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.riena.toolbox.assemblyeditor.ui.handler.GenerateConfigureRidgetsHandler"
+            id="org.eclipse.riena.toolbox.generateConfigureRidgets.command"
+            name="Generate configureRidgets">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.riena.toolbox.generateConfigureRidgets.command"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+R">
+      </key>
+   </extension>
+
+
 </plugin>
