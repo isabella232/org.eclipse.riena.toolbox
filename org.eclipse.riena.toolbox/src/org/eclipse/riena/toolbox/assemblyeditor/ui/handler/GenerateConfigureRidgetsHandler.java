@@ -38,9 +38,9 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.views.AssemblyView;
  * 
  * TODO: implement PropertyTester for this command
  */
+@SuppressWarnings("restriction")
 public class GenerateConfigureRidgetsHandler extends AbstractHandler {
 
-	@SuppressWarnings("restriction")
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
@@ -75,7 +75,7 @@ public class GenerateConfigureRidgetsHandler extends AbstractHandler {
 
 		if (Platform.inDebugMode()) {
 			for (final SwtControl control : controls) {
-				System.out.println("DEBUG: found control: " + control.getSwtControlClassName() + " ridgetId: "
+				System.out.println("DEBUG: found control: " + control.getSwtControlClassName() + " ridgetId: " //$NON-NLS-1$ //$NON-NLS-2$
 						+ control.getRidgetId());
 			}
 		}

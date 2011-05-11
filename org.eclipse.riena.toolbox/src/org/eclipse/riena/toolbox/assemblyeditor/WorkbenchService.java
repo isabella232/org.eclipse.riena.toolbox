@@ -24,6 +24,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode;
 /**
  *
  */
+@SuppressWarnings("restriction")
 public class WorkbenchService implements IWorkbenchService {
 
 	public String getCompilationUnitClassNameOfActiveEditor(final IEditorPart part) {

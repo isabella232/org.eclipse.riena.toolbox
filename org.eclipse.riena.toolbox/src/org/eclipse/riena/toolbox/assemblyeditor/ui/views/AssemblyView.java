@@ -1050,8 +1050,10 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private class OnlyShowProjectsWithAssembliesAction extends Action {
 		public OnlyShowProjectsWithAssembliesAction() {
-			super("Hide Projects without Assemblies", Action.AS_CHECK_BOX);
+			super("Hide Empty Projects", Action.AS_CHECK_BOX);
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.OnlyShowProjectsWithAssemblies.action"); //$NON-NLS-1$
+			setChecked(Activator.getDefault().getPreferenceStore()
+					.getBoolean(PreferenceConstants.CONST_ONLY_SHOW_PROJECTS_WITH_ASSEMBLIES));
 		}
 
 		@Override
@@ -1064,15 +1066,16 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private class LinkWithEditorAction extends Action {
 		public LinkWithEditorAction() {
-			super("Link with Editor", Action.AS_CHECK_BOX);
+			super("Link With Editor", Action.AS_CHECK_BOX);
 			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.linkwitheditor.action"); //$NON-NLS-1$
+			setChecked(Activator.getDefault().getPreferenceStore()
+					.getBoolean(PreferenceConstants.CONST_LINK_WITH_EDITOR));
 		}
 
 		@Override
 		public void run() {
 			Activator.getDefault().getPreferenceStore()
 					.setValue(PreferenceConstants.CONST_LINK_WITH_EDITOR, isChecked());
-			System.out.println("AssemblyView.LinkWithEditorAction.run() " + isChecked());
 		}
 	}
 }

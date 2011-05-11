@@ -45,11 +45,12 @@ import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 
+@SuppressWarnings("restriction")
 public class CodeGenerator implements ICodeGenerator {
 	/**
 	 *
 	 */
-	private static final String CONST_CLASS_IDENT = "public class";
+	private static final String CONST_CLASS_IDENT = "public class"; //$NON-NLS-1$
 	private static final String EXTENSION_JAVA = ".java"; //$NON-NLS-1$
 	private static final String DIR_TEMPLATES = "templates"; //$NON-NLS-1$
 	private static final String PACKAGE_SEPARATOR = "."; //$NON-NLS-1$
@@ -211,7 +212,6 @@ public class CodeGenerator implements ICodeGenerator {
 		return fullClassName;
 	}
 
-	@SuppressWarnings("restriction")
 	private void generateComments(final IFile classFile, final SubModuleNode subModule, final String fullClassName,
 			final StringWriter writer) {
 		final RidgetGenerator ridgetGenerator = new RidgetGenerator(subModule.getBundle().getProject());
