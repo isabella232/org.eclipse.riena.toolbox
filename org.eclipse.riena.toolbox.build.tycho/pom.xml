@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>org.eclipse.riena.toolbox.build.tycho</artifactId>
+  <packaging>pom</packaging>
+  <parent>
+  	<groupId>org.eclipse.riena</groupId>
+  	<artifactId>org.eclipse.riena.build.tycho</artifactId>
+  	<version>3.0.0-SNAPSHOT</version>
+  	<relativePath>../org.eclipse.riena.build.tycho/pom.xml</relativePath>
+  </parent>
+  
+  <modules>
+    <module>../org.eclipse.riena.beans.common</module>
+    <module>../org.eclipse.riena.build.tycho</module>
+    <module>../org.eclipse.riena.client</module>
+    <module>../org.eclipse.riena.communication.console</module>
+    <module>../org.eclipse.riena.communication.core</module>
+    <module>../org.eclipse.riena.communication.factory.hessian</module>
+    <module>../org.eclipse.riena.core</module>
+    <module>../org.eclipse.riena.navigation</module>
+    <module>../org.eclipse.riena.navigation.ui</module>
+    <module>../org.eclipse.riena.navigation.ui.swt</module>
+    <module>../org.eclipse.riena.ui.common</module>
+    <module>../org.eclipse.riena.ui.core</module>
+    <module>../org.eclipse.riena.ui.filter</module>
+    <module>../org.eclipse.riena.ui.ridgets</module>
+    <module>../org.eclipse.riena.ui.ridgets.swt</module>
+    <module>../org.eclipse.riena.ui.swt</module>
+    <module>../org.eclipse.riena.ui.swt.rcp</module>
+  
+    <module>../org.eclipse.riena.ui.workarea</module>
+    <module>../org.eclipse.riena.toolbox</module>
+  	<module>../org.eclipse.riena.toolbox.feature</module>
+  	<module>../org.eclipse.riena.toolbox.previewer</module>
+  	<module>../org.eclipse.riena.toolbox.previewer.customizer</module>
+  	<module>../org.eclipse.riena.toolbox.previewer.feature</module>
+  	<module>../org.eclipse.riena.ui.templates</module>
+  	<module>../org.eclipse.riena.ui.templates.feature</module>
+  	<module>../org.eclipse.riena.ui.wizard.cs</module>
+  	<module>../org.eclipse.riena.toolbox.updatesite</module>
+  </modules>
+</project>
