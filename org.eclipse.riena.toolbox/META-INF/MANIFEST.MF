@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
  org.eclipse.jdt;bundle-version="3.5.0",
- org.eclipse.jdt.ui;bundle-version="3.5.0",
  org.eclipse.jdt.core;bundle-version="3.5.0",
  org.apache.velocity;bundle-version="1.5.0",
  org.eclipse.riena.ui.ridgets.swt,
@@ -20,7 +19,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.riena.core;bundle-version="3.0.0",
  org.eclipse.riena.navigation.ui.swt;bundle-version="3.0.0",
  org.eclipse.jdt.launching;bundle-version="3.5.100",
- org.eclipse.equinox.launcher;bundle-version="1.2.0"
+ org.eclipse.equinox.launcher;bundle-version="1.1.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Eclipse.org - Riena
+Import-Package: org.eclipse.jdt.internal.corext.codemanipulation,
+ org.eclipse.jdt.internal.corext.util,
+ org.eclipse.jdt.internal.ui,
+ org.eclipse.jdt.internal.ui.dialogs,
+ org.eclipse.jdt.internal.ui.javaeditor,
+ org.eclipse.jdt.ui
