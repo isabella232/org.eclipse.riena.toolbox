@@ -17,6 +17,19 @@
 
 	<!-- ############################################################################################################ -->
 
+	
+    <target name="copyUpdateSite">
+    	<delete dir="${COPY_TARGET_DIR}">
+    		<include name="**"/>
+    	</delete>
+        <copy todir="${COPY_TARGET_DIR}">
+        	<fileset dir="${COPY_SRC_DIR}">
+    			<include name="**"/>
+			</fileset>
+        </copy>
+    </target>
+
+	
 	<target name="clean">
 		<deltree dir="${TARGET_DIR}" />
 		<mkdir dir="${TARGET_DIR}" />
