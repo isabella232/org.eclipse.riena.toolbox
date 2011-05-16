@@ -12,10 +12,6 @@
   <modules>
     <module>../org.eclipse.riena.beans.common</module>
     <module>../org.eclipse.riena.build.tycho</module>
-    <module>../org.eclipse.riena.client</module>
-    <module>../org.eclipse.riena.communication.console</module>
-    <module>../org.eclipse.riena.communication.core</module>
-    <module>../org.eclipse.riena.communication.factory.hessian</module>
     <module>../org.eclipse.riena.core</module>
     <module>../org.eclipse.riena.navigation</module>
     <module>../org.eclipse.riena.navigation.ui</module>
