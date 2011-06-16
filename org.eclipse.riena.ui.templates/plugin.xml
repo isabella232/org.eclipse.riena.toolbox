@@ -44,9 +44,9 @@
    <extension
          point="org.eclipse.pde.core.targets">
       <target
-            definition="targets/riena_2.0.0.target"
-            id="org.eclipse.riena.target.200"
-            name="Riena Target 2.0.0">
+            definition="targets/riena-3.0.0.target"
+            id="org.eclipse.riena.target.300"
+            name="Riena 3.0.0 Targetplatform">
       </target>
    </extension>
 </plugin>

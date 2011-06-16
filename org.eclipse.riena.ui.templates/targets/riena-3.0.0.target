@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.6"?>
+
+<target name="Riena3" sequenceNumber="15">
+<locations>
+<location includeAllPlatforms="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.riena.build.feature.sdk.feature.group" version="3.0.0.v20110614_3_0_0_0"/>
+<repository location="http://download.eclipse.org/rt/riena/3.0.0.0/update/"/>
+</location>
+<location includeAllPlatforms="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+<unit id="org.eclipse.rcp.feature.group" version="3.7.0.v20110216-9DB5Fm1FpBGy_AJSy2FajiY"/>
+<unit id="org.eclipse.rcp.source.feature.group" version="3.7.0.v20110216-9DB5Fm1FpBGy_AJSy2FajiY"/>
+<unit id="org.eclipse.rcp.sdk.id" version="3.7.0.I20110526-1708"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.0.v20110502-7M7W8Z8eNV4UqfbhicjCO-Iigkdz"/>
+<repository location="http://download.eclipse.org/releases/indigo/"/>
+</location>
+</locations>
+</target>
