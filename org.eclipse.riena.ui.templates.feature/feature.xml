@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.riena.ui.templates.feature"
       label="Riena UI Wizard"
-      version="3.0.0.qualifier">
+      version="4.0.0.qualifier">
 
    <description>
       Riena Wizard for creating several UI projects from scratch to
