@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.eclipse.riena.ui.templates.feature_3.0.0.qualifier" id="org.eclipse.riena.ui.templates.feature" version="3.0.0.qualifier">
+   <feature url="features/org.eclipse.riena.ui.templates.feature_4.0.0.qualifier" id="org.eclipse.riena.ui.templates.feature" version="4.0.0.qualifier">
       <category name="Riena Eclipse IDE Toolbox"/>
    </feature>
-   <feature url="features/org.eclipse.riena.toolbox.feature_3.0.0.qualifier" id="org.eclipse.riena.toolbox.feature" version="3.0.0.qualifier">
+   <feature url="features/org.eclipse.riena.toolbox.feature_4.0.0.qualifier" id="org.eclipse.riena.toolbox.feature" version="4.0.0.qualifier">
       <category name="Riena Eclipse IDE Toolbox"/>
    </feature>
-   <feature url="features/org.eclipse.riena.toolbox.previewer.feature_3.0.0.qualifier" id="org.eclipse.riena.toolbox.previewer.feature" version="3.0.0.qualifier">
+   <feature url="features/org.eclipse.riena.toolbox.previewer.feature_4.0.0.qualifier" id="org.eclipse.riena.toolbox.previewer.feature" version="4.0.0.qualifier">
       <category name="Riena Eclipse IDE Toolbox"/>
    </feature>
    <category-def name="Riena Eclipse IDE Toolbox" label="Riena Toolbox" />
