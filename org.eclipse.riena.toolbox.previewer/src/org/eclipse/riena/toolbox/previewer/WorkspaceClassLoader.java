@@ -121,6 +121,8 @@ public final class WorkspaceClassLoader {
 			WorkbenchUtil.handleException(e);
 		} catch (final SecurityException e) {
 			WorkbenchUtil.handleException(e);
+		} catch (final UnsupportedClassVersionError e) {
+			WorkbenchUtil.handleException(e, "UnsupportedClassVersionError: Make sure that you use the same java version to start the Eclipse IDE and for the workspace"); //$NON-NLS-1$
 		}
 		return null;
 	}

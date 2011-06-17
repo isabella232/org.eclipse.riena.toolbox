@@ -36,11 +36,11 @@ public final class WorkbenchUtil {
 		}
 	}
 
-	public static void handleException(final Exception e) {
+	public static void handleException(final Throwable e) {
 		handleException(e, null);
 	}
 
-	public static void handleException(final Exception e, final String message) {
+	public static void handleException(final Throwable e, final String message) {
 		Activator.getDefault().getLog().log(new Status(Status.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
 		if (null != message) {
 			MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
