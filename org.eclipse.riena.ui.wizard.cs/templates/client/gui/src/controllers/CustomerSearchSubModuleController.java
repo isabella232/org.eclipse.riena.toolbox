@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.riena.navigation.NavigationNodeId;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.riena.core.wire.InjectService;
@@ -90,7 +91,7 @@ public class CustomerSearchSubModuleController extends SubModuleController {
 
 		Customer selected = (Customer) selectedValue;
 
-		SubModuleNode child = new SubModuleNode(null, selected.getFirstName());
+		SubModuleNode child = new SubModuleNode(new NavigationNodeId("customer.submodule"), selected.getFirstName());
 
 		child.setContext(Customer.class.getName(), selected);
 
