@@ -79,6 +79,7 @@
 
 	<target name="checkoutRT" description="check out Riena projects">
 		<login cvsRoot="${RT}" />
+		<checkout cvsroot="${RT}" package="org.eclipse.riena/org.eclipse.riena.build3" />
 		<checkout cvsroot="${RT}" package="org.eclipse.equinox/compendium/bundles/org.eclipse.equinox.log" />
 		<checkout cvsroot="${RT}" package="org.eclipse.riena/org.eclipse.riena.beans.common" />
 		<checkout cvsroot="${RT}" package="org.eclipse.riena/org.eclipse.riena.core" />
