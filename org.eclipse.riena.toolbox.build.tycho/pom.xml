@@ -9,6 +9,10 @@
   	<relativePath>../org.eclipse.riena.build.tycho/pom.xml</relativePath>
   </parent>
   
+  <properties>
+  		<tycho-version>0.12.0</tycho-version>
+  </properties>
+  
   <modules>
     <module>../org.eclipse.riena.beans.common</module>
     <module>../org.eclipse.riena.build.tycho</module>
