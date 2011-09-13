@@ -164,7 +164,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		lnkView.setBackground(workareaBackground);
 		GridDataFactory.swtDefaults().applyTo(lnkView);
 		txtView = new IdSelectorText(parent, workareaBackground, "View Selection",
-				"Select a View (* = any string, ? = any char):");
+				"Select a View (* = any string, ? = any char):", false);
 
 		// FIXME
 		// use
@@ -191,7 +191,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		private String controllerName;
 
 		public BrowseControllerComposite(final Composite parent, final Color background) {
-			super(parent, background, true);
+			super(parent, background, false);
 
 			getBrowseButton().addSelectionListener(new SelectionAdapter() {
 

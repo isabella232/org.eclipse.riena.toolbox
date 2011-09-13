@@ -98,7 +98,7 @@ public class SubApplicationComposite extends AbstractDetailComposite<SubApplicat
 		final Label lblPersp = UIControlsFactory.createLabel(parent, "PerspectiveId");
 		GridDataFactory.swtDefaults().applyTo(lblPersp);
 		txtPerspective = new IdSelectorText(parent, workareaBackground, "Perspective Selection",
-				"Select a Perspective (* = any string, ? = any char):");
+				"Select a Perspective (* = any string, ? = any char):", true);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtPerspective);
 	}
 }

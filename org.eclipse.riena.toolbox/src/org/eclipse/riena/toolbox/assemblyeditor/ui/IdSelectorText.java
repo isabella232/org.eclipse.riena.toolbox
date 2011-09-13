@@ -37,8 +37,9 @@ public class IdSelectorText extends TextButtonComposite {
 
 	private IDataProvider dataProvider;
 
-	public IdSelectorText(final Composite parent, final Color background, final String title, final String message) {
-		super(parent, background, true);
+	public IdSelectorText(final Composite parent, final Color background, final String title, final String message,
+			final boolean mandatory) {
+		super(parent, background, mandatory);
 
 		getBrowseButton().addSelectionListener(new SelectionAdapter() {
 			@Override

@@ -79,6 +79,7 @@ import org.eclipse.riena.toolbox.assemblyeditor.ui.DetailSection;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.IDirtyListener;
 import org.eclipse.riena.toolbox.assemblyeditor.ui.preferences.PreferenceConstants;
 import org.eclipse.riena.ui.swt.MessageBox;
+import org.eclipse.riena.ui.swt.utils.SwtUtilities;
 
 /**
  * View that shows the AssemblyTree on the left side and the DetailsSection with
@@ -389,7 +390,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			final AssemblyModel model = Activator.getDefault().getDataProvider().createData();
 			Activator.getDefault().setAssemblyModel(model);
 
-			if (assemblyTree != null) {
+			if (null != assemblyTree && !SwtUtilities.isDisposed(assemblyTree.getTree())) {
 				assemblyTree.getTree().getDisplay().asyncExec(new Runnable() {
 					public void run() {
 						assemblyTree.setModel(model, false);
@@ -657,7 +658,13 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 					.getActiveWorkbenchWindow().getShell(), options, new ArrayContentProvider(), new LabelProvider(),
 					TITLE);
 			dia.open();
-			final List<Object> diaResult = Arrays.asList(dia.getResult());
+
+			final Object[] result = dia.getResult();
+			if (null == result) {
+				return;
+			}
+
+			final List<Object> diaResult = Arrays.asList(result);
 
 			boolean isBundleDirty = false;
 			if (diaResult.contains(OPTION_DELETE_VIEW_CLASS)) {
