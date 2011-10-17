@@ -114,7 +114,6 @@ public class RidgetGenerator {
 	 * @param fullyQualifiedClassName
 	 * @return all found SwtControls, or an empty list
 	 */
-	@SuppressWarnings("unchecked")
 	public List<SwtControl> findSwtControls(final String fullyQualifiedClassName) {
 		final CompilationUnit astNode = findCompilationUnit(fullyQualifiedClassName);
 		if (null == astNode) {
@@ -189,7 +188,6 @@ public class RidgetGenerator {
 	 * @param controls
 	 * @return true if the given class was found, otherwise false
 	 */
-	@SuppressWarnings("unchecked")
 	public boolean generateConfigureRidgets(final String fullyQualifiedControllerClassName,
 			final List<SwtControl> controls) {
 		final ICompilationUnit unit = findICompilationUnit(fullyQualifiedControllerClassName);
@@ -247,7 +245,6 @@ public class RidgetGenerator {
 	 * @param parentMethod
 	 * @param controls
 	 */
-	@SuppressWarnings("unchecked")
 	private void generateGetRidgetCalls(final AST ast, final MethodDeclaration parentMethod,
 			final List<SwtControl> controls) {
 
@@ -287,7 +284,6 @@ public class RidgetGenerator {
 	 * @param unit
 	 * @param controls
 	 */
-	@SuppressWarnings("unchecked")
 	private void addImportStatements(final AST ast, final CompilationUnit unit, final List<SwtControl> controls) {
 		for (final SwtControl swtControl : controls) {
 			if (!hasImportStatement(unit, swtControl.getFullyQualifiedRidgetClassName())) {

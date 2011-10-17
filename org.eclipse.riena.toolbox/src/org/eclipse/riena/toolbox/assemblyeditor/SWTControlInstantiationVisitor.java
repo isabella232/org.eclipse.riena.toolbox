@@ -20,10 +20,13 @@ import java.util.Set;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 
@@ -88,7 +91,6 @@ public class SWTControlInstantiationVisitor extends ASTVisitor {
 
 			if (parent instanceof VariableDeclaration) {
 				final VariableDeclaration decl = (VariableDeclaration) parent;
-
 				final String varName = decl.getName().getFullyQualifiedName();
 
 				final MethodDeclaration enclosingMethod = findDeclaringMethod(node);
@@ -96,8 +98,13 @@ public class SWTControlInstantiationVisitor extends ASTVisitor {
 					Util.logWarning("could not detect enclosing method for " + node); //$NON-NLS-1$
 					return false;
 				}
-
-				if (!variabelCache.isRegistered(enclosingMethod, varName)) {
+				generateAddUIControlCall(enclosingMethod, varName);
+			} else if (parent instanceof Assignment) {
+				final Assignment ass = (Assignment) parent;
+				final Expression left = ass.getLeftHandSide();
+				if (left instanceof SimpleName) {
+					final String varName = ((SimpleName) left).getFullyQualifiedName();
+					final MethodDeclaration enclosingMethod = findDeclaringMethod(node);
 					generateAddUIControlCall(enclosingMethod, varName);
 				}
 			}
@@ -105,18 +112,18 @@ public class SWTControlInstantiationVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void generateAddUIControlCall(final MethodDeclaration enclosingMethod, final String variableName) {
+		if (variabelCache.isRegistered(enclosingMethod, variableName)) {
+			return;
+		}
+
 		final AST ast = enclosingMethod.getAST();
-
 		final MethodInvocation methodAddUIControl = ast.newMethodInvocation();
-
 		methodAddUIControl.setName(ast.newSimpleName("addUIControl")); //$NON-NLS-1$
 		methodAddUIControl.arguments().add(ast.newSimpleName(variableName));
 		final StringLiteral ridgetId = ast.newStringLiteral();
 		ridgetId.setLiteralValue(variableName);
 		methodAddUIControl.arguments().add(ridgetId);
-
 		enclosingMethod.getBody().statements().add(ast.newExpressionStatement(methodAddUIControl));
 	}
 

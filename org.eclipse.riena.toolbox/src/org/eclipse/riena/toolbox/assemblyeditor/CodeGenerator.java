@@ -244,7 +244,7 @@ public class CodeGenerator implements ICodeGenerator {
 		try {
 			return CodeGeneration.getTypeComment(newClassCompilationUnit, fullClassName, typeParamNames, lineDelimiter);
 		} catch (final NullPointerException e) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 
@@ -254,7 +254,7 @@ public class CodeGenerator implements ICodeGenerator {
 		try {
 			return CodeGeneration.getFileComment(newClassCompilationUnit, lineDelimiter);
 		} catch (final NullPointerException e) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 	}
 

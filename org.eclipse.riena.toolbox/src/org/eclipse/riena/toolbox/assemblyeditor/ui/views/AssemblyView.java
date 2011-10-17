@@ -14,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.osgi.framework.BundleException;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -58,7 +56,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.AddUIControlCallGenerator;
-import org.eclipse.riena.toolbox.assemblyeditor.ApplicationPreviewer;
 import org.eclipse.riena.toolbox.assemblyeditor.ResourceChangeListener;
 import org.eclipse.riena.toolbox.assemblyeditor.RidgetGenerator;
 import org.eclipse.riena.toolbox.assemblyeditor.api.INodeFactory;
@@ -103,7 +100,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 	private GenerateAddUIControlCallsAction generateAddUIControlCallsAction;
 	private final PluginXmlResourceChangeListener changeListener = new PluginXmlResourceChangeListener();
 	private RegisterPerspectiveAction registerPerspectiveAction;
-	private ShowPreview showApplicationPreview;
 	private LinkWithEditorAction linkWidthEditorAction;
 	private OnlyShowProjectsWithAssembliesAction onlyShowProjectsWithAssembliesAction;
 
@@ -130,7 +126,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		generateAddUIControlCallsAction = new GenerateAddUIControlCallsAction();
 		refreshAction = new RefreshAction();
 		registerPerspectiveAction = new RegisterPerspectiveAction();
-		showApplicationPreview = new ShowPreview();
 		linkWidthEditorAction = new LinkWithEditorAction();
 		onlyShowProjectsWithAssembliesAction = new OnlyShowProjectsWithAssembliesAction();
 	}
@@ -166,58 +161,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			}
 		});
 	}
-
-	//	private class DropDownAction extends Action implements IMenuCreator {
-	//		private Menu dropDownMenu;
-	//
-	//		public DropDownAction() {
-	//			setToolTipText("Settings");
-	//			setImageDescriptor(null);
-	//			setText("");
-	//			setMenuCreator(this);
-	//		}
-	//
-	//		public void dispose() {
-	//			if (dropDownMenu != null) {
-	//				dropDownMenu.dispose();
-	//				dropDownMenu = null;
-	//			}
-	//		}
-	//
-	//		public Menu getMenu(final Menu parent) {
-	//			return null;
-	//		}
-	//
-	//		public Menu getMenu(final Control parent) {
-	//			if (dropDownMenu != null) {
-	//				dropDownMenu.dispose();
-	//			}
-	//
-	//			dropDownMenu = new Menu(parent);
-	//			addActionToMenu(dropDownMenu, onlyShowProjectsWithAssembliesAction);
-	//			addActionToMenu(dropDownMenu, linkWidthEditorAction);
-	//
-	//			return dropDownMenu;
-	//		}
-	//
-	//		protected void addActionToMenu(final Menu parent, final Action action) {
-	//			final ActionContributionItem item = new ActionContributionItem(action);
-	//			item.fill(parent, -1);
-	//		}
-	//
-	//		@Override
-	//		public void run() {
-	//
-	//		}
-	//
-	//		/**
-	//		 * Get's rid of the menu, because the menu hangs on to the searches,
-	//		 * etc.
-	//		 */
-	//		void clear() {
-	//			dispose();
-	//		}
-	//	}
 
 	public void openClassInEditor(final SubModuleNode submod, final String className) {
 		if (className == null) {
@@ -1035,22 +978,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 					doSave(null);
 					checkActionEnabledState();
 				}
-			}
-		}
-	}
-
-	private class ShowPreview extends Action {
-		public ShowPreview() {
-			setText("Preview Application");
-			setId("org.eclipse.riena.toolbox.assemblyeditor.ui.views.showpreview.action"); //$NON-NLS-1$
-		}
-
-		@Override
-		public void run() {
-			try {
-				new ApplicationPreviewer().start();
-			} catch (final BundleException e) {
-				e.printStackTrace();
 			}
 		}
 	}

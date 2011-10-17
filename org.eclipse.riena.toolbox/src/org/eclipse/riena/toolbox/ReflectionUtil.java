@@ -11,10 +11,11 @@
 package org.eclipse.riena.toolbox;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.eclipse.swt.widgets.Composite;
 
+import org.eclipse.riena.core.util.ReflectionFailure;
+import org.eclipse.riena.core.util.ReflectionUtils;
 import org.eclipse.riena.toolbox.assemblyeditor.model.ViewPartInfo;
 
 // FIXME move ReflectionUtil to common-bundle
@@ -27,25 +28,14 @@ public final class ReflectionUtil {
 	 * @throws InvocationTargetException
 	 */
 	public static boolean invokeMethod(final String methodName, final Object viewPart, final Composite parent) {
-		for (final Method method : viewPart.getClass().getDeclaredMethods()) {
-			if (methodName.equals(method.getName())) {
-				method.setAccessible(true);
-				try {
-					method.invoke(viewPart, parent);
-					return true;
-				} catch (final IllegalArgumentException e) {
-					Util.showError(e);
-					return false;
-				} catch (final IllegalAccessException e) {
-					Util.showError(e);
-					return false;
-				} catch (final InvocationTargetException e) {
-					Util.showError(e);
-					return false;
-				}
-			}
+		try {
+
+			ReflectionUtils.invokeHidden(viewPart, methodName, parent);
+			return true;
+		} catch (final ReflectionFailure f) {
+			Util.logError(f);
+			return false;
 		}
-		return false;
 	}
 
 	/**
