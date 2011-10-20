@@ -94,8 +94,9 @@ public class UIControlVisitor extends ASTVisitor {
 				return ridgetInterface;
 			}
 		} catch (final ClassNotFoundException e) {
-			e.printStackTrace();
+			Util.logError(e);
 		} catch (final BindingException e) {
+			Util.logError(e);
 			return null;
 		}
 		return IRidget.class;

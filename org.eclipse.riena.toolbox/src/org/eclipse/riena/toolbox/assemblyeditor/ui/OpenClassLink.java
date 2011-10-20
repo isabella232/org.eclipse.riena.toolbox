@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.riena.toolbox.assemblyeditor.ui;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -25,15 +26,15 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
+import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.RidgetGenerator;
-import org.eclipse.riena.toolbox.assemblyeditor.model.SubModuleNode;
 
 @SuppressWarnings("restriction")
 public class OpenClassLink extends Composite {
 
-	private Link lnk;
+	private final Link lnk;
 	private String className;
-	private SubModuleNode subModule;
+	private IProject project;
 
 	public OpenClassLink(final Composite parent, final String text) {
 		super(parent, SWT.None);
@@ -45,20 +46,23 @@ public class OpenClassLink extends Composite {
 		lnk.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				if (subModule == null || className == null) {
+				if (project == null || className == null) {
+					Util.logWarning("OpenClassLink: no class or project found"); //$NON-NLS-1$
 					return;
 				}
 
-				final RidgetGenerator gen = new RidgetGenerator(subModule.getBundle().getProject());
+				final RidgetGenerator gen = new RidgetGenerator(project);
 
 				try {
 					final ICompilationUnit unit = gen.findICompilationUnit(className);
 					if (null != unit) {
 						final IEditorPart part = EditorUtility.openInEditor(unit, false);
 						JavaUI.revealInEditor(part, (IJavaElement) unit);
+					} else {
+						Util.logWarning("ICompilationUnit not found " + className + " in " + project); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				} catch (final PartInitException pix) {
-					pix.printStackTrace();
+					Util.logError(pix);
 				}
 
 			}
@@ -85,11 +89,11 @@ public class OpenClassLink extends Composite {
 		this.className = className;
 	}
 
-	public SubModuleNode getSubModule() {
-		return subModule;
+	public IProject getProject() {
+		return project;
 	}
 
-	public void setSubModule(final SubModuleNode subModule) {
-		this.subModule = subModule;
+	public void setProject(final IProject project) {
+		this.project = project;
 	}
 }

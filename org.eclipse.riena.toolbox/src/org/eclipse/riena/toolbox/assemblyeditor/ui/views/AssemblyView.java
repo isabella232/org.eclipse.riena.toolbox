@@ -110,7 +110,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 	private void initActions() {
 		final INodeFactory nodeFactory = Activator.getDefault().getNodeFactory();
-
 		addAssemblyAction = new AddAssemblyAction(nodeFactory);
 		addSubAppAction = new AddSubApplication(nodeFactory);
 		addModuleGroupAction = new AddModuleGroupAction(nodeFactory);
@@ -145,7 +144,6 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 		final SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
 
 		getViewSite().getActionBars().getToolBarManager().add(refreshAction);
-		//getViewSite().getActionBars().getToolBarManager().add(new DropDownAction());
 		getViewSite().getActionBars().getMenuManager().add(onlyShowProjectsWithAssembliesAction);
 		getViewSite().getActionBars().getMenuManager().add(linkWidthEditorAction);
 
@@ -570,7 +568,9 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			final ListSelectionDialog dia = new ListSelectionDialog(PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getShell(), options, new ArrayContentProvider(), new LabelProvider(),
 					TITLE);
+			dia.setInitialElementSelections(Arrays.asList(options));
 			dia.open();
+
 			final List<Object> diaResult = Arrays.asList(dia.getResult());
 
 			boolean isBundleDirty = false;
@@ -600,6 +600,7 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 			final ListSelectionDialog dia = new ListSelectionDialog(PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getShell(), options, new ArrayContentProvider(), new LabelProvider(),
 					TITLE);
+			dia.setInitialElementSelections(Arrays.asList(options));
 			dia.open();
 
 			final Object[] result = dia.getResult();
@@ -822,19 +823,20 @@ public class AssemblyView extends ViewPart implements ISaveablePart {
 
 				if (null != rcpView) {
 					final String className = rcpView.getViewClass();
-					final RidgetGenerator generator = new RidgetGenerator(selectedNode.getBundle().getProject());
+					final List<SwtControl> controls = new RidgetGenerator(rcpView.getBundle().getProject())
+							.findSwtControlsReflectionStyle(className);
 
-					final List<SwtControl> controls = generator.findSwtControlsReflectionStyle(className);
-					generator.generateConfigureRidgets(((SubModuleNode) selectedNode).getController(), controls);
+					new RidgetGenerator(selectedNode.getBundle().getProject()).generateConfigureRidgets(
+							((SubModuleNode) selectedNode).getController(), controls);
 
 					if (Platform.inDebugMode()) {
 						for (final SwtControl control : controls) {
-							System.out.println("DEBUG: found control: " + control.getSwtControlClassName()
-									+ " ridgetId: " + control.getRidgetId());
+							System.out.println("DEBUG: found control: " + control.getSwtControlClassName() //$NON-NLS-1$
+									+ " ridgetId: " + control.getRidgetId()); //$NON-NLS-1$
 						}
 					}
 				} else {
-					System.err.println("No ViewClass found for node: " + selectedNode);
+					System.err.println("No ViewClass found for node: " + selectedNode); //$NON-NLS-1$
 				}
 
 			}

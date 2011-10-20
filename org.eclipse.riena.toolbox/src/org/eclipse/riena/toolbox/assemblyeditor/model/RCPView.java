@@ -20,6 +20,7 @@ public class RCPView {
 	private String viewClass;
 	private final boolean allowMultiple = true;
 	private final boolean restorable = false;
+	private BundleNode bundle;
 
 	public RCPView() {
 	}
@@ -60,11 +61,12 @@ public class RCPView {
 		this.viewClass = clazz;
 	}
 
-	@Override
-	public String toString() {
-		return "RCPView [allowMultiple=" + allowMultiple + ", clazz=" + viewClass //$NON-NLS-1$ //$NON-NLS-2$
-				+ ", id=" + id + ", name=" + name + ", restorable=" //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
-				+ restorable + "]"; //$NON-NLS-1$
+	public BundleNode getBundle() {
+		return bundle;
+	}
+
+	public void setBundle(final BundleNode bundle) {
+		this.bundle = bundle;
 	}
 
 	@Override
@@ -96,4 +98,11 @@ public class RCPView {
 		}
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "RCPView [id=" + id + ", name=" + name + ", viewClass=" + viewClass + ", allowMultiple=" + allowMultiple
+				+ ", restorable=" + restorable + "]";
+	}
+
 }

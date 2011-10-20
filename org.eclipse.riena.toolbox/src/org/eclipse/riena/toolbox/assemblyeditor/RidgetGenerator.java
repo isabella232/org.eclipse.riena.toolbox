@@ -49,6 +49,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 
+import org.eclipse.riena.core.util.StringUtils;
 import org.eclipse.riena.toolbox.ReflectionUtil;
 import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.model.SwtControl;
@@ -76,6 +77,10 @@ public class RidgetGenerator {
 	 * @return if found the CompilationUnit, otherwise false
 	 */
 	public ICompilationUnit findICompilationUnit(final String fullyQualifiedClassName) {
+		if (!StringUtils.isGiven(fullyQualifiedClassName)) {
+			return null;
+		}
+
 		try {
 			if (project.isNatureEnabled(NATURE_JAVA)) {
 				final IJavaProject javaProject = JavaCore.create(project);
@@ -87,6 +92,9 @@ public class RidgetGenerator {
 					final String className = m.group(2);
 
 					final IPackageFragment viewPackage = findPackage(javaProject, packageName);
+					if (null == viewPackage) {
+						return null;
+					}
 					for (final ICompilationUnit unit : viewPackage.getCompilationUnits()) {
 						if (unit.getElementName().equals(className + EXTENSION_JAVA)) {
 							return unit;
@@ -190,6 +198,7 @@ public class RidgetGenerator {
 	 */
 	public boolean generateConfigureRidgets(final String fullyQualifiedControllerClassName,
 			final List<SwtControl> controls) {
+
 		final ICompilationUnit unit = findICompilationUnit(fullyQualifiedControllerClassName);
 		if (null == unit) {
 			Util.logWarning("controller not found " + fullyQualifiedControllerClassName); //$NON-NLS-1$

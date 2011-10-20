@@ -122,6 +122,7 @@ public class CodeGenerator implements ICodeGenerator {
 				properties);
 
 		final RCPView view = new RCPView();
+		view.setBundle(subModule.getBundle());
 		view.setViewClass(classFileName);
 		view.setId(classFileName);
 		view.setName(classFileName);

@@ -52,16 +52,9 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 	}
 
 	public Set<RCPView> getRcpViews(final BundleNode bundleNode) {
-		return parseViewIds(getDocument(bundleNode));
+		return parseViewIds(getDocument(bundleNode), bundleNode);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seeorg.eclipse.riena.toolbox.assemblyeditor.api.IPluginXmlParser#
-	 * getRcpPerspectives
-	 * (org.eclipse.riena.toolbox.assemblyeditor.model.BundleNode)
-	 */
 	public Set<RCPPerspective> getRcpPerspectives(final BundleNode bundleNode) {
 		return parsePerspectiveIds(getDocument(bundleNode));
 	}
@@ -98,7 +91,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 		return viewIds;
 	}
 
-	private Set<RCPView> parseViewIds(final Document doc) {
+	private Set<RCPView> parseViewIds(final Document doc, final BundleNode bundleNode) {
 		final Set<RCPView> viewIds = new HashSet<RCPView>();
 
 		if (null == doc) {
@@ -119,6 +112,7 @@ public class PluginXmlParser extends AbstractXmlProvider implements IPluginXmlPa
 					final Element elmView = (Element) nlViews.item(j);
 
 					final RCPView view = parseView(elmView);
+					view.setBundle(bundleNode);
 					viewIds.add(view);
 				}
 			}

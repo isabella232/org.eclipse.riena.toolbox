@@ -160,6 +160,7 @@ public class AssemblyDataProvider implements IAssemblyDataProvider {
 	 */
 	private List<BundleNode> findBundles(final AssemblyModel model) {
 		final List<BundleNode> bundles = new ArrayList<BundleNode>();
+
 		for (final IProject proj : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			final IFile pluginXml = proj.getFile(PLUGIN_XML);
 			if (isJavaProject(proj)) {

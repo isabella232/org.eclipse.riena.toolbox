@@ -23,6 +23,8 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -33,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
+import org.eclipse.riena.core.util.StringUtils;
 import org.eclipse.riena.toolbox.Activator;
 import org.eclipse.riena.toolbox.Util;
 import org.eclipse.riena.toolbox.assemblyeditor.model.RCPView;
@@ -84,13 +87,15 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		txtController.setControllerName(node.getController());
 		txtController.setProject(node.getBundle().getProject());
 
-		lnkController.setSubModule(node);
+		lnkController.setProject(node.getBundle().getProject());
 		lnkController.setClassName(node.getController());
 
-		lnkView.setSubModule(node);
-
+		lnkView.setProject(node.getBundle().getProject());
 		if (node.getRcpView() != null) {
 			lnkView.setClassName(node.getRcpView().getViewClass());
+			if (null != node.getRcpView() && null != node.getRcpView().getBundle()) {
+				lnkView.setProject(node.getRcpView().getBundle().getProject());
+			}
 		}
 
 		btnShared.setSelection(node.isSharedView());
@@ -117,6 +122,14 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		}
 
 		node.getRcpView().setId(txtView.getText().getText());
+
+		for (final RCPView view : Activator.getDefault().getAssemblyModel().getRcpViews()) {
+			if (view.getId().equals(node.getRcpView().getId())) {
+				node.setRcpView(view);
+				break;
+			}
+		}
+
 		node.setController(txtController.getText().getText());
 		node.setSharedView(btnShared.getSelection());
 		node.setIcon(txtIcon.getText().getText());
@@ -138,7 +151,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 				}
 
 				// if the node already has a RCPView, don't update the nodeId
-				if (Util.isGiven(node.getRcpView().getViewClass())) {
+				if (null != node.getRcpView() && Util.isGiven(node.getRcpView().getViewClass())) {
 					return;
 				}
 
@@ -166,6 +179,26 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		txtView = new IdSelectorText(parent, workareaBackground, "View Selection",
 				"Select a View (* = any string, ? = any char):", false);
 
+		txtView.getText().addModifyListener(new ModifyListener() {
+			public void modifyText(final ModifyEvent e) {
+				final String viewId = txtView.getText().getText();
+
+				if (!StringUtils.isGiven(viewId)) {
+					lnkView.setClassName(null);
+					lnkView.setProject(null);
+					return;
+				}
+
+				for (final RCPView view : Activator.getDefault().getAssemblyModel().getRcpViews()) {
+					if (viewId.equals(view.getId())) {
+						lnkView.setClassName(view.getViewClass());
+						lnkView.setProject(view.getBundle().getProject());
+						break;
+					}
+				}
+			}
+		});
+
 		// FIXME
 		// use
 		// RCPViews
@@ -179,7 +212,15 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 
 	private void buildControllerSection(final Composite parent) {
 		lnkController = UIControlsFactory.createOpenClassLink(parent, "Controller");
-		txtController = new BrowseControllerComposite(parent, workareaBackground);
+		txtController = new BrowseControllerComposite(parent, workareaBackground, lnkController);
+		txtController.getText().addModifyListener(new ModifyListener() {
+			public void modifyText(final ModifyEvent e) {
+				if (!StringUtils.isGiven(txtController.getText().getText())) {
+					lnkController.setClassName(null);
+					lnkController.setProject(null);
+				}
+			}
+		});
 
 		GridDataFactory.swtDefaults().applyTo(lnkController);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(txtController);
@@ -190,7 +231,7 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 		private IProject project;
 		private String controllerName;
 
-		public BrowseControllerComposite(final Composite parent, final Color background) {
+		public BrowseControllerComposite(final Composite parent, final Color background, final OpenClassLink link) {
 			super(parent, background, false);
 
 			getBrowseButton().addSelectionListener(new SelectionAdapter() {
@@ -219,6 +260,9 @@ public class SubModuleComposite extends AbstractDetailComposite<SubModuleNode> {
 						for (final Object obj : result) {
 							final SourceType source = (SourceType) obj;
 							getText().setText(source.getFullyQualifiedName());
+							link.setClassName(source.getFullyQualifiedName());
+							link.setProject(source.getJavaProject().getProject());
+
 						}
 					}
 				}
