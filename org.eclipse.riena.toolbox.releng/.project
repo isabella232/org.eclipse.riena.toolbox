@@ -11,7 +11,4 @@
 			</arguments>
 		</buildCommand>
 	</buildSpec>
-	<natures>
-		<nature>com.csc.dip.projectset.ProjectSetNature</nature>
-	</natures>
 </projectDescription>
