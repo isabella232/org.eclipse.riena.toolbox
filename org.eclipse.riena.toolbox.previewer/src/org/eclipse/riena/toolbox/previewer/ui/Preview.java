@@ -25,13 +25,11 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -44,13 +42,15 @@ import org.eclipse.riena.toolbox.previewer.WorkspaceClassLoader;
 import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 
 public class Preview extends ViewPart {
-	private static final String VIEW_TITLE = "Previewer";
-
 	public final static String ID = "org.eclipse.riena.toolbox.previewer.ui.Preview"; //$NON-NLS-1$
+
+	private static final String VIEW_TITLE = "Previewer";
 
 	private Composite parent;
 
 	private CompResourceChangeListener changeListener;
+
+	private Button showGridButton;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -70,16 +70,9 @@ public class Preview extends ViewPart {
 	}
 
 	private class ViewSizeToolBar extends ContributionItem {
-		/**
-		 * 
-		 */
 		private static final String LABEL_HIDE_GRID = "hide grid";
-		/**
-		 * 
-		 */
 		private static final String LABEL_SHOW_GRID = "show grid";
 		private final Composite viewParent;
-		private Button showGridButton;
 
 		public ViewSizeToolBar(final Composite viewParent) {
 			this.viewParent = viewParent;
@@ -129,34 +122,34 @@ public class Preview extends ViewPart {
 			return showGridButton;
 		}
 
-		private class ShowGridPaintListener implements PaintListener {
-			public void paintControl(final PaintEvent e) {
-				if (!showGridButton.getSelection()) {
-					return;
-				}
+	}
 
-				if (!(e.widget instanceof Composite)) {
-					return;
-				}
+	/**
+	 * Paints horizontal and vertical lines between the controls, when the
+	 * showGridButton is selected.
+	 */
+	private class ShowGridPaintListener implements PaintListener {
+		public void paintControl(final PaintEvent e) {
+			if (!showGridButton.getSelection()) {
+				return;
+			}
 
-				final Composite targetComposite = (Composite) e.widget;
-				final Layout layout = targetComposite.getLayout();
-				if (!(layout instanceof GridLayout)) {
-					return;
-				}
+			if (!(e.widget instanceof Composite)) {
+				return;
+			}
 
-				e.gc.setForeground(e.display.getSystemColor(SWT.COLOR_RED));
+			final Composite targetComposite = (Composite) e.widget;
+			e.gc.setForeground(e.display.getSystemColor(SWT.COLOR_RED));
 
-				for (final Control control : targetComposite.getChildren()) {
-					final int width = control.getBounds().width + control.getBounds().x;
-					// vertical line
-					e.gc.drawLine(width, 0, width, targetComposite.getBounds().height);
-					// horizontal line
-					final int height = control.getBounds().height + control.getBounds().y;
-					e.gc.drawLine(0, height, targetComposite.getBounds().width, height);
-					if (control instanceof Composite) {
-						control.addPaintListener(this);
-					}
+			for (final Control control : targetComposite.getChildren()) {
+				final int width = control.getBounds().width + control.getBounds().x;
+				// vertical line
+				e.gc.drawLine(width, 0, width, targetComposite.getBounds().height);
+				// horizontal line
+				final int height = control.getBounds().height + control.getBounds().y;
+				e.gc.drawLine(0, height, targetComposite.getBounds().width, height);
+				if (control instanceof Composite) {
+					control.addPaintListener(this);
 				}
 			}
 		}
