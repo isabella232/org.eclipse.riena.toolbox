@@ -188,14 +188,6 @@
 			<layout>p2</layout>
 			<url>${indigo-site}</url>
 		</repository>
-		
-		<repository>
-			<id>prebuild-site</id>
-			<layout>p2</layout>
-			<url>${prebuild-site}</url>
-		</repository>
-		
-		
 	</repositories>
 
 	<pluginRepositories>

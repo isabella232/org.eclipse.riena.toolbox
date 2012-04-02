@@ -14,23 +14,6 @@
   </properties>
   
   <modules>
-   
-   <!--   <module>../org.eclipse.riena.beans.common</module>
-    <module>../org.eclipse.riena.build.tycho</module>
-    <module>../org.eclipse.riena.core</module>
-    <module>../org.eclipse.riena.navigation</module>
-    <module>../org.eclipse.riena.navigation.ui</module>
-    <module>../org.eclipse.riena.navigation.ui.swt</module>
-    <module>../org.eclipse.riena.ui.common</module>
-    <module>../org.eclipse.riena.ui.core</module>
-    <module>../org.eclipse.riena.ui.filter</module>
-    <module>../org.eclipse.riena.ui.ridgets</module>
-    <module>../org.eclipse.riena.ui.ridgets.swt</module>
-    <module>../org.eclipse.riena.ui.swt</module>
-    <module>../org.eclipse.riena.ui.swt.rcp</module>
-    <module>../org.eclipse.riena.ui.workarea</module>
-  -->
-  
     <module>../org.eclipse.riena.toolbox</module>
   	<module>../org.eclipse.riena.toolbox.feature</module>
   	<module>../org.eclipse.riena.toolbox.previewer</module>
