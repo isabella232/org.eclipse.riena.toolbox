@@ -46,15 +46,19 @@ public class Preview extends ViewPart {
 
 	private static final String VIEW_TITLE = "Previewer";
 
-	private Composite parent;
+	private Composite globalParent;
 
 	private CompResourceChangeListener changeListener;
 
 	private Button showGridButton;
 
+	private ViewPartInfo lastViewPart;
+
+	private ShowGridPaintListener showGridPaintListener;
+
 	@Override
 	public void createPartControl(final Composite parent) {
-		this.parent = parent;
+		this.globalParent = parent;
 		parent.setLayout(new FillLayout());
 		setPartName(VIEW_TITLE);
 
@@ -67,6 +71,65 @@ public class Preview extends ViewPart {
 	public void showView(final ViewPartInfo viewPart) {
 		updateView(viewPart);
 		changeListener.setViewPart(viewPart);
+	}
+
+	/**
+	 * @param viewPart
+	 */
+	private void updateView(final ViewPartInfo viewPart) {
+
+		this.lastViewPart = viewPart;
+
+		if (globalParent.isDisposed()) {
+			return;
+		}
+
+		for (final Control child : globalParent.getChildren()) {
+			child.removePaintListener(showGridPaintListener);
+			child.dispose();
+		}
+
+		repaintView();
+		setPartName(viewPart.getName());
+
+		if (ViewPart.class.isAssignableFrom(viewPart.getType())) {
+			final Object instance = ReflectionUtil.loadClass(viewPart);
+			if (!ReflectionUtil.invokeMethod("createPartControl", instance, //$NON-NLS-1$
+					globalParent)) {
+				setPartName(VIEW_TITLE);
+				return;
+			}
+		} else {
+			final Control instance = (Control) ReflectionUtil.newInstance(viewPart.getType(), globalParent);
+			if (null == instance) {
+				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
+						"Can not instantiate Composite " + viewPart.getType().getName()
+								+ "\nNo valid SWT-style constructor found");
+				return;
+			} else {
+				instance.addPaintListener(showGridPaintListener);
+			}
+		}
+
+		final IPreviewCustomizer contribution = WorkspaceClassLoader.getInstance().getContributedPreviewCustomizer();
+		if (null != contribution) {
+			contribution.afterCreation(globalParent);
+		}
+
+		repaintView();
+	}
+
+	/**
+	 * 
+	 */
+	private void repaintView() {
+		globalParent.layout(true, true);
+		globalParent.redraw();
+	}
+
+	@Override
+	public void setFocus() {
+		globalParent.setFocus();
 	}
 
 	private class ViewSizeToolBar extends ContributionItem {
@@ -111,17 +174,21 @@ public class Preview extends ViewPart {
 			showGridButton.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					viewParent.redraw();
+					if (null != lastViewPart && !ViewPart.class.isAssignableFrom(lastViewPart.getType())) {
+						updateView(lastViewPart);
+					} else {
+						repaintView();
+					}
 					showGridButton.setText(showGridButton.getSelection() ? LABEL_HIDE_GRID : LABEL_SHOW_GRID);
 				}
 			});
 
 			tool.setWidth(70);
 			tool.setControl(showGridButton);
-			viewParent.addPaintListener(new ShowGridPaintListener());
+			showGridPaintListener = new ShowGridPaintListener();
+			globalParent.addPaintListener(showGridPaintListener);
 			return showGridButton;
 		}
-
 	}
 
 	/**
@@ -153,54 +220,6 @@ public class Preview extends ViewPart {
 				}
 			}
 		}
-	}
-
-	/**
-	 * @param viewPart
-	 */
-	private void updateView(final ViewPartInfo viewPart) {
-
-		if (parent.isDisposed()) {
-			return;
-		}
-
-		for (final Control child : parent.getChildren()) {
-			child.dispose();
-		}
-
-		parent.layout(true);
-		parent.redraw();
-		setPartName(viewPart.getName());
-
-		if (ViewPart.class.isAssignableFrom(viewPart.getType())) {
-			final Object instance = ReflectionUtil.loadClass(viewPart);
-			if (!ReflectionUtil.invokeMethod("createPartControl", instance, //$NON-NLS-1$
-					parent)) {
-				setPartName(VIEW_TITLE);
-				return;
-			}
-		} else {
-			final Control instance = (Control) ReflectionUtil.newInstance(viewPart.getType(), parent);
-			if (null == instance) {
-				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
-						"Can not instantiate Composite " + viewPart.getType().getName()
-								+ "\nNo valid SWT-style constructor found");
-				return;
-			}
-		}
-
-		final IPreviewCustomizer contribution = WorkspaceClassLoader.getInstance().getContributedPreviewCustomizer();
-		if (null != contribution) {
-			contribution.afterCreation(parent);
-		}
-
-		parent.layout(true);
-		parent.redraw();
-	}
-
-	@Override
-	public void setFocus() {
-		parent.setFocus();
 	}
 
 	private static class CompilationUnitVisitor implements IResourceDeltaVisitor {
@@ -268,5 +287,4 @@ public class Preview extends ViewPart {
 			this.viewPart = viewPart;
 		}
 	}
-
 }
