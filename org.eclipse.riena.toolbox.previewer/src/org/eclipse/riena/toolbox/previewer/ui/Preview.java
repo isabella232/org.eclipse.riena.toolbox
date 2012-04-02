@@ -20,11 +20,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -63,8 +70,16 @@ public class Preview extends ViewPart {
 	}
 
 	private class ViewSizeToolBar extends ContributionItem {
-
+		/**
+		 * 
+		 */
+		private static final String LABEL_HIDE_GRID = "hide grid";
+		/**
+		 * 
+		 */
+		private static final String LABEL_SHOW_GRID = "show grid";
 		private final Composite viewParent;
+		private Button showGridButton;
 
 		public ViewSizeToolBar(final Composite viewParent) {
 			this.viewParent = viewParent;
@@ -72,6 +87,8 @@ public class Preview extends ViewPart {
 
 		@Override
 		public void fill(final ToolBar parent, final int index) {
+			createShowGridButton(parent);
+
 			final Text txtSize = createText(parent);
 			viewParent.addListener(SWT.Resize, new Listener() {
 				public void handleEvent(final Event e) {
@@ -91,6 +108,57 @@ public class Preview extends ViewPart {
 			text.setEditable(false);
 			tool.setControl(text);
 			return text;
+		}
+
+		private Button createShowGridButton(final ToolBar parent) {
+			final ToolItem tool = new ToolItem(parent, SWT.SEPARATOR);
+			showGridButton = new Button(parent, SWT.TOGGLE);
+			showGridButton.setText(LABEL_SHOW_GRID);
+			showGridButton.setSelection(false);
+			showGridButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					viewParent.redraw();
+					showGridButton.setText(showGridButton.getSelection() ? LABEL_HIDE_GRID : LABEL_SHOW_GRID);
+				}
+			});
+
+			tool.setWidth(70);
+			tool.setControl(showGridButton);
+			viewParent.addPaintListener(new ShowGridPaintListener());
+			return showGridButton;
+		}
+
+		private class ShowGridPaintListener implements PaintListener {
+			public void paintControl(final PaintEvent e) {
+				if (!showGridButton.getSelection()) {
+					return;
+				}
+
+				if (!(e.widget instanceof Composite)) {
+					return;
+				}
+
+				final Composite targetComposite = (Composite) e.widget;
+				final Layout layout = targetComposite.getLayout();
+				if (!(layout instanceof GridLayout)) {
+					return;
+				}
+
+				e.gc.setForeground(e.display.getSystemColor(SWT.COLOR_RED));
+
+				for (final Control control : targetComposite.getChildren()) {
+					final int width = control.getBounds().width + control.getBounds().x;
+					// vertical line
+					e.gc.drawLine(width, 0, width, targetComposite.getBounds().height);
+					// horizontal line
+					final int height = control.getBounds().height + control.getBounds().y;
+					e.gc.drawLine(0, height, targetComposite.getBounds().width, height);
+					if (control instanceof Composite) {
+						control.addPaintListener(this);
+					}
+				}
+			}
 		}
 	}
 
