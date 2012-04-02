@@ -32,11 +32,13 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
+            categoryId="org.eclipse.ui.category.window"
             defaultHandler="org.eclipse.riena.toolbox.previewer.handler.PreviewPackageExplorerSelectionHandler"
             id="org.eclipse.riena.toolbox.previewe.rcpview.command"
             name="Preview">
       </command>
       <command
+            categoryId="org.eclipse.ui.category.window"
             defaultHandler="org.eclipse.riena.toolbox.previewer.handler.PreviewActiveEditorHandler"
             id="org.eclipse.riena.toolbox.previewer.previewActiveEditor.command"
             name="Preview Active Editor">
@@ -72,6 +74,24 @@
             type="org.eclipse.jdt.core.ICompilationUnit">
       </propertyTester>
    </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.jdt.ui.CompilationUnitEditor.EditorContext?after=additions">
+         <menu
+               id="org.eclipse.riena.toolbox.annotationviewer.rienatoolbox.menu"
+               label="Riena Toolbox">
+            <command
+                  commandId="org.eclipse.riena.toolbox.previewer.previewActiveEditor.command"
+                  label="Preview"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   
    <!--<extension
          point="org.eclipse.ui.editors.templates">
       <contextType
