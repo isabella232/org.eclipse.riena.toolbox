@@ -54,9 +54,8 @@
 	<properties>
 		<orbit-target>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-target>
 		<indigo-site>http://download.eclipse.org/releases/indigo/</indigo-site>
-		<!--   <prebuild-site>file:/${basedir}/../org.eclipse.riena.build3/prebuild</prebuild-site>-->
 		<project-build-sourceEncoding>UTF-8</project-build-sourceEncoding>
-		<tycho-version>0.12.0</tycho-version>
+		<tycho-version>0.14.1</tycho-version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<junit-version>3.8.2</junit-version>
 	</properties>
