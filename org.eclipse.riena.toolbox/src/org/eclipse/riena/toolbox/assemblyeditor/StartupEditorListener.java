@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchPage;
@@ -81,8 +82,13 @@ public class StartupEditorListener implements IStartup {
 
 			if (part instanceof CompilationUnitEditor) {
 				final CompilationUnitEditor edi = (CompilationUnitEditor) part;
-				final FileEditorInput inp = (FileEditorInput) edi.getEditorInput();
-				final IFile file = inp.getFile();
+
+				final IEditorInput editorInput = edi.getEditorInput();
+				if (!(editorInput instanceof FileEditorInput)) {
+					return;
+				}
+
+				final IFile file = ((FileEditorInput) editorInput).getFile();
 
 				// FIXME get src folder from projectsettings
 				final Pattern pattern = Pattern.compile(BundleNode.SRC_FOLDER + "(.*?)\\.java"); //$NON-NLS-1$
