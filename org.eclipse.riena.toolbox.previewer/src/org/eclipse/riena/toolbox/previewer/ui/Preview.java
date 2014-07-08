@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.ContributionItem;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -44,7 +45,7 @@ import org.eclipse.riena.toolbox.previewer.model.ViewPartInfo;
 public class Preview extends ViewPart {
 	public final static String ID = "org.eclipse.riena.toolbox.previewer.ui.Preview"; //$NON-NLS-1$
 
-	private static final String VIEW_TITLE = "Previewer";
+	private static final String VIEW_TITLE = "Previewer"; //$NON-NLS-1$
 
 	private Composite globalParent;
 
@@ -62,7 +63,9 @@ public class Preview extends ViewPart {
 		parent.setLayout(new FillLayout());
 		setPartName(VIEW_TITLE);
 
-		getViewSite().getActionBars().getToolBarManager().add(new ViewSizeToolBar(parent));
+		final IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		toolBarManager.add(new ViewGridToolBar());
+		toolBarManager.add(new ViewSizeToolBar(parent));
 
 		changeListener = new CompResourceChangeListener(parent.getDisplay());
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(changeListener, IResourceChangeEvent.POST_CHANGE);
@@ -102,9 +105,9 @@ public class Preview extends ViewPart {
 		} else {
 			final Control instance = (Control) ReflectionUtil.newInstance(viewPart.getType(), globalParent);
 			if (null == instance) {
-				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning",
-						"Can not instantiate Composite " + viewPart.getType().getName()
-								+ "\nNo valid SWT-style constructor found");
+				MessageDialog.openWarning(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Warning", //$NON-NLS-1$
+						"Can not instantiate Composite " + viewPart.getType().getName() //$NON-NLS-1$
+								+ "\nNo valid SWT-style constructor found"); //$NON-NLS-1$
 				return;
 			} else {
 				instance.addPaintListener(showGridPaintListener);
@@ -132,42 +135,18 @@ public class Preview extends ViewPart {
 		globalParent.setFocus();
 	}
 
-	private class ViewSizeToolBar extends ContributionItem {
-		private static final String LABEL_HIDE_GRID = "hide grid";
-		private static final String LABEL_SHOW_GRID = "show grid";
-		private final Composite viewParent;
-
-		public ViewSizeToolBar(final Composite viewParent) {
-			this.viewParent = viewParent;
-		}
+	private class ViewGridToolBar extends ContributionItem {
+		private static final String LABEL_HIDE_GRID = "hide grid"; //$NON-NLS-1$
+		private static final String LABEL_SHOW_GRID = "show grid"; //$NON-NLS-1$
 
 		@Override
 		public void fill(final ToolBar parent, final int index) {
-			createShowGridButton(parent);
-
-			final Text txtSize = createText(parent);
-			viewParent.addListener(SWT.Resize, new Listener() {
-				public void handleEvent(final Event e) {
-					txtSize.setText(viewParent.getSize().x + "x" + viewParent.getSize().y); //$NON-NLS-1$
-				}
-			});
-		}
-
-		/**
-		 * @param parent
-		 * @return
-		 */
-		private Text createText(final ToolBar parent) {
-			final ToolItem tool = new ToolItem(parent, SWT.SEPARATOR);
-			final Text text = new Text(parent, SWT.BORDER);
-			tool.setWidth(80);
-			text.setEditable(false);
-			tool.setControl(text);
-			return text;
-		}
-
-		private Button createShowGridButton(final ToolBar parent) {
-			final ToolItem tool = new ToolItem(parent, SWT.SEPARATOR);
+			ToolItem item = null;
+			if (index >= 0) {
+				item = new ToolItem(parent, SWT.SEPARATOR, index);
+			} else {
+				item = new ToolItem(parent, SWT.SEPARATOR);
+			}
 			showGridButton = new Button(parent, SWT.TOGGLE);
 			showGridButton.setText(LABEL_SHOW_GRID);
 			showGridButton.setSelection(false);
@@ -183,11 +162,37 @@ public class Preview extends ViewPart {
 				}
 			});
 
-			tool.setWidth(70);
-			tool.setControl(showGridButton);
+			item.setWidth(70);
+			item.setControl(showGridButton);
 			showGridPaintListener = new ShowGridPaintListener();
 			globalParent.addPaintListener(showGridPaintListener);
-			return showGridButton;
+		}
+	}
+
+	private class ViewSizeToolBar extends ContributionItem {
+		private final Composite viewParent;
+
+		public ViewSizeToolBar(final Composite viewParent) {
+			this.viewParent = viewParent;
+		}
+
+		@Override
+		public void fill(final ToolBar parent, final int index) {
+			ToolItem item = null;
+			if (index >= 0) {
+				item = new ToolItem(parent, SWT.SEPARATOR, index);
+			} else {
+				item = new ToolItem(parent, SWT.SEPARATOR);
+			}
+			final Text txtSize = new Text(parent, SWT.BORDER | SWT.RIGHT);
+			txtSize.setEditable(false);
+			item.setWidth(80);
+			item.setControl(txtSize);
+			viewParent.addListener(SWT.Resize, new Listener() {
+				public void handleEvent(final Event e) {
+					txtSize.setText(viewParent.getSize().x + "x" + viewParent.getSize().y); //$NON-NLS-1$
+				}
+			});
 		}
 	}
 
