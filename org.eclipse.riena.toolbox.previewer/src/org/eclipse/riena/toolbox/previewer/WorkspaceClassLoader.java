@@ -122,7 +122,10 @@ public final class WorkspaceClassLoader {
 		} catch (final SecurityException e) {
 			WorkbenchUtil.handleException(e);
 		} catch (final UnsupportedClassVersionError e) {
-			WorkbenchUtil.handleException(e, "UnsupportedClassVersionError: Make sure that you use the same java version to start the Eclipse IDE and for the workspace"); //$NON-NLS-1$
+			WorkbenchUtil
+					.handleException(
+							e,
+							"UnsupportedClassVersionError: Make sure that you use the same java version to start the Eclipse IDE and for the workspace"); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -150,7 +153,7 @@ public final class WorkspaceClassLoader {
 
 	}
 
-	private URLClassLoader createClassloader(final ClassLoader parentClass, final IJavaProject project) {
+	public static URLClassLoader createClassloader(final ClassLoader parentClass, final IJavaProject project) {
 		try {
 
 			String[] classPathEntries = null;
@@ -176,4 +179,5 @@ public final class WorkspaceClassLoader {
 		}
 		return null;
 	}
+
 }
