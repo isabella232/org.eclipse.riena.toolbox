@@ -64,8 +64,8 @@ public class Preview extends ViewPart {
 		setPartName(VIEW_TITLE);
 
 		final IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		toolBarManager.add(new ViewGridToolBar());
-		toolBarManager.add(new ViewSizeToolBar(parent));
+		toolBarManager.add(new ViewGridToolItem());
+		toolBarManager.add(new ViewSizeToolItem(parent));
 
 		changeListener = new CompResourceChangeListener(parent.getDisplay());
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(changeListener, IResourceChangeEvent.POST_CHANGE);
@@ -135,7 +135,7 @@ public class Preview extends ViewPart {
 		globalParent.setFocus();
 	}
 
-	private class ViewGridToolBar extends ContributionItem {
+	private class ViewGridToolItem extends ContributionItem {
 		private static final String LABEL_HIDE_GRID = "hide grid"; //$NON-NLS-1$
 		private static final String LABEL_SHOW_GRID = "show grid"; //$NON-NLS-1$
 
@@ -169,10 +169,10 @@ public class Preview extends ViewPart {
 		}
 	}
 
-	private class ViewSizeToolBar extends ContributionItem {
+	private class ViewSizeToolItem extends ContributionItem {
 		private final Composite viewParent;
 
-		public ViewSizeToolBar(final Composite viewParent) {
+		public ViewSizeToolItem(final Composite viewParent) {
 			this.viewParent = viewParent;
 		}
 
