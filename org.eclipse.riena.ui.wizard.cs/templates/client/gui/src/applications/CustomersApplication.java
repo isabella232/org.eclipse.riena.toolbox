@@ -19,7 +19,7 @@ public class CustomersApplication extends SwtApplication {
 	private IApplicationNode application;
 
 	@Override
-	protected IApplicationNode createModel() {
+	public IApplicationNode createModel() {
 
 		application = new ApplicationNode("${project}"); 
 		ISubApplicationNode subApplication = new SubApplicationNode(new NavigationNodeId("customers.subapp"), "Customers"); 
