@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+
+<target name="Riena Toolbox milestone" sequenceNumber="14">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.riena.build.feature.sdk.e4.feature.group" version="6.1.0.v20141107_6_1_0_M3"/>
+<repository location="http://download.eclipse.org/releases/staging"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.rcp.source.feature.group" version="4.5.0.v20141029-2000"/>
+<unit id="org.eclipse.pde.source.feature.group" version="3.11.0.v20141029-2000"/>
+<unit id="org.eclipse.jdt.source.feature.group" version="3.11.0.v20141029-2000"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.5milestones/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.apache.velocity" version="1.5.0.v200905192330"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/S20141023165154/repository/"/>
+</location>
+</locations>
+<environment>
+<os>win32</os>
+<ws>win32</ws>
+<arch>x86</arch>
+<nl>de_DE</nl>
+</environment>
+</target>
