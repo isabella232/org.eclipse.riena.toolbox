@@ -79,9 +79,14 @@ public class RienaPreviewCustomizer implements IPreviewCustomizer {
 		try {
 			setLnf(classLoader, lnfName);
 			return;
-		} catch (final ReflectiveOperationException ex) {
-			// do nothing
+
+			// if an exception happens, do nothing
 			// try other class loader
+		} catch (final ClassNotFoundException ex) {
+			firstException = ex;
+		} catch (final InstantiationException ex) {
+			firstException = ex;
+		} catch (final IllegalAccessException ex) {
 			firstException = ex;
 		}
 

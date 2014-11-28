@@ -10,5 +10,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.riena.ui.swt;bundle-version="3.0.0",
  org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Eclipse.org - Riena

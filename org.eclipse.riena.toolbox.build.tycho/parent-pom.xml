@@ -59,7 +59,7 @@
 		<project-build-sourceEncoding>UTF-8</project-build-sourceEncoding>
 		<tycho-version>0.21.0</tycho-version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<junit-version>3.8.2</junit-version>
+		<junit-version>4.11.0</junit-version>
 	</properties>
 
 	<profiles>
@@ -74,7 +74,7 @@
 						<configuration>
 							<linkXref>true</linkXref>
 							<minimumTokens>100</minimumTokens>
-							<targetJdk>1.5</targetJdk>
+							<targetJdk>1.6</targetJdk>
 							<rulesets>
 								<!-- List of available rules: http://pmd.sourceforge.net/rules/index.html -->
 								<ruleset>/rulesets/basic.xml</ruleset>
@@ -234,8 +234,8 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<encoding>${project-build-sourceEncoding}</encoding>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
 
@@ -337,7 +337,7 @@
 					<configuration>
 						<sourceEncoding>utf-8</sourceEncoding>
 						<minimumTokens>100</minimumTokens>
-						<targetJdk>1.5</targetJdk>
+						<targetJdk>1.6</targetJdk>
 						<format>xml</format>
 						<failOnViolation>false</failOnViolation>
 					</configuration>
