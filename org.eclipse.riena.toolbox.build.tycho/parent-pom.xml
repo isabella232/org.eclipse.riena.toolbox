@@ -18,7 +18,7 @@
 	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Eclipse Riena </name>
+	<name>Eclipse Riena Toolbox</name>
 	<url>http://www.eclipse.org/riena</url>
 
 	<mailingLists>
@@ -52,10 +52,12 @@
 
 
 	<properties>
-		<orbit-target>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-target>
-		<indigo-site>http://download.eclipse.org/releases/indigo/</indigo-site>
+		<orbit-target>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</orbit-target>
+		<riena-site>http://download.eclipse.org/releases/luna/</riena-site>
+		<eclipse-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-site>
+		<nebula-site>http://download.eclipse.org/technology/nebula/snapshot/</nebula-site>
 		<project-build-sourceEncoding>UTF-8</project-build-sourceEncoding>
-		<tycho-version>0.14.1</tycho-version>
+		<tycho-version>0.21.0</tycho-version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<junit-version>3.8.2</junit-version>
 	</properties>
@@ -183,9 +185,21 @@
 		</repository>
 
 		<repository>
-			<id>indigo</id>
+			<id>riena</id>
 			<layout>p2</layout>
-			<url>${indigo-site}</url>
+			<url>${riena-site}</url>
+		</repository>
+
+		<repository>
+			<id>eclipse</id>
+			<layout>p2</layout>
+			<url>${eclipse-site}</url>
+		</repository>
+
+		<repository>
+			<id>nebula</id>
+			<layout>p2</layout>
+			<url>${nebula-site}</url>
 		</repository>
 	</repositories>
 
