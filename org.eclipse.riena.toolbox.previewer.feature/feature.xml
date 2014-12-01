@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.riena.toolbox.previewer.feature"
       label="Riena Previewer"
-      version="4.0.0.qualifier">
+      version="6.1.0.qualifier">
 
    <description>
       Previewer for SWT-Composites and RCP-Views

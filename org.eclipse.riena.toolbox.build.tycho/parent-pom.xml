@@ -15,7 +15,7 @@
 
 	<groupId>org.eclipse.riena</groupId>
 	<artifactId>org.eclipse.riena.build.tycho</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>6.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Eclipse Riena Toolbox</name>
@@ -57,7 +57,7 @@
 		<eclipse-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-site>
 		<nebula-site>http://download.eclipse.org/technology/nebula/snapshot/</nebula-site>
 		<project-build-sourceEncoding>UTF-8</project-build-sourceEncoding>
-		<tycho-version>0.21.0</tycho-version>
+		<tycho-version>0.22.0</tycho-version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<junit-version>4.11.0</junit-version>
 	</properties>
