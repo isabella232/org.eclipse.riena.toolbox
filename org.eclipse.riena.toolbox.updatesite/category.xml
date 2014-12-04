@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="org.eclipse.riena.ui.templates.feature">
+      <category name="Riena Eclipse IDE Toolbox"/>
+   </feature>
+   <feature id="org.eclipse.riena.toolbox.feature">
+      <category name="Riena Eclipse IDE Toolbox"/>
+   </feature>
+   <feature id="org.eclipse.riena.toolbox.previewer.feature">
+      <category name="Riena Eclipse IDE Toolbox"/>
+   </feature>
+   <category-def name="Riena Eclipse IDE Toolbox" label="Riena Toolbox" />
+</site>

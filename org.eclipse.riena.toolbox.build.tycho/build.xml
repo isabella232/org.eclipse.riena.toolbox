@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     13.05.2011 13:36:29                                                        
+
+     org.eclipse.riena.toolbox.build.tycho    
+     description
+                   
+     ====================================================================== -->
+<project name="org.eclipse.riena.toolbox.build.tycho">
+
+	<target name="copyUpdateSite">
+		<delete dir="${COPY_TARGET_DIR}">
+			<include name="**" />
+		</delete>
+		<copy todir="${COPY_TARGET_DIR}">
+			<fileset dir="${COPY_SRC_DIR}">
+				<include name="**" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>
