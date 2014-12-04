@@ -149,7 +149,7 @@
 							<groupId>${project.groupId}</groupId>
 							<artifactId>org.eclipse.riena.toolbox.build.tycho</artifactId>
 							<version>${project.version}</version>
-							<classifier>../org.eclipse.riena.toolbox.releng/Riena Toolbox</classifier>
+							<classifier>../org.eclipse.riena.toolbox.releng/RienaToolbox</classifier>
 						</artifact>
 					</target>
 					<environments>
