@@ -62,13 +62,6 @@ v1.0
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.widgets.compositetable"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.riena.beans.common"
          download-size="0"
          install-size="0"
@@ -98,13 +91,6 @@ v1.0
 
    <plugin
          id="org.apache.commons.collections"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.log"
          download-size="0"
          install-size="0"
          version="0.0.0"

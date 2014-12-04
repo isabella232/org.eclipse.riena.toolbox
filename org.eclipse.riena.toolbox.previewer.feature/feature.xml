@@ -83,20 +83,6 @@ v1.0
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.nebula.widgets.compositetable"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.log"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.riena.toolbox.previewer.customizer"
          download-size="0"
          install-size="0"
